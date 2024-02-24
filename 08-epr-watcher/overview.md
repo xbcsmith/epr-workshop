@@ -1,6 +1,11 @@
 EPR Watchers: Monitoring and Responding to Events
 
-Within the Event-Driven CI/CD architecture, EPR Watchers play a crucial role in orchestrating downstream workflows. These microservice applications act as dedicated consumers of events published to the Redpanda topic. Utilizing the matching logic provided by the EPR SDK, they selectively process events based on criteria like project identifier, event type (e.g., test result), and even success/failure status.
+Within the Event-Driven CI/CD architecture, EPR Watchers play a crucial role in
+orchestrating downstream workflows. These microservice applications act as
+dedicated consumers of events published to the Redpanda topic. Utilizing the
+matching logic provided by the EPR SDK, they selectively process events based on
+criteria like project identifier, event type (e.g., test result), and even
+success/failure status.
 
 Key functionalities of EPR Watchers:
 
@@ -16,4 +21,7 @@ Benefits of using EPR Watchers:
     Enhanced flexibility: The ability to create custom Watchers with tailored matching logic and actions provides high flexibility in integrating with diverse tools and processes.
     Increased efficiency: By focusing on relevant events and automating tasks, Watchers free up development teams to dedicate their expertise to more strategic work.
 
-In essence, EPR Watchers act as the intelligent assistants within your Event-Driven CI/CD pipeline, ensuring events are routed to the appropriate downstream actions, leading to a more efficient and responsive development process.
+In essence, EPR Watchers act as the intelligent assistants within your
+Event-Driven CI/CD pipeline, ensuring events are routed to the appropriate
+downstream actions, leading to a more efficient and responsive development
+process.

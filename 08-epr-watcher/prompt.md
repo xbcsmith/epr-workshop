@@ -8,4 +8,3 @@ Extended EPR: Creating a watcher
 - Creating a watcher client using the watcher SDK
 - Create a task for the Watcher
 - Trigger the watcher with an event
-

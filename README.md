@@ -1,18 +1,37 @@
 # Event Provenance Registry Workshop
 
-Building an Event-Driven CI/CD Provenance System with Event Provenance Registry (EPR) and CDEvents
+Building an Event-Driven CI/CD Provenance System with Event Provenance Registry
+(EPR) and CDEvents
 
 ## Overview
 
-In this hands-on workshop participants will journey through the architecture of an Event-Driven CI/CD Provenance System. We will cover microservice architectures, asynchronous communication, data interoperability, message specifications, and schema validation. We will learn how to leverage Golang for service and CLI development, Docker for seamless deployment, Redpanda as a Kafka-compatible message bus, and PostgreSQL for efficient backend storage. The workshop uses the open-source project Event Provenance Registry (EPR) as the central service to leverage these technologies. Over the course of the session we will delve into the EPR codebase, work through coding and building Golang services, discuss the theories of event driven systems, cover some pitfalls, and examine the integration with Redpanda for effective event propagation. The workshop provides a valuable blend of theoretical understanding and hands-on experience in the dynamic landscape of Event-Driven CI/CD architectures.
+In this hands-on workshop participants will journey through the architecture of
+an Event-Driven CI/CD Provenance System. We will cover microservice
+architectures, asynchronous communication, data interoperability, message
+specifications, and schema validation. We will learn how to leverage Golang for
+service and CLI development, Docker for seamless deployment, Redpanda as a
+Kafka-compatible message bus, and PostgreSQL for efficient backend storage. The
+workshop uses the open-source project Event Provenance Registry (EPR) as the
+central service to leverage these technologies. Over the course of the session
+we will delve into the EPR codebase, work through coding and building Golang
+services, discuss the theories of event driven systems, cover some pitfalls, and
+examine the integration with Redpanda for effective event propagation. The
+workshop provides a valuable blend of theoretical understanding and hands-on
+experience in the dynamic landscape of Event-Driven CI/CD architectures.
 
 ### Workshop Overview
 
-The workshop will guide participants through the process of building an Event-Driven CI/CD Provenance System using Event Provenance Registry (EPR). Participants will gain hands-on experience with Golang, Redpanda, and PostgreSQL while working with a microservices architecture. The project, EPR, comprises server, CLI, and client components, utilizing Cloud Events for the message envelope and for this workshop CDEvents spec for the message payload.
+The workshop will guide participants through the process of building an
+Event-Driven CI/CD Provenance System using Event Provenance Registry (EPR).
+Participants will gain hands-on experience with Golang, Redpanda, and PostgreSQL
+while working with a microservices architecture. The project, EPR, comprises
+server, CLI, and client components, utilizing Cloud Events for the message
+envelope and for this workshop CDEvents spec for the message payload.
 
 ## Prerequisites
 
-While not completely necessary it will be helpful to have a basic understanding of some core concepts we will cover in the workshop.
+While not completely necessary it will be helpful to have a basic understanding
+of some core concepts we will cover in the workshop.
 
 The prerequisites for the workshop as as follows:
 
@@ -23,7 +42,9 @@ The prerequisites for the workshop as as follows:
 
 ## Requirements
 
-Bring your own unix environment. The workshop is geared towards a Linux development environment. While Mac OS works fine most of the time none of us have tried this in Windows.
+Bring your own unix environment. The workshop is geared towards a Linux
+development environment. While Mac OS works fine most of the time none of us
+have tried this in Windows.
 
 The requirements for the workshop are as follows:
 
@@ -34,12 +55,12 @@ The requirements for the workshop are as follows:
 - Docker Compose installed on participants' machines
 - Code editor (e.g., Visual Studio Code, Sublime Text, Vim, Not Emacs)
 - Command line utilities including:
-    - make
-    - curl
-    - jq
-    - go
-    - golangci-lint
-    - docker
+  - make
+  - curl
+  - jq
+  - go
+  - golangci-lint
+  - docker
 
 ## Workshop Outline:
 
@@ -53,7 +74,7 @@ The requirements for the workshop are as follows:
 ### Setting Up the Environment
 
 - Install Golang and set up the development environment
-- Configure  Redpanda (Kafka) instance
+- Configure Redpanda (Kafka) instance
 - Set up PostgreSQL database for backend storage
 - Deploy PostgreSQL and Redpanda using docker-compose
 - Configure environment variables for EPR
@@ -90,8 +111,8 @@ The requirements for the workshop are as follows:
 - Hands-on session on using the EPR python client
 - Creating EventRecievers using the EPR Python Client
 - Creating EventRecieverGroups using the EPR Python Client
-- Creating Events using the EPR Python Client 
-- Searching for Events using the EPR Python Client 
+- Creating Events using the EPR Python Client
+- Searching for Events using the EPR Python Client
 
 ### Advanced EPR: Creating, Storing, and Tracking SBOMs
 
@@ -122,4 +143,8 @@ The requirements for the workshop are as follows:
 - Encouragement to explore further and contribute to the EPR project
 - Providing additional resources for continuous learning
 
-Note: Detailed instructions, code snippets, and configurations will be provided during the workshop for participants to follow along. The goal is to ensure that participants gain practical experience in building an Event-Driven CI/CD Provenance System using EPR and Golang, specifically focusing on creating, storing, and retrieving CDEvents.
+Note: Detailed instructions, code snippets, and configurations will be provided
+during the workshop for participants to follow along. The goal is to ensure that
+participants gain practical experience in building an Event-Driven CI/CD
+Provenance System using EPR and Golang, specifically focusing on creating,
+storing, and retrieving CDEvents.

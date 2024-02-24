@@ -1,10 +1,13 @@
 # Install Go
 
-The Golang programming language is used in the Event-Driven CI/CD workshop. To install it, follow the steps on the Golang website: [https://go.dev/doc/install](https://go.dev/doc/install).
+The Golang programming language is used in the Event-Driven CI/CD workshop. To
+install it, follow the steps on the Golang website:
+[https://go.dev/doc/install](https://go.dev/doc/install).
 
 ## Windows
 
-Another way is to download and install the [Golang Windows Installer](https://go.dev/dl/).
+Another way is to download and install the
+[Golang Windows Installer](https://go.dev/dl/).
 
 ## Mac M1
 
@@ -34,12 +37,13 @@ rm -v go${GOVERSION}.${GOOS}-${GOARCH}.tar.gz
 
 ## Tools
 
-Once you have installed go you can install the tools that are used in the workshop.
+Once you have installed go you can install the tools that are used in the
+workshop.
 
 ### golangci-lint
 
-Install golangci-lint by following the instructions on the website: [https://golangci-lint.run/usage/install/](https://golangci-lint.run/usage/install/)
-
+Install golangci-lint by following the instructions on the website:
+[https://golangci-lint.run/usage/install/](https://golangci-lint.run/usage/install/)
 
 ### go tools
 

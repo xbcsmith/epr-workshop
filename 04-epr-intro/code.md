@@ -1,6 +1,7 @@
 # Get the Code
 
-Initiate the workshop by guiding participants on how to clone and get the codebase of the Event Provenance Registry (EPR) project.
+Initiate the workshop by guiding participants on how to clone and get the
+codebase of the Event Provenance Registry (EPR) project.
 
 ## Clone the Code
 

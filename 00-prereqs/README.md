@@ -1,27 +1,47 @@
 # Prerequisites for Event-Driven CI/CD Workshop
 
-This workshop is designed for developers and DevOps professionals interested in learning and implementing Event-Driven CI/CD pipelines. While not mandatory, having a basic understanding of the following concepts will greatly benefit your learning experience:
+This workshop is designed for developers and DevOps professionals interested in
+learning and implementing Event-Driven CI/CD pipelines. While not mandatory,
+having a basic understanding of the following concepts will greatly benefit your
+learning experience:
 
-Programming:
+## Programming:
 
-    Basic understanding of Golang: Familiarity with the Golang programming language syntax and basic constructs like variables, functions, and packages will be helpful in understanding and working with the Event Provenance Registry codebase.
+### Basic understanding of Golang:
 
-DevOps:
+Familiarity with the Golang programming language syntax and basic constructs
+like variables, functions, and packages will be helpful in understanding and
+working with the Event Provenance Registry codebase.
 
-    Familiarity with Docker and containerization concepts: Understanding how Docker containers work and their use in building and deploying applications will be beneficial for the hands-on lab exercises involving containerization of the Event Provenance Registry services.
+### DevOps and Containerization:
 
-Message Queues:
+Familiarity with Docker and containerization concepts: Understanding how Docker
+containers work and their use in building and deploying applications will be
+beneficial for the hands-on lab exercises involving containerization of the
+Event Provenance Registry services.
 
-    Knowledge of message bus systems (Kafka): Having a basic understanding of message bus systems like Kafka, including topics, producers, and consumers, will help grasp how events are communicated and processed in the Event-Driven CI/CD architecture.
+### Message Queues:
 
-Databases:
+Knowledge of message bus systems (Kafka): Having a basic understanding of
+message bus systems like Kafka, including topics, producers, and consumers, will
+help grasp how events are communicated and processed in the Event-Driven CI/CD
+architecture.
 
-    Basic knowledge of PostgreSQL: Familiarity with the PostgreSQL database system, including basic commands for creating and manipulating data, will be helpful in understanding how the Event Provenance Registry stores and retrieves information.
+### Databases:
 
-Additional Notes:
+Basic knowledge of PostgreSQL: Familiarity with the PostgreSQL database system,
+including basic commands for creating and manipulating data, will be helpful in
+understanding how the Event Provenance Registry stores and retrieves
+information.
 
-    While prior experience with all these technologies is beneficial, the workshop will provide introductory sessions and resources to help participants get familiar with the necessary concepts.
-    Participants are encouraged to come with an open mind and willingness to learn.
-    The workshop instructors are available to answer questions and provide support throughout the sessions.
+## Additional Notes:
 
-Don't hesitate to reach out if you have any questions or concerns about the prerequisites. We encourage everyone to participate, regardless of their prior experience level!
+While prior experience with all these technologies is beneficial, the workshop
+will provide introductory sessions and resources to help participants get
+familiar with the necessary concepts. Participants are encouraged to come with
+an open mind and willingness to learn. The workshop instructors are available to
+answer questions and provide support throughout the sessions.
+
+Don't hesitate to reach out if you have any questions or concerns about the
+prerequisites. We encourage everyone to participate, regardless of their prior
+experience level!

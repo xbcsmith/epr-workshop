@@ -1,6 +1,6 @@
 # Prompt
 
-Write a workshop session for the following list of topics: 
+Write a workshop session for the following list of topics:
 
 Redpanda (Kafka): Message Queue Overview
 
