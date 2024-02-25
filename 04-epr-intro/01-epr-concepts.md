@@ -72,7 +72,7 @@ EPR.
 **EventReceiver**: The event receiver object assigned to the event upon creation
 in EPR.
 
-#### NVRPP Identifier:
+#### NVRPP Identifier
 
 A crucial aspect of event identification in EPR is the NVRPP identifier,
 standing for Name, Version, Release, Platform ID, and Package. These five keys

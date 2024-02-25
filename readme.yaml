@@ -1,121 +1,126 @@
+---
 - children:
-  - children: []
-    type: heading
-  - literal: Event Provenance Registry Workshop
-    type: text
+    - children: []
+      type: heading
+    - literal: Event Provenance Registry Workshop
+      type: text
   type: document
 - children:
-  - children: []
-    type: paragraph
-  - literal: Building an Event-Driven CI/CD Provenance System with Event Provenance
-      Registry (EPR) and CDEvents
-    type: text
+    - children: []
+      type: paragraph
+    - literal:
+        Building an Event-Driven CI/CD Provenance System with Event Provenance
+        Registry (EPR) and CDEvents
+      type: text
   type: heading
 - children:
-  - children: []
-    type: heading
-  - literal: Overview
-    type: text
+    - children: []
+      type: heading
+    - literal: Overview
+      type: text
   type: paragraph
 - children:
-  - children: []
-    type: paragraph
-  - literal: In this hands-on workshop participants will journey through the architecture
-      of an Event-Driven CI/CD Provenance System. We will cover microservice architectures,
-      asynchronous communication, data interoperability, message specifications, and
-      schema validation. We will learn how to leverage Golang for service and CLI
-      development, Docker for seamless deployment, Redpanda as a Kafka-compatible
-      message bus, and PostgreSQL for efficient backend storage. The workshop uses
-      the open-source project Event Provenance Registry (EPR) as the central service
-      to leverage these technologies. Over the course of the session we will delve
-      into the EPR codebase, work through coding and building Golang services, discuss
-      the theories of event driven systems, cover some pitfalls, and examine the integration
-      with Redpanda for effective event propagation. The workshop provides a valuable
-      blend of theoretical understanding and hands-on experience in the dynamic landscape
-      of Event-Driven CI/CD architectures.
-    type: text
+    - children: []
+      type: paragraph
+    - literal:
+        In this hands-on workshop participants will journey through the architecture
+        of an Event-Driven CI/CD Provenance System. We will cover microservice architectures,
+        asynchronous communication, data interoperability, message specifications, and
+        schema validation. We will learn how to leverage Golang for service and CLI
+        development, Docker for seamless deployment, Redpanda as a Kafka-compatible
+        message bus, and PostgreSQL for efficient backend storage. The workshop uses
+        the open-source project Event Provenance Registry (EPR) as the central service
+        to leverage these technologies. Over the course of the session we will delve
+        into the EPR codebase, work through coding and building Golang services, discuss
+        the theories of event driven systems, cover some pitfalls, and examine the integration
+        with Redpanda for effective event propagation. The workshop provides a valuable
+        blend of theoretical understanding and hands-on experience in the dynamic landscape
+        of Event-Driven CI/CD architectures.
+      type: text
   type: heading
 - children:
-  - children: []
-    type: heading
-  - literal: Workshop Overview
-    type: text
+    - children: []
+      type: heading
+    - literal: Workshop Overview
+      type: text
   type: paragraph
 - children:
-  - children: []
-    type: paragraph
-  - literal: The workshop will guide participants through the process of building
-      an Event-Driven CI/CD Provenance System using Event Provenance Registry (EPR).
-      Participants will gain hands-on experience with Golang, Redpanda, and PostgreSQL
-      while working with a microservices architecture. The project, EPR, comprises
-      server, CLI, and client components, utilizing Cloud Events for the message envelope
-      and for this workshop CDEvents spec for the message payload.
-    type: text
+    - children: []
+      type: paragraph
+    - literal:
+        The workshop will guide participants through the process of building
+        an Event-Driven CI/CD Provenance System using Event Provenance Registry (EPR).
+        Participants will gain hands-on experience with Golang, Redpanda, and PostgreSQL
+        while working with a microservices architecture. The project, EPR, comprises
+        server, CLI, and client components, utilizing Cloud Events for the message envelope
+        and for this workshop CDEvents spec for the message payload.
+      type: text
   type: heading
 - children:
-  - children: []
-    type: heading
-  - literal: Prerequisites
-    type: text
+    - children: []
+      type: heading
+    - literal: Prerequisites
+      type: text
   type: paragraph
 - children:
-  - children: []
-    type: paragraph
-  - literal: While not completely necessary it will be helpful to have a basic understanding
-      of some core concepts we will cover in the workshop.
-    type: text
+    - children: []
+      type: paragraph
+    - literal:
+        While not completely necessary it will be helpful to have a basic understanding
+        of some core concepts we will cover in the workshop.
+      type: text
   type: heading
 - children:
-  - children: []
-    type: paragraph
-  - literal: 'The prerequisites for the workshop as as follows:'
-    type: text
+    - children: []
+      type: paragraph
+    - literal: "The prerequisites for the workshop as as follows:"
+      type: text
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: list
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Basic understanding of Golang
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: list
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Basic understanding of Golang
+      type: text
   type: paragraph
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Familiarity with Docker and containerization concepts
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Familiarity with Docker and containerization concepts
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -126,22 +131,22 @@
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Knowledge of message bus systems (Kafka)
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Knowledge of message bus systems (Kafka)
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -152,22 +157,22 @@
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Basic knowledge of PostgreSQL
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Basic knowledge of PostgreSQL
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -179,7 +184,7 @@
   type: paragraph
 - children: []
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -188,12 +193,12 @@
     type: bullet
   type: item
 - children:
-  - children: []
-    type: heading
-  - literal: Requirements
-    type: text
+    - children: []
+      type: heading
+    - literal: Requirements
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -202,68 +207,69 @@
     type: bullet
   type: list
 - children:
-  - children: []
-    type: paragraph
-  - literal: Bring your own unix environment. The workshop is geared towards a Linux
-      development environment. While Mac OS works fine most of the time none of us
-      have tried this in Windows.
-    type: text
+    - children: []
+      type: paragraph
+    - literal:
+        Bring your own unix environment. The workshop is geared towards a Linux
+        development environment. While Mac OS works fine most of the time none of us
+        have tried this in Windows.
+      type: text
   type: heading
 - children:
-  - children: []
-    type: paragraph
-  - literal: 'The requirements for the workshop are as follows:'
-    type: text
+    - children: []
+      type: paragraph
+    - literal: "The requirements for the workshop are as follows:"
+      type: text
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: list
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Laptop
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: list
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Laptop
+      type: text
   type: paragraph
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Golang installed on participants
-    type: text
-  - literal: ''''
-    type: text
-  - literal: ' machines'
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Golang installed on participants
+      type: text
+    - literal: "'"
+      type: text
+    - literal: " machines"
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -274,22 +280,22 @@
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Docker installed and running
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Docker installed and running
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -300,22 +306,22 @@
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Docker Compose installed
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Docker Compose installed
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -326,22 +332,22 @@
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Code editor (e.g., Visual Studio Code, Sublime Text, Vim, Not Emacs)
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Code editor (e.g., Visual Studio Code, Sublime Text, Vim, Not Emacs)
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -352,22 +358,22 @@
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: 'Command line utilities including:'
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: "Command line utilities including:"
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -376,50 +382,50 @@
     type: bullet
   type: item
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 2
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: list
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 2
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: make
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 2
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: list
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 2
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: make
+      type: text
   type: paragraph
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 2
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: curl
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 2
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: curl
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 2
     padding: 2
@@ -430,22 +436,22 @@
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 2
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: jq
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 2
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: jq
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 2
     padding: 2
@@ -456,22 +462,22 @@
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 2
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: go
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 2
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: go
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 2
     padding: 2
@@ -482,22 +488,22 @@
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 2
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: golangci-lint
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 2
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: golangci-lint
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 2
     padding: 2
@@ -508,22 +514,22 @@
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 2
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: docker
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 2
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: docker
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 2
     padding: 2
@@ -535,7 +541,7 @@
   type: paragraph
 - children: []
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 2
     padding: 2
@@ -545,7 +551,7 @@
   type: item
 - children: []
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 2
     padding: 2
@@ -555,7 +561,7 @@
   type: list
 - children: []
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -564,12 +570,12 @@
     type: bullet
   type: item
 - children:
-  - children: []
-    type: heading
-  - literal: 'Workshop Outline:'
-    type: text
+    - children: []
+      type: heading
+    - literal: "Workshop Outline:"
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -578,56 +584,56 @@
     type: bullet
   type: list
 - children:
-  - children: []
-    type: heading
-  - literal: Introduction to Event Driven Microservice Architectures
-    type: text
+    - children: []
+      type: heading
+    - literal: Introduction to Event Driven Microservice Architectures
+      type: text
   type: heading
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: list
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Overview of microservice architectures for scalability and modularity
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: list
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Overview of microservice architectures for scalability and modularity
+      type: text
   type: heading
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Define an event driven asynchronous CI/CD architecture
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Define an event driven asynchronous CI/CD architecture
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -638,22 +644,22 @@
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Explanation of EPR project and its components (server, CLI, client)
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Explanation of EPR project and its components (server, CLI, client)
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -664,22 +670,22 @@
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Introduction to Cloud Events and CDEvents spec
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Introduction to Cloud Events and CDEvents spec
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -691,7 +697,7 @@
   type: paragraph
 - children: []
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -700,12 +706,12 @@
     type: bullet
   type: item
 - children:
-  - children: []
-    type: heading
-  - literal: Setting Up the Environment
-    type: text
+    - children: []
+      type: heading
+    - literal: Setting Up the Environment
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -714,50 +720,50 @@
     type: bullet
   type: list
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: list
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Install Golang and set up the development environment
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: list
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Install Golang and set up the development environment
+      type: text
   type: heading
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Configure  Redpanda (Kafka) instance
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Configure  Redpanda (Kafka) instance
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -768,22 +774,22 @@
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Set up PostgreSQL database for backend storage
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Set up PostgreSQL database for backend storage
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -794,22 +800,22 @@
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Deploy PostgreSQL and Redpanda using docker-compose
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Deploy PostgreSQL and Redpanda using docker-compose
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -820,22 +826,22 @@
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Configure environment variables for EPR
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Configure environment variables for EPR
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -847,7 +853,7 @@
   type: paragraph
 - children: []
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -856,12 +862,12 @@
     type: bullet
   type: item
 - children:
-  - children: []
-    type: heading
-  - literal: Integrating with Redpanda (Kafka)
-    type: text
+    - children: []
+      type: heading
+    - literal: Integrating with Redpanda (Kafka)
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -870,50 +876,50 @@
     type: bullet
   type: list
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: list
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Configuring EPR services to use Redpanda as the message bus
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: list
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Configuring EPR services to use Redpanda as the message bus
+      type: text
   type: heading
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Understanding the role of Kafka in the event-driven architecture
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Understanding the role of Kafka in the event-driven architecture
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -924,22 +930,22 @@
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Testing message propagation and handling in EPR
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Testing message propagation and handling in EPR
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -951,7 +957,7 @@
   type: paragraph
 - children: []
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -960,12 +966,12 @@
     type: bullet
   type: item
 - children:
-  - children: []
-    type: heading
-  - literal: Exploring EPR Codebase
-    type: text
+    - children: []
+      type: heading
+    - literal: Exploring EPR Codebase
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -974,50 +980,50 @@
     type: bullet
   type: list
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: list
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Get the Code
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: list
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Get the Code
+      type: text
   type: heading
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Overview of the project structure
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Overview of the project structure
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1028,22 +1034,22 @@
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Understanding the role of each component (server, CLI, client)
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Understanding the role of each component (server, CLI, client)
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1055,7 +1061,7 @@
   type: paragraph
 - children: []
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1064,12 +1070,12 @@
     type: bullet
   type: item
 - children:
-  - children: []
-    type: heading
-  - literal: Building EPR Services in Golang
-    type: text
+    - children: []
+      type: heading
+    - literal: Building EPR Services in Golang
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1078,50 +1084,50 @@
     type: bullet
   type: list
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: list
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Walkthrough of building the server component
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: list
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Walkthrough of building the server component
+      type: text
   type: heading
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Using curl to interact with EPR
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Using curl to interact with EPR
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1132,22 +1138,22 @@
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Walkthrough of building the CLI component
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Walkthrough of building the CLI component
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1158,22 +1164,22 @@
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Use the CLI to interact with EPR
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Use the CLI to interact with EPR
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1185,7 +1191,7 @@
   type: paragraph
 - children: []
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1194,12 +1200,12 @@
     type: bullet
   type: item
 - children:
-  - children: []
-    type: heading
-  - literal: 'Using EPR: Creating, Storing, and Retrieving CDEvents'
-    type: text
+    - children: []
+      type: heading
+    - literal: "Using EPR: Creating, Storing, and Retrieving CDEvents"
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1208,50 +1214,50 @@
     type: bullet
   type: list
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: list
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Hands-on session on utilizing EPR for CDEvents management
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: list
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Hands-on session on utilizing EPR for CDEvents management
+      type: text
   type: heading
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Creating CDEvents using EPR CLI and API
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Creating CDEvents using EPR CLI and API
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1262,22 +1268,22 @@
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Storing CDEvents in the EPR backend
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Storing CDEvents in the EPR backend
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1288,22 +1294,22 @@
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Retrieving and querying CDEvents from the EPR storage
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Retrieving and querying CDEvents from the EPR storage
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1315,7 +1321,7 @@
   type: paragraph
 - children: []
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1324,12 +1330,12 @@
     type: bullet
   type: item
 - children:
-  - children: []
-    type: heading
-  - literal: 'Advanced EPR: Creating, Storing, and Tracking SBOMs'
-    type: text
+    - children: []
+      type: heading
+    - literal: "Advanced EPR: Creating, Storing, and Tracking SBOMs"
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1338,50 +1344,50 @@
     type: bullet
   type: list
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: list
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Create an SBOM
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: list
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Create an SBOM
+      type: text
   type: heading
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Use EPR to store SBOMs
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Use EPR to store SBOMs
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1392,22 +1398,22 @@
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Use CDEvents to record SBOM creation
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Use CDEvents to record SBOM creation
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1418,22 +1424,22 @@
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Use event to retrieve the SBOM
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Use event to retrieve the SBOM
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1445,7 +1451,7 @@
   type: paragraph
 - children: []
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1454,12 +1460,12 @@
     type: bullet
   type: item
 - children:
-  - children: []
-    type: heading
-  - literal: 'EPR Extended: Creating a watcher'
-    type: text
+    - children: []
+      type: heading
+    - literal: "EPR Extended: Creating a watcher"
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1468,50 +1474,50 @@
     type: bullet
   type: list
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: list
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Creating a watcher client using the watcher SDK
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: list
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Creating a watcher client using the watcher SDK
+      type: text
   type: heading
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Create a task for the Watcher
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Create a task for the Watcher
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1522,22 +1528,22 @@
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Trigger the watcher with an event
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Trigger the watcher with an event
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1549,7 +1555,7 @@
   type: paragraph
 - children: []
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1558,12 +1564,12 @@
     type: bullet
   type: item
 - children:
-  - children: []
-    type: heading
-  - literal: 'Workshop Challenge: Enhancing EPR Functionality'
-    type: text
+    - children: []
+      type: heading
+    - literal: "Workshop Challenge: Enhancing EPR Functionality"
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1572,52 +1578,54 @@
     type: bullet
   type: list
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: list
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Participants will be given a challenge to enhance a specific aspect of
-      EPR
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: list
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal:
+        Participants will be given a challenge to enhance a specific aspect of
+        EPR
+      type: text
   type: heading
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Guidance and assistance will be provided as participants work on the
-      challenge
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal:
+        Guidance and assistance will be provided as participants work on the
+        challenge
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1629,7 +1637,7 @@
   type: paragraph
 - children: []
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1638,16 +1646,16 @@
     type: bullet
   type: item
 - children:
-  - children: []
-    type: heading
-  - literal: Q
-    type: text
-  - literal: '&'
-    type: text
-  - literal: A and Discussion
-    type: text
+    - children: []
+      type: heading
+    - literal: Q
+      type: text
+    - literal: "&"
+      type: text
+    - literal: A and Discussion
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1656,50 +1664,50 @@
     type: bullet
   type: list
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: list
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Participants can ask questions and engage in discussions
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: list
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Participants can ask questions and engage in discussions
+      type: text
   type: heading
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Sharing experiences and insights from the workshop
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Sharing experiences and insights from the workshop
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1711,7 +1719,7 @@
   type: paragraph
 - children: []
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1720,12 +1728,12 @@
     type: bullet
   type: item
 - children:
-  - children: []
-    type: heading
-  - literal: Conclusion and Next Steps
-    type: text
+    - children: []
+      type: heading
+    - literal: Conclusion and Next Steps
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1734,50 +1742,50 @@
     type: bullet
   type: list
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: list
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Recap of key learnings
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: list
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Recap of key learnings
+      type: text
   type: heading
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Encouragement to explore further and contribute to the EPR project
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Encouragement to explore further and contribute to the EPR project
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1788,22 +1796,22 @@
 - children: []
   type: paragraph
 - children:
-  - children: []
-    list_data:
-      bullet_char: '-'
-      delimiter: null
-      marker_offset: 0
-      padding: 2
-      start: null
-      tight: true
-      type: bullet
-    type: item
-  - children: []
-    type: paragraph
-  - literal: Providing additional resources for continuous learning
-    type: text
+    - children: []
+      list_data:
+        bullet_char: "-"
+        delimiter: null
+        marker_offset: 0
+        padding: 2
+        start: null
+        tight: true
+        type: bullet
+      type: item
+    - children: []
+      type: paragraph
+    - literal: Providing additional resources for continuous learning
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1815,7 +1823,7 @@
   type: paragraph
 - children: []
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2
@@ -1824,16 +1832,17 @@
     type: bullet
   type: item
 - children:
-  - children: []
-    type: paragraph
-  - literal: 'Note: Detailed instructions, code snippets, and configurations will
-      be provided during the workshop for participants to follow along. The goal is
-      to ensure that participants gain practical experience in building an Event-Driven
-      CI/CD Provenance System using EPR and Golang, specifically focusing on creating,
-      storing, and retrieving CDEvents.'
-    type: text
+    - children: []
+      type: paragraph
+    - literal:
+        "Note: Detailed instructions, code snippets, and configurations will
+        be provided during the workshop for participants to follow along. The goal is
+        to ensure that participants gain practical experience in building an Event-Driven
+        CI/CD Provenance System using EPR and Golang, specifically focusing on creating,
+        storing, and retrieving CDEvents."
+      type: text
   list_data:
-    bullet_char: '-'
+    bullet_char: "-"
     delimiter: null
     marker_offset: 0
     padding: 2

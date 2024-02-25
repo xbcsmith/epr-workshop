@@ -9,14 +9,14 @@ codebase of the Event Provenance Registry (EPR) project. Provide step-by-step
 instructions for utilizing version control systems like Git to access the latest
 EPR codebase.
 
-2. Overview of the Project Structure:
+1. Overview of the Project Structure:
 
 Once participants have the code, offer an in-depth exploration of the project's
 structure. Walk through the key directories and files, explaining their roles
 and contributions to the overall architecture. Discuss any coding conventions or
 standards followed in the project to ensure a consistent understanding.
 
-3. Understanding the Role of Each Component (Server, CLI, Client):
+1. Understanding the Role of Each Component (Server, CLI, Client):
 
 Break down the components of the EPR project, highlighting the distinct roles
 and responsibilities of the server, command-line interface (CLI), and client.

@@ -9,28 +9,28 @@ Registry (EPR) services and Command-Line Interface (CLI) components in Golang.
 Emphasize the role of these components in the overall EPR architecture and how
 they facilitate event-driven operations.
 
-2. Walkthrough of Building the Server Component:
+1. Walkthrough of Building the Server Component:
 
 Conduct a detailed walkthrough of building the server component of EPR in
 Golang. Cover key aspects such as setting up the development environment,
 defining API endpoints, and incorporating necessary dependencies. Demonstrate
 the process of compiling and running the server locally.
 
-3. Using Curl to Interact with EPR:
+1. Using Curl to Interact with EPR:
 
 Explore the practicality of interacting with EPR using curl. Demonstrate how to
 make HTTP requests to the EPR server API to create, retrieve, and manage events.
 Discuss the importance of understanding server interactions for both development
 and testing purposes.
 
-4. Walkthrough of Building the CLI Component:
+1. Walkthrough of Building the CLI Component:
 
 Transition to building the CLI component of EPR in Golang. Provide a
 step-by-step walkthrough of creating commands, handling input parameters, and
 interfacing with the EPR server. Illustrate the process of building and
 installing the CLI locally.
 
-5. Use the CLI to Interact with EPR:
+1. Use the CLI to Interact with EPR:
 
 Engage participants in hands-on exercises using the EPR CLI. Demonstrate how to
 execute commands to create events, manage event receivers, and perform other
@@ -38,20 +38,20 @@ relevant operations. Encourage participants to experiment with different CLI
 options and understand how the CLI facilitates seamless communication with the
 EPR server.
 
-6. Q&A and Troubleshooting:
+1. Q&A and Troubleshooting:
 
 Allocate time for participants to ask questions related to building the server
 and CLI components. Address common issues, troubleshoot errors, and provide
 insights into best practices. Foster a collaborative environment for
 participants to share their experiences and challenges.
 
-7. Integration with EPR Architecture:
+1. Integration with EPR Architecture:
 
 Discuss how the server and CLI components fit into the broader EPR architecture.
 Emphasize the significance of these components in enabling event-driven
 provenance tracking and management.
 
-8. Recap and Next Steps:
+1. Recap and Next Steps:
 
 Summarize the key takeaways from the session, highlighting the essential
 concepts covered in building the EPR server and CLI components. Encourage

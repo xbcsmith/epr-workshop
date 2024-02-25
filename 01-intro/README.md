@@ -9,7 +9,7 @@ in achieving scalability and modularity in modern software development. Discuss
 the principles behind breaking down monolithic applications into smaller,
 independent services for enhanced maintainability and deployment flexibility.
 
-2. Define an Event-Driven Asynchronous CI/CD Architecture:
+1. Define an Event-Driven Asynchronous CI/CD Architecture:
 
 Transition to the concept of Event-Driven CI/CD architectures, highlighting the
 advantages of asynchronous communication in Continuous Integration and
@@ -17,7 +17,7 @@ Continuous Delivery (CI/CD) pipelines. Explore how event-driven paradigms enable
 services to operate independently, facilitating a more resilient and responsive
 CI/CD ecosystem.
 
-3. Explanation of EPR Project and Its Components (Server, CLI, Client):
+1. Explanation of EPR Project and Its Components (Server, CLI, Client):
 
 Introduce the Event Provenance Registry (EPR) project as an exemplary
 implementation of an event-driven microservice architecture. Break down the
@@ -25,7 +25,7 @@ components of the EPR project, including the server responsible for handling
 events, the command-line interface (CLI) for user interaction, and the client
 component for external system integration.
 
-4. Introduction to Cloud Events and CDEvents Spec:
+1. Introduction to Cloud Events and CDEvents Spec:
 
 Dive into the essential concepts of Cloud Events, emphasizing their role in
 providing a standardized format for event messages. Introduce the Continuous

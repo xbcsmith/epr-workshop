@@ -95,7 +95,7 @@ This command runs a single Redpanda broker, configured without authentication,
 accessible from `localhost:9092`. You can access the web console in your browser
 at [http://localhost:8080/overview](http://localhost:8080/overview).
 
-### Step 2: Create a Topic
+### Step 2: Create a Topic in Redpanda
 
 Now, let's create a topic named `epr.dev.events`. Execute the following command
 to create the topic within the running Redpanda container.
@@ -108,7 +108,7 @@ docker exec -it redpanda \
 View the topic in the Redpanda admin console at
 [http://localhost:8080/topics/epr.dev.events](http://localhost:8080/topics/epr.dev.events).
 
-### Step 3: Produce a Message
+### Step 3: Produce a Message in Redpanda
 
 Produce a message into the `epr.dev.events` topic using the following command.
 Type your desired text and press `Ctrl + D` to separate between messages. To
@@ -122,7 +122,7 @@ docker exec -it redpanda \
 View the message in the Redpanda admin console (refresh the page if needed) at
 [http://localhost:8080/topics/epr.dev.events](http://localhost:8080/topics/epr.dev.events).
 
-### Step 4: Consume a Message
+### Step 4: Consume a Message from Redpanda
 
 Finally, let's consume a message from the `epr.dev.events` topic. Execute the
 following command, and each message will be displayed with its metadata.

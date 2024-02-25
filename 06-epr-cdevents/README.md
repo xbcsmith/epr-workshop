@@ -10,27 +10,27 @@ Continuous Delivery Events (CDEvents). Participants will be guided through the
 setup of their development environment and introduced to the EPR CLI for
 seamless interaction.
 
-2. Creating CDEvents for Activity in the Pipeline:
+1. Creating CDEvents for Activity in the Pipeline:
 
 Walk participants through the process of creating CDEvents to capture and
 document activities within a Continuous Delivery (CD) pipeline. Discuss the
 significance of defining key attributes in CDEvents, such as name, version,
 release, platform, package, success, description, and payload.
 
-3. Storing CDEvents in EPR in Events:
+1. Storing CDEvents in EPR in Events:
 
 Guide participants in storing the created CDEvents within the EPR system.
 Explore the storage mechanism, emphasizing the importance of maintaining a
 comprehensive record of CD activities for provenance.
 
-4. Retrieving and Querying CDEvents from the EPR Storage:
+1. Retrieving and Querying CDEvents from the EPR Storage:
 
 Demonstrate how to retrieve and query CDEvents from the EPR storage, providing
 participants with the skills to access and analyze historical data. Introduce
 various querying techniques, including filtering by event attributes and
 retrieving specific event details.
 
-5. Grouping CDEvents in Event Receivers:
+1. Grouping CDEvents in Event Receivers:
 
 Explore the concept of Event Receivers and guide participants in grouping
 CDEvents within these receivers. Discuss the benefits of organizing events into

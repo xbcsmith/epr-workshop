@@ -1,4 +1,6 @@
-## Introduction to Event Driven Microservice Architectures
+# Introduction to Event Driven Microservice Architectures
+
+## Introduction
 
 Imagine your CI/CD pipeline as a bustling kitchen, each task like chopping
 carrots or preheating the oven is an action. Now, think of Event Driven
@@ -31,3 +33,28 @@ So, in a nutshell, Event Driven Microservice Architecture is like the maestro in
 the kitchen, orchestrating a symphony of actions, ensuring every event finds its
 way to the right expert cook, resulting in a well-coordinated and delicious
 outcome!
+
+## Why microservices?
+
+Microservices constitute a fundamental element within the Event Driven
+Architecture. We adhere to the Unix philosophy, "do one thing and do it well".
+This approach allows us to emphasize the principle of performing one task
+exceptionally well. Concentrating services on specific functions enables
+optimization and enhances reliability. Additionally, this approach facilitates
+scaling only the services that require it, avoiding the need to scale every
+service uniformly.
+
+## You want microservices this is how you get microservices?
+
+There are drawbacks to this approach. We can increase the complexity of the
+system by by increasing the number of microservices.
+
+## Why Event Driven Microservice Architecture?
+
+The microservices architecture offers a high degree of independence from the
+broader system. Though it introduces additional components, effective
+utilization of CI/CD and DevOps practices can empower teams to operate at
+distinct development speeds and release frequencies. Embracing eventual
+consistency and integrating a message-based architecture enables asynchronous
+communication, fostering increased parallelism and efficient utilization of
+computing resources.

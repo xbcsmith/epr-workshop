@@ -9,28 +9,28 @@ practical experience in using the Event Provenance Registry (EPR) Python client.
 Guide participants through the installation of the Python client and ensure that
 everyone has the necessary dependencies set up.
 
-2. Creating Event Receivers using the EPR Python Client:
+1. Creating Event Receivers using the EPR Python Client:
 
 Dive into the creation of Event Receivers using the EPR Python client. Walk
 participants through the process of defining receiver attributes, such as name,
 version, description, type, and schema. Emphasize the importance of well-defined
 receivers in capturing specific types of events.
 
-3. Creating Event Receiver Groups using the EPR Python Client:
+1. Creating Event Receiver Groups using the EPR Python Client:
 
 Extend the hands-on experience by guiding participants through the creation of
 Event Receiver Groups using the Python client. Demonstrate how to associate
 Event Receivers with groups, highlighting the benefits of organized event
 handling.
 
-4. Creating Events using the EPR Python Client:
+1. Creating Events using the EPR Python Client:
 
 Shift focus to creating events using the EPR Python client. Explore the
 attributes and metadata associated with events, including name, version,
 release, platform, package, success, description, and payload. Showcase the
 versatility of event creation, covering different use cases and scenarios.
 
-5. Searching for Events using the EPR Python Client:
+1. Searching for Events using the EPR Python Client:
 
 Conclude the session by demonstrating how to search for events using the EPR
 Python client. Explore various search criteria, including event IDs, fields, and

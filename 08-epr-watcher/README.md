@@ -9,21 +9,21 @@ of EPR and its significance in event-driven architectures. Discuss real-world
 scenarios where watchers play a crucial role in monitoring and responding to
 specific events.
 
-2. Creating a Watcher Client Using the Watcher SDK:
+1. Creating a Watcher Client Using the Watcher SDK:
 
 Guide participants through the process of creating a watcher client using the
 Watcher Software Development Kit (SDK). Explore the key components and
 functionalities provided by the SDK for seamless integration with the EPR
 project.
 
-3. Create a Task for the Watcher:
+1. Create a Task for the Watcher:
 
 Walk participants through the steps of creating a task for the watcher, defining
 the specific actions or responses it should undertake based on certain events.
 Discuss the flexibility and customization options available when defining
 watcher tasks.
 
-4. Trigger the Watcher with an Event:
+1. Trigger the Watcher with an Event:
 
 Illustrate how to trigger the watcher by associating it with a specific event
 within the EPR system. Provide practical examples of events that can serve as

@@ -7,34 +7,34 @@ interaction between its components to ensure efficient event tracking and
 processing. This document outlines the key workflows involving the EPR Server,
 Database, CLI, and Watcher components.
 
-## Workflows:
+## Workflows
 
-### EPR Server: Storing Events in the Database:
+### EPR Server: Storing Events in the Database
 
 Initiation: Events are generated within the CI/CD pipeline or other systems.
 Processing: The EPR Server receives these events and communicates with the
 Database to store them securely.
 
-### EPR CLI: Creating Events with the cli:
+### EPR CLI: Creating Events with the cli
 
 Command Execution: Users utilize the EPR CLI to create events. Communication
 with Server: EPR CLI communicates with the EPR Server to store the newly created
 events.
 
-### EPR CLI: Searching for Events with the cli:
+### EPR CLI: Searching for Events with the cli
 
 CLI Query: Users leverage the EPR CLI to search for specific events based on
 various criteria. Server Interaction: The EPR CLI communicates with the EPR
 Server to retrieve the requested event data.
 
-### EPR Watcher: Watching Redpanda with the Watcher Microservice:
+### EPR Watcher: Watching Redpanda with the Watcher Microservice
 
 Continuous Monitoring: The EPR Watcher monitors messages in Redpanda for events
 of interest. Action Execution: Upon detecting relevant messages, the Watcher
 performs predefined actions. Event Notification: The EPR Watcher sends an event
 to the EPR Server, explaining the action taken.
 
-## EPR Message Bus: Interacting with Redpanda:
+## EPR Message Bus: Interacting with Redpanda
 
 Messaging Interaction: Both the EPR Server and EPR Watcher interact with
 Redpanda for sending and receiving messages. Data Propagation: Redpanda serves

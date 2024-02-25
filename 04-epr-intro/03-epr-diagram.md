@@ -1,3 +1,5 @@
+# EPR Workflow Diagram
+
 Diagram to represent an Event Provenance Registry (EPR) workflow:
 
 ```mermaid

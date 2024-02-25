@@ -9,14 +9,14 @@ have the opportunity to enhance a specific aspect of the Event Provenance
 Registry (EPR) project. Provide an overview of the challenge, outlining the
 goals and the aspect of EPR functionality to be enhanced.
 
-2. Challenge Objectives:
+1. Challenge Objectives:
 
 Clearly communicate the objectives of the challenge, specifying the desired
 outcomes and the criteria for successful completion. Emphasize the relevance of
 the challenge in addressing real-world scenarios or improving specific
 functionalities within EPR.
 
-3. Guidance on EPR Architecture and Codebase:
+1. Guidance on EPR Architecture and Codebase:
 
 Offer a brief review of the EPR architecture and codebase related to the
 challenge. Provide participants with key insights into the relevant components,
@@ -24,35 +24,35 @@ modules, and areas of the codebase that may need modification. Share
 documentation and references to assist participants in navigating and
 understanding the existing codebase.
 
-4. Hands-On Implementation:
+1. Hands-On Implementation:
 
 Allow participants dedicated time to actively work on the challenge. Encourage
 them to apply their knowledge and creativity to enhance the specified aspect of
 EPR functionality. Provide support and answer questions as participants delve
 into the coding and development process.
 
-5. Collaboration and Discussion:
+1. Collaboration and Discussion:
 
 Foster collaboration among participants by encouraging discussions on potential
 approaches, solutions, and challenges encountered during the implementation.
 Facilitate an environment where participants can share ideas and seek feedback
 from both peers and facilitators.
 
-6. Assistance and Troubleshooting:
+1. Assistance and Troubleshooting:
 
 Be available to provide guidance, assistance, and troubleshoot issues that
 participants may encounter during the challenge. Address questions, provide
 clarifications, and offer insights to ensure participants feel supported
 throughout the implementation process.
 
-7. Showcasing Solutions:
+1. Showcasing Solutions:
 
 Conclude the challenge session by inviting participants to showcase their
 solutions, either through live demonstrations or presentations. Encourage
 participants to discuss the thought process behind their enhancements and any
 lessons learned during the challenge.
 
-8. Debrief and Reflection:
+1. Debrief and Reflection:
 
 Facilitate a debrief session to reflect on the challenge experience. Discuss key
 learnings, insights gained, and potential areas for further exploration within

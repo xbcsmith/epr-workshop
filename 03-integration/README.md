@@ -9,7 +9,7 @@
    terminology, and key functionalities of Redpanda, emphasizing its role in
    facilitating seamless communication between microservices.
 
-2. Understanding the Role of Redpanda (Kafka) in Event-Driven Architecture:
+1. Understanding the Role of Redpanda (Kafka) in Event-Driven Architecture:
 
    Delve into the specifics of how Redpanda integrates into an event-driven
    architecture, emphasizing its significance in decoupling components and
@@ -17,7 +17,7 @@
    Redpanda plays a pivotal role in building scalable and resilient event-driven
    systems.
 
-3. Testing Message Propagation and Handling with Redpanda (Kafka):
+1. Testing Message Propagation and Handling with Redpanda (Kafka):
 
    Conduct hands-on exercises to guide participants through testing message
    propagation and handling using Redpanda. Demonstrate how to produce and

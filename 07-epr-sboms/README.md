@@ -9,21 +9,21 @@ CycloneDX Software Bill of Materials (SBOM) using open-source tools. Explore the
 CycloneDX standard, emphasizing the importance of SBOMs in software supply chain
 security.
 
-2. Use EPR Events to Store SBOMs:
+1. Use EPR Events to Store SBOMs:
 
 Demonstrate how to leverage EPR Events for the seamless storage of SBOMs.
 Discuss the structure and format of SBOMs within the EPR storage system.
 Emphasize the benefits of utilizing EPR as a centralized repository for SBOMs,
 enabling efficient tracking and management.
 
-3. Use CDEvents to Record SBOM Creation:
+1. Use CDEvents to Record SBOM Creation:
 
 Introduce the use of Continuous Delivery Events (CDEvents) to record the
 creation of SBOMs. Discuss the specific attributes and metadata relevant to SBOM
 events. Illustrate how CDEvents contribute to a comprehensive record of the SBOM
 creation process, enhancing transparency and traceability.
 
-4. Retrieving SBOMs from EPR:
+1. Retrieving SBOMs from EPR:
 
 Guide participants in retrieving SBOMs from the EPR storage, demonstrating
 various querying techniques and filters. Discuss the significance of easy access
