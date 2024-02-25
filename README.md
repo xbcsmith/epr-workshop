@@ -62,7 +62,7 @@ The requirements for the workshop are as follows:
   - golangci-lint
   - docker
 
-## Workshop Outline:
+## Workshop Outline
 
 ### Introduction to Event Driven Microservice Architectures
 

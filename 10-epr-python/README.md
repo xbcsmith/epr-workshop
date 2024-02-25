@@ -37,7 +37,7 @@ Python client. Explore various search criteria, including event IDs, fields, and
 filters. Discuss effective strategies for querying and retrieving specific sets
 of events based on different requirements.
 
-## Workshop Format:
+## Workshop Format
 
 The workshop will combine live demonstrations with hands-on exercises using the
 EPR Python client. Participants will actively create Event Receivers, Event
@@ -45,7 +45,7 @@ Receiver Groups, and Events, gaining practical experience with each step. Q&A
 sessions will be incorporated to address participant queries and provide
 additional insights.
 
-## Key Learning Objectives:
+## Key Learning Objectives
 
 Gain hands-on experience in using the EPR Python client for interacting with the
 EPR system. Learn how to create Event Receivers and Event Receiver Groups

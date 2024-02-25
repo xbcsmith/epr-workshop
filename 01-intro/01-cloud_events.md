@@ -52,3 +52,7 @@ independently while maintaining seamless communication through the production
 and consumption of events. This approach not only enhances system flexibility
 and scalability but also contributes to the resilience and adaptability of
 modern distributed applications.
+
+## Links
+
+- [Cloud Events Specification](https://github.com/cloudevents/spec)

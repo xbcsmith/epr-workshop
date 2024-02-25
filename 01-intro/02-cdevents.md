@@ -66,3 +66,7 @@ principles of Cloud Events and embracing well-established integration patterns,
 CDEvents ensures a coherent and interoperable approach to handling events,
 enhancing the efficiency and adaptability of systems involved in Continuous
 Delivery.
+
+## Links
+
+- [CDEvents Specification](https://github.com/cdevents/spec)

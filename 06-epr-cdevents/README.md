@@ -36,7 +36,7 @@ Explore the concept of Event Receivers and guide participants in grouping
 CDEvents within these receivers. Discuss the benefits of organizing events into
 logical groups, facilitating efficient event handling and management.
 
-## Workshop Format:
+## Workshop Format
 
 The workshop will be interactive, allowing participants to actively engage in
 creating, storing, and retrieving CDEvents using the EPR CLI. Practical
@@ -44,7 +44,7 @@ exercises will be provided to reinforce learning, with real-time feedback and
 assistance. Q&A sessions will be included to address participant queries and
 explore specific use cases.
 
-## Key Learning Objectives:
+## Key Learning Objectives
 
 Gain hands-on experience in using the EPR CLI for managing CDEvents. Learn how
 to create CDEvents to capture relevant activity within a CD pipeline. Acquire

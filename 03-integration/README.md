@@ -25,14 +25,14 @@
    Redpanda. Discuss best practices for designing topics, partitions, and
    consumers to optimize message processing.
 
-## Workshop Format:
+## Workshop Format
 
 The session will combine theoretical presentations with live demonstrations and
 interactive coding exercises. Participants will be provided with access to a
 sandbox environment to experiment with Redpanda in real-time. Q&A segments will
 be integrated to address participant inquiries and foster discussion.
 
-## Key Learning Objectives:
+## Key Learning Objectives
 
 Gain a solid understanding of Redpanda (Kafka) and its role as a message bus in
 microservices architectures. Learn how to configure and use Redpanda for

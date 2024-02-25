@@ -35,7 +35,7 @@ participants through the setup. Cover key variables related to database
 connections, Kafka configurations, and any other parameters critical for EPR's
 operation.
 
-## Workshop Format:
+## Workshop Format
 
 The session will combine theoretical explanations with hands-on demonstrations
 to ensure a practical understanding of each setup step. Participants will be
@@ -43,7 +43,7 @@ provided with step-by-step guides and resources for reference during and after
 the workshop. A dedicated Q&A segment will be integrated to address participant
 queries and troubleshoot common issues.
 
-## Key Learning Objectives:
+## Key Learning Objectives
 
 Gain proficiency in installing and configuring Golang for EPR development.
 Understand the setup and configuration of Redpanda as a Kafka message bus.

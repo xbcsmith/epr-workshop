@@ -29,7 +29,7 @@ Guide participants in retrieving SBOMs from the EPR storage, demonstrating
 various querying techniques and filters. Discuss the significance of easy access
 to SBOMs for auditing, compliance, and security purposes.
 
-## Workshop Format:
+## Workshop Format
 
 The session will involve a mix of presentations, live demonstrations, and
 hands-on exercises. Participants will actively engage in creating CycloneDX
@@ -37,7 +37,7 @@ SBOMs, storing them in EPR Events, and utilizing CDEvents to record the SBOM
 creation process. Practical scenarios and use cases will be explored to showcase
 real-world applications of advanced EPR features.
 
-## Key Learning Objectives:
+## Key Learning Objectives
 
 Gain practical experience in creating CycloneDX SBOMs using open-source tools.
 Understand how to use EPR Events for storing and managing SBOMs effectively.

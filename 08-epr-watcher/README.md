@@ -29,14 +29,14 @@ Illustrate how to trigger the watcher by associating it with a specific event
 within the EPR system. Provide practical examples of events that can serve as
 triggers and demonstrate the real-time responsiveness of the watcher.
 
-## Workshop Format:
+## Workshop Format
 
 The workshop will be interactive, with live coding demonstrations and hands-on
 exercises. Participants will actively create a watcher client, define tasks, and
 trigger the watcher with simulated events. Q&A sessions will be incorporated to
 address participant queries and facilitate a deeper understanding.
 
-## Key Learning Objectives:
+## Key Learning Objectives
 
 Understand the role and significance of watchers in event-driven architectures.
 Gain practical skills in creating a watcher client using the Watcher SDK. Learn

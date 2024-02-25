@@ -51,7 +51,7 @@ gratitude for participants' active engagement and contributions. Provide
 information on further resources, community forums, or ongoing support for
 participants interested in continuing their learning journey.
 
-## Workshop Format:
+## Workshop Format
 
 The session will incorporate live demonstrations, allowing participants to
 follow along with the exploration of the EPR Server and CLI. Practical exercises
@@ -59,7 +59,7 @@ will be integrated, enabling participants to navigate the project structure and
 identify key components. Q&A sessions will be interspersed throughout the
 workshop to address participant queries and provide clarifications.
 
-## Key Learning Objectives:
+## Key Learning Objectives
 
 Provide a platform for participants to seek clarification and ask questions
 related to the workshop. Foster a collaborative environment for peer-to-peer

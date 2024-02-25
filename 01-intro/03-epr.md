@@ -25,26 +25,40 @@ structures:
 
 ## Data Structures
 
-### Events:
+### Events
 
-Events represent the core data entities within EPR. These entities encapsulate
-information about tasks executed in the pipeline. Events act as the foundational
-building blocks of the provenance tracking system.
+Events represent the core data entities within EPR. An event is simply a record
+of something changing state. These entities encapsulate information about tasks
+executed in the pipeline. Events are created to represent a set of event_types
+that are performed on a unit. Events act as the foundational building blocks of
+the provenance tracking system.
 
-### Event Receivers:
+### Event Receivers
 
-Event receivers are structures within EPR designed to capture and process
+Event receivers are structures within EPR designed to capture and catagorize
 events. They act as recipients of specific events, defining the scope and nature
 of events they are interested in. These receivers streamline the categorization
-and handling of events based on predetermined criteria.
+and handling of events based on predetermined criteria. Event Receivers are
+reusable lists of requirements. When an event receiver receives an event, it
+publishes a message that specifies the type of event.
 
-### Event Receiver Groups:
+### Event Receiver Groups
 
-Event receiver groups provide a higher-level organizational structure within
-EPR. By grouping multiple event receivers, users can efficiently manage and
-coordinate the processing of events across various categories or functional
-units. This grouping mechanism enhances the scalability and modularity of event
-handling.
+Event receiver groups are collections of event receivers. Event receiver groups
+provide a higher-level organizational structure within EPR. By grouping multiple
+event receivers, users can efficiently manage and coordinate the processing of
+events across various categories or functional units. This grouping mechanism
+enhances the scalability and modularity of event handling.
+
+When all event_receivers in an event_receiver_group have successful events (with
+"success": true status), the event_receiver_group publishes a message that
+specifies an event_type for the event_receiver_group.
+
+An event_receiver_group can be enabled or disabled (with "enabled": true|false).
+When enabled, the event_receiver_group acts as previously described. When
+disabled, messages for the event_receiver_group will not be published. Messages
+will still be published for the underlying event_receivers should they receive
+successful events.
 
 ## Conclusion
 

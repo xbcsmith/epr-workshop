@@ -59,7 +59,7 @@ learnings, insights gained, and potential areas for further exploration within
 EPR. Acknowledge and celebrate the achievements of participants, fostering a
 sense of accomplishment.
 
-## Workshop Format:
+## Workshop Format
 
 The session will incorporate live demonstrations, allowing participants to
 follow along with the exploration of the EPR Server and CLI. Practical exercises
@@ -67,7 +67,7 @@ will be integrated, enabling participants to navigate the project structure and
 identify key components. Q&A sessions will be interspersed throughout the
 workshop to address participant queries and provide clarifications.
 
-## Key Learning Objectives:
+## Key Learning Objectives
 
 Apply knowledge and skills in a real-world scenario by enhancing EPR
 functionality. Collaborate with peers to brainstorm solutions and discuss

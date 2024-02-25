@@ -59,7 +59,7 @@ Conclude the workshop with closing remarks, expressing gratitude for
 participants' time, enthusiasm, and contributions. Reinforce the sense of
 community and the collective journey of learning.
 
-## Workshop Format:
+## Workshop Format
 
 The session will incorporate live demonstrations, allowing participants to
 follow along with the exploration of the EPR Server and CLI. Practical exercises
@@ -67,7 +67,7 @@ will be integrated, enabling participants to navigate the project structure and
 identify key components. Q&A sessions will be interspersed throughout the
 workshop to address participant queries and provide clarifications.
 
-## Key Learning Objectives:
+## Key Learning Objectives
 
 Summarize key learnings and achievements from the workshop. Motivate
 participants to explore further and actively contribute to the EPR project.

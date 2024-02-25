@@ -33,14 +33,14 @@ Delivery Events (CDEvents) specification as an extension of Cloud Events,
 specifically tailored for capturing and conveying information within CI/CD
 processes.
 
-## Workshop Format:
+## Workshop Format
 
 The session will include a mix of presentations, live demonstrations, and
 interactive discussions. Practical exercises will be integrated, allowing
 participants to apply concepts in a controlled environment. Q&A sessions will be
 interspersed to address participant queries and foster engagement.
 
-## Key Learning Objectives:
+## Key Learning Objectives
 
 Gain a foundational understanding of microservice architectures and their
 relevance in achieving scalability and modularity. Explore the benefits of

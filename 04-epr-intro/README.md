@@ -23,7 +23,7 @@ and responsibilities of the server, command-line interface (CLI), and client.
 Discuss the server's function in handling events, the CLI's role in user
 interaction, and the client's purpose in integrating with external systems.
 
-## Workshop Format:
+## Workshop Format
 
 The session will incorporate live demonstrations, allowing participants to
 follow along with the exploration of the codebase. Practical exercises will be
@@ -31,7 +31,7 @@ integrated, enabling participants to navigate the project structure and identify
 key components. Q&A sessions will be interspersed throughout the workshop to
 address participant queries and provide clarifications.
 
-## Key Learning Objectives:
+## Key Learning Objectives
 
 Acquire the skills to access and clone the EPR project codebase using version
 control. Gain a deep understanding of the project's structure, including

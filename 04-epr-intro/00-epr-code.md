@@ -1,9 +1,11 @@
-# Get the Code
+# EPR Codebase
 
-Initiate the workshop by guiding participants on how to clone and get the
-codebase of the Event Provenance Registry (EPR) project.
+Begin your exploration of the Event Provenance Registry (EPR) project by gaining
+access to the codebase and understanding its structure.
 
 ## Clone the Code
+
+Use the following command to clone the EPR project repository:
 
 ```bash
 git clone git@github.com:sassoftware/event-provenance-registry.git
@@ -11,9 +13,12 @@ git clone git@github.com:sassoftware/event-provenance-registry.git
 
 ## Repository Structure
 
+Let's take a look at the repository structure. Currently, the EPR project is
+layed out like an SDK.
+
 The codebase is structured as follows:
 
-Event Provenance Registry (EPR) Server Packages
+### Event Provenance Registry (EPR) Server Packages
 
 ```bash
 ├── cmd
@@ -21,46 +26,6 @@ Event Provenance Registry (EPR) Server Packages
 ├── docker-compose.services.yaml
 ├── docker-compose.yaml
 ├── docs
-│   ├── README.md
-│   ├── explanations
-│   │   ├── README.md
-│   │   ├── arch
-│   │   │   ├── DECISIONS.md
-│   │   │   ├── README.md
-│   │   │   └── adr-1-use-adrs.md
-│   │   ├── cdf-blog.md
-│   │   └── enhancements
-│   │       ├── README.md
-│   │       └── REP-1.md
-│   ├── how-to
-│   │   ├── README.md
-│   │   ├── redpanda
-│   │   │   ├── README.md
-│   │   │   ├── multi-node
-│   │   │   │   ├── docker-compose.yaml
-│   │   │   │   └── redpanda_deploy.md
-│   │   │   └── single-node
-│   │   │       └── README.md
-│   │   ├── start-server
-│   │   │   └── README.md
-│   │   └── watcher
-│   │       ├── README.md
-│   │       ├── go.mod
-│   │       ├── go.sum
-│   │       └── main.go
-│   ├── reference
-│   │   ├── README.md
-│   │   └── glossary.md
-│   └── tutorials
-│       ├── README.md
-│       ├── cdevents
-│       │   └── README.md
-│       ├── hello_world
-│       │   └── README.md
-│       ├── sboms
-│       │   └── README.md
-│       └── watcher
-│           └── README.md
 ├── gencerts.sh
 ├── go.mod
 ├── go.sum
@@ -145,21 +110,9 @@ Event Provenance Registry (EPR) Server Packages
 │   └── watcher
 │       └── watcher.go
 └── tests
-    ├── README.md
-    ├── common
-    │   └── net.go
-    ├── e2e
-    │   ├── api_event.go
-    │   ├── api_event_receiver.go
-    │   ├── api_event_receiver_group.go
-    │   ├── api_event_receiver_group_test.go
-    │   ├── api_event_receiver_test.go
-    │   └── api_event_test.go
-    ├── go.mod
-    └── go.sum
 ```
 
-Event Provenance Registry (EPR) CLI
+### Event Provenance Registry (EPR) CLI
 
 ```bash
 ├── cli
@@ -191,33 +144,90 @@ Event Provenance Registry (EPR) CLI
 │   │   └── status
 │   │       └── status.go
 │   ├── docs
-│   │   ├── README.md
-│   │   ├── explanations
-│   │   │   ├── README.md
-│   │   │   ├── arch
-│   │   │   │   ├── DECISIONS.md
-│   │   │   │   ├── README.md
-│   │   │   │   └── adr-1-use-adrs.md
-│   │   │   └── enhancements
-│   │   │       ├── README.md
-│   │   │       └── REP-1.md
-│   │   ├── how-to
-│   │   │   └── README.md
-│   │   ├── reference
-│   │   │   └── README.md
-│   │   └── tutorials
-│   │       ├── README.md
-│   │       └── hello_world.md
 │   ├── go.mod
 │   ├── go.sum
 │   ├── main.go
-│   ├── temp
-│   │   └── README.md
 │   └── testdata
-│       ├── e_bar.json
-│       ├── e_foo.json
-│       ├── er_bar.json
-│       ├── er_foo.json
-│       ├── erg_foo.json
-│       └── list_er.json
+```
+
+## Develop
+
+EPR provides a `Makefile` which can be used to build and install the project.
+
+### Build
+
+Build the server binaries for several platforms.
+
+```bash
+make
+```
+
+## Installation
+
+Install the server binaries in the `bin` directory.
+
+The default install location is `/usr/local/bin`. You can install in the
+`/usr/local/bin` directory by running the following command:
+
+Linux
+
+```bash
+make install
+```
+
+Mac OS X
+
+```bash
+make install-darwin
+```
+
+To install in your go path directory set `PREFIX` to your go path. For example,
+if you want to install in `~/go/bin` set `PREFIX=~/go`.
+
+Linux
+
+```bash
+make PREFIX=$(go env GOPATH) install
+```
+
+Mac OS X M1
+
+```bash
+make PREFIX=$(go env GOPATH) install-darwin-arm64
+```
+
+## Tests
+
+Run the go unit tests:
+
+```bash
+make test
+```
+
+## Linter
+
+Run golangci-lint (requires
+[golangci-lint](https://golangci-lint.run/usage/install/) to be installed):
+
+```bash
+make megalint
+```
+
+## Usage
+
+The `epr-server` command is used to start the EPR server.
+
+```txt
+Usage:
+  epr-server [flags]
+
+Flags:
+      --brokers string   broker uris separated by commas (default "localhost:9092")
+      --config string    config file (default is $XDG_CONFIG_HOME/epr/epr.yaml)
+      --db string        database connection string (default "postgres://localhost:5432")
+      --debug            Enable debugging statements
+  -h, --help             help for epr-server
+      --host string      host to listen on (default "localhost")
+      --port string      port to listen on (default "8042")
+      --topic string     topic to produce events on (default "epr.dev.events")
 ```
