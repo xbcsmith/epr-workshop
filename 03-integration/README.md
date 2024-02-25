@@ -2,14 +2,14 @@
 
 ## Outline
 
-1. Overview of How to Use Redpanda (Kafka) as a Message Bus:
+### Overview of How to Use Redpanda (Kafka) as a Message Bus
 
    Begin the workshop by providing participants with a comprehensive overview of
    Redpanda (Kafka) as a powerful message bus. Cover the fundamental concepts,
    terminology, and key functionalities of Redpanda, emphasizing its role in
    facilitating seamless communication between microservices.
 
-1. Understanding the Role of Redpanda (Kafka) in Event-Driven Architecture:
+### Understanding the Role of Redpanda (Kafka) in Event-Driven Architecture
 
    Delve into the specifics of how Redpanda integrates into an event-driven
    architecture, emphasizing its significance in decoupling components and
@@ -17,7 +17,7 @@
    Redpanda plays a pivotal role in building scalable and resilient event-driven
    systems.
 
-1. Testing Message Propagation and Handling with Redpanda (Kafka):
+### Testing Message Propagation and Handling with Redpanda (Kafka)
 
    Conduct hands-on exercises to guide participants through testing message
    propagation and handling using Redpanda. Demonstrate how to produce and

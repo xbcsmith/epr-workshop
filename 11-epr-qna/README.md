@@ -2,14 +2,14 @@
 
 ## Outline
 
-1. Participant Questions and Engagements:
+### Participant Questions and Engagements
 
 Open the session by inviting participants to ask questions related to the
 workshop content, challenges faced during hands-on exercises, or any areas they
 seek clarification on. Encourage an open and interactive environment where
 participants feel comfortable sharing their queries.
 
-1. Facilitated Discussion on Workshop Topics:
+### Facilitated Discussion on Workshop Topics
 
 Facilitate a discussion centered around the key topics covered in the workshop.
 Encourage participants to share their thoughts, insights, and experiences
@@ -17,7 +17,7 @@ related to the workshop content. Prompt discussions on specific challenges
 encountered, successful implementations, or alternative approaches participants
 may have explored.
 
-1. Peer-to-Peer Exchange of Experiences:
+### Peer-to-Peer Exchange of Experiences
 
 Create opportunities for participants to share their experiences with each
 other. This could include discussing solutions to challenges, sharing best
@@ -25,26 +25,26 @@ practices, or showcasing unique implementations. Foster a collaborative
 atmosphere where participants can learn from each other's experiences and
 perspectives.
 
-1. Facilitator-Led Insights:
+### Facilitator-Led Insights
 
 Share additional insights or tips related to the workshop topics, addressing
 common questions that may have arisen during the session. Provide additional
 context or real-world examples to enhance participants' understanding.
 
-1. Reflection on Learning Outcomes:
+### Reflection on Learning Outcomes
 
 Encourage participants to reflect on what they've learned during the workshop.
 Ask them to identify key takeaways and how they plan to apply their new
 knowledge or skills in their respective contexts.
 
-1. Future Applications and Extensions:
+### Future Applications and Extensions
 
 Facilitate a discussion on how participants envision applying the workshop's
 content in their work or projects. Explore potential extensions or applications
 of the concepts covered, encouraging participants to brainstorm and share their
 ideas.
 
-1. Closing Remarks and Thank You:
+### Closing Remarks and Thank You
 
 Conclude the Q&A and discussion session with closing remarks, expressing
 gratitude for participants' active engagement and contributions. Provide

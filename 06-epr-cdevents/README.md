@@ -2,7 +2,7 @@
 
 ## Outline
 
-1. Hands-On Session on Utilizing EPR for CDEvents Management:
+### Hands-On Session on Utilizing EPR for CDEvents Management
 
 Commence the workshop with a hands-on session, providing participants with
 direct experience in utilizing the Event Provenance Registry (EPR) for managing
@@ -10,27 +10,27 @@ Continuous Delivery Events (CDEvents). Participants will be guided through the
 setup of their development environment and introduced to the EPR CLI for
 seamless interaction.
 
-1. Creating CDEvents for Activity in the Pipeline:
+### Creating CDEvents for Activity in the Pipeline
 
 Walk participants through the process of creating CDEvents to capture and
 document activities within a Continuous Delivery (CD) pipeline. Discuss the
 significance of defining key attributes in CDEvents, such as name, version,
 release, platform, package, success, description, and payload.
 
-1. Storing CDEvents in EPR in Events:
+### Storing CDEvents in EPR in Events
 
 Guide participants in storing the created CDEvents within the EPR system.
 Explore the storage mechanism, emphasizing the importance of maintaining a
 comprehensive record of CD activities for provenance.
 
-1. Retrieving and Querying CDEvents from the EPR Storage:
+### Retrieving and Querying CDEvents from the EPR Storage
 
 Demonstrate how to retrieve and query CDEvents from the EPR storage, providing
 participants with the skills to access and analyze historical data. Introduce
 various querying techniques, including filtering by event attributes and
 retrieving specific event details.
 
-1. Grouping CDEvents in Event Receivers:
+### Grouping CDEvents in Event Receivers
 
 Explore the concept of Event Receivers and guide participants in grouping
 CDEvents within these receivers. Discuss the benefits of organizing events into
