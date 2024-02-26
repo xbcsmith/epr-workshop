@@ -4,26 +4,25 @@
 
 ### Overview of How to Use Redpanda (Kafka) as a Message Bus
 
-   Begin the workshop by providing participants with a comprehensive overview of
-   Redpanda (Kafka) as a powerful message bus. Cover the fundamental concepts,
-   terminology, and key functionalities of Redpanda, emphasizing its role in
-   facilitating seamless communication between microservices.
+Begin the workshop by providing participants with a comprehensive overview of
+Redpanda (Kafka) as a powerful message bus. Cover the fundamental concepts,
+terminology, and key functionalities of Redpanda, emphasizing its role in
+facilitating seamless communication between microservices.
 
 ### Understanding the Role of Redpanda (Kafka) in Event-Driven Architecture
 
-   Delve into the specifics of how Redpanda integrates into an event-driven
-   architecture, emphasizing its significance in decoupling components and
-   enabling asynchronous communication. Discuss real-world use cases where
-   Redpanda plays a pivotal role in building scalable and resilient event-driven
-   systems.
+Delve into the specifics of how Redpanda integrates into an event-driven
+architecture, emphasizing its significance in decoupling components and enabling
+asynchronous communication. Discuss real-world use cases where Redpanda plays a
+pivotal role in building scalable and resilient event-driven systems.
 
 ### Testing Message Propagation and Handling with Redpanda (Kafka)
 
-   Conduct hands-on exercises to guide participants through testing message
-   propagation and handling using Redpanda. Demonstrate how to produce and
-   consume messages, showcasing the reliability and fault-tolerance features of
-   Redpanda. Discuss best practices for designing topics, partitions, and
-   consumers to optimize message processing.
+Conduct hands-on exercises to guide participants through testing message
+propagation and handling using Redpanda. Demonstrate how to produce and consume
+messages, showcasing the reliability and fault-tolerance features of Redpanda.
+Discuss best practices for designing topics, partitions, and consumers to
+optimize message processing.
 
 ## Workshop Format
 

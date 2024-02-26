@@ -41,15 +41,9 @@ Later we will build the server binary with `make`.
 
 On successful startup the server will display the message below:
 
-```json
-{
-  "level": "info",
-  "module": "cmd.root",
-  "v": 0,
-  "logger": "server",
-  "timestamp": "2023-07-29T13:56:22.378783-04:00",
-  "message": "connect to http://localhost:8042/api/v1/graphql for GraphQL playground"
-}
+```txt
+time=2024-02-26T09:44:52.943-05:00 level=INFO msg="TLS Not Enabled"
+time=2024-02-26T09:44:52.943-05:00 level=INFO msg="connect to http://localhost:8042/api/v1/graphql for GraphQL playground"
 ```
 
 The graphql playground will now be accessible at:

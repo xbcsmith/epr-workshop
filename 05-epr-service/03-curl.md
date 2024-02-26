@@ -1,7 +1,7 @@
 # Curl
 
-In this section of the workshop we will be using curl to make requests to the
-Event Provenance Registry.
+In this section of the workshop we will use curl to make requests to the Event
+Provenance Registry.
 
 ## Create using the REST API
 
