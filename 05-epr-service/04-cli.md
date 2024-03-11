@@ -177,3 +177,5 @@ epr-cli event search --name bar --version 1.0.0 --success true --fields all
 By posting the `foo` event to the first receiver and `bar` to the second
 receiver we trigger the receiver group message to fire. We should be able to see
 the message in the redpanda UI and in the event queue.
+
+## Generating Events from files with the CLI

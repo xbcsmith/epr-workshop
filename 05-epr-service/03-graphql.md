@@ -63,6 +63,10 @@ mutation {
 }
 ```
 
+01HQK3PW9SY8G0B5FHYSK61VT4
+
+01HQK3RG7NR3XXN2HP1VVBJW1E
+
 This will return the id of the newly created event receiver group.
 
 ```json
@@ -124,7 +128,7 @@ the previously created event
 
 ```graphql
 query {
-  events_by_id(id: "01HPW06R5QXK0C2GZM8H442Q9F") {
+  events_by_id(id: "01HQK3WF99YXWQW7QZCC4TC7FW") {
     id
     name
     version

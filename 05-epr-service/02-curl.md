@@ -16,7 +16,7 @@ curl --location --request POST 'http://localhost:8042/api/v1/receivers' \
 --data-raw '{
     "name": "foobar",
     "type": "foo.bar",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "description": "The event receiver of Brixton",
     "enabled": true,
     "schema": {
@@ -63,6 +63,8 @@ curl --location --request POST 'http://localhost:8042/api/v1/events' \
     "event_receiver_id": "<PASTE EVENT RECEIVER ID FROM FIRST CURL COMMAND>"
 }'
 ```
+
+
 
 The results of the command should look like this:
 

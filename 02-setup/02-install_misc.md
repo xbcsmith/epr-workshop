@@ -26,7 +26,6 @@ The binaries should just run, but on macOS and Linux you may need to make them e
 
 You can download the binaries from the [jq downloads page](https://jqlang.github.io/jq/download/).
 
-
 Or you can install jq with the following command:
 
 ```bash

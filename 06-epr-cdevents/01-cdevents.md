@@ -27,7 +27,7 @@ cd ./cdevents
 
 ## Event Receiver Schema
 
-Event recievers have a `schema` we can attach a JSON Schema object to as part of
+Event receivers have a `schema` we can attach a JSON Schema object to as part of
 the creation process. Event receivers are required to have a schema. This schema
 plays a crucial role in validating the payload of events linked to the event
 receiver. Leveraging this feature allows us to guarantee that event payloads
@@ -215,7 +215,7 @@ curl --location --request POST 'http://localhost:8042/api/v1/events' \
 }
     ,
     "success": true,
-    "event_receiver_id": "01HFFDS17FA20PZRWR23KHPK9Y"
+    "event_receiver_id": "01HQK4JD53RYX04HZTMTEYBDTX"
 }'
 ```
 
