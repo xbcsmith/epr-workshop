@@ -64,8 +64,6 @@ curl --location --request POST 'http://localhost:8042/api/v1/events' \
 }'
 ```
 
-
-
 The results of the command should look like this:
 
 ```json

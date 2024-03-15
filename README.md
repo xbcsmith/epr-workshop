@@ -104,15 +104,7 @@ The requirements for the workshop are as follows:
 - Creating CDEvents for activity in the pipeline
 - Storing CDEvents in EPR in Events
 - Retrieving and querying CDEvents from the EPR storage
-- Grouping CDEvents in EventRecievers
-
-### Python EPR: Working with the python client
-
-- Hands-on session on using the EPR python client
-- Creating EventRecievers using the EPR Python Client
-- Creating EventRecieverGroups using the EPR Python Client
-- Creating Events using the EPR Python Client
-- Searching for Events using the EPR Python Client
+- Grouping CDEvents in EventReceivers
 
 ### Advanced EPR: Creating, Storing, and Tracking SBOMs
 
@@ -126,6 +118,14 @@ The requirements for the workshop are as follows:
 - Creating a watcher client using the watcher SDK
 - Create a task for the Watcher
 - Trigger the watcher with an event
+
+### Python EPR: Working with the python client
+
+- Hands-on session on using the EPR python client
+- Creating EventReceivers using the EPR Python Client
+- Creating EventReceiverGroups using the EPR Python Client
+- Creating Events using the EPR Python Client
+- Searching for Events using the EPR Python Client
 
 ### Workshop Challenge: Enhancing EPR Functionality
 
