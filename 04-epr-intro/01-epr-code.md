@@ -49,8 +49,8 @@ The codebase is structured as follows:
 │   │   │       ├── schema_test.go
 │   │   │       └── types
 │   │   │           ├── event.graphql
-│   │   │           ├── event_reciever.graphql
-│   │   │           ├── event_reciever_group.graphql
+│   │   │           ├── event_receiver.graphql
+│   │   │           ├── event_receiver_group.graphql
 │   │   │           ├── json.go
 │   │   │           ├── json.graphql
 │   │   │           ├── time.go

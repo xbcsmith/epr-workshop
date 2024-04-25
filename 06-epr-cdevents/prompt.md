@@ -8,4 +8,4 @@ CDEvents EPR: Creating, Storing, and Retrieving CDEvents
 - Creating CDEvents for activity in the pipeline
 - Storing CDEvents in EPR in Events
 - Retrieving and querying CDEvents from the EPR storage
-- Grouping CDEvents in EventRecievers
+- Grouping CDEvents in EventReceivers

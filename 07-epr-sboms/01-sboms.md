@@ -11,8 +11,8 @@ Provenance Registry (EPR).
 
 ## Requirements
 
-The [Quickstart](../quickstart/README.md) has been completed and the EPR
-server is running.
+The [Quickstart](../quickstart/README.md) has been completed and the EPR server
+is running.
 
 ### Tools
 
@@ -34,7 +34,12 @@ cd ./sboms
 
 ## Event Receiver Schema
 
-Event recievers have a `schema` we can attach a JSON Schema object to as part of the creation process. Event receivers are required to have a schema. This schema plays a crucial role in validating the payload of events linked to the event receiver. Leveraging this feature allows us to guarantee that event payloads conforms to the expected data structure defined for that specific event receiver.
+Event receivers have a `schema` we can attach a JSON Schema object to as part of
+the creation process. Event receivers are required to have a schema. This schema
+plays a crucial role in validating the payload of events linked to the event
+receiver. Leveraging this feature allows us to guarantee that event payloads
+conforms to the expected data structure defined for that specific event
+receiver.
 
 ## CycloneDX bom schema
 

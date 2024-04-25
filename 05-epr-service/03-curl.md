@@ -119,7 +119,7 @@ curl --header 'Content-Type: application/json' --location \
 We need to craft a GraphQL query. First thing we need is an event receiver. The
 event receiver acts as a classification and gate for events.
 
-We can find and event reciever by id using the following graphql query:
+We can find and event receiver by id using the following graphql query:
 
 ```json
 {
@@ -132,7 +132,7 @@ We can find and event reciever by id using the following graphql query:
 }
 ```
 
-We can query the event reciever information using a POST on the graphql endpoint
+We can query the event receiver information using a POST on the graphql endpoint
 as follows:
 
 ```bash
@@ -153,7 +153,7 @@ We can query for an event by name and version using the following graphql query:
 }
 ```
 
-We can query the event reciever information using a POST on the graphql endpoint
+We can query the event receiver information using a POST on the graphql endpoint
 as follows:
 
 ```bash
@@ -179,7 +179,7 @@ graphql query:
 }
 ```
 
-We can query the event reciever information using a POST on the graphql endpoint
+We can query the event receiver information using a POST on the graphql endpoint
 as follows:
 
 ```bash
@@ -188,10 +188,28 @@ curl -X POST -H "content-type:application/json" -d '{"query":"query ($erg: FindE
 
 ### Create using GraphQL with Curl
 
-Create an event receiver using the GraphQL with Curl #TODO FIXME
+We can create an event receiver using the following graphql query:
+
+```json
+{
+  "query": "mutation ($er: CreateEventReceiverInput!){create_event_receiver(event_receiver: $er)}",
+  "variables": {
+    "er": {
+      "name": "foobar",
+      "version": "1.3.0",
+      "description": "foobar is the description",
+      "type": "foobar.test",
+      "schema": "{}"
+    }
+  }
+}
+```
+
+We can create the event receiver using a POST on the graphql endpoint as
+follows:
 
 ```bash
-curl -X POST -H "content-type:application/json" -d '{"query":"mutation ($obj: CreateEventReceiverInput!){create_event_receiver(event_receiver: $obj)}", "variables": {"obj": {"name": "foo", "version": "1.0.0"}}}' http://localhost:8042/api/v1/graphql/query
+curl -X POST -H "content-type:application/json" -d '{"query":"mutation ($er: CreateEventReceiverInput!){create_event_receiver(event_receiver: $er)}","variables":{"er": {"name":"foobar","version":"1.3.0","description":"foobar is the description","type": "foobar.test", "schema" : "{}"}}}' http://localhost:8042/api/v1/graphql/query
 ```
 
 Create an event receiver group using the GraphQL with Curl #TODO FIXME
