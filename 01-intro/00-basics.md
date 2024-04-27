@@ -47,7 +47,17 @@ service uniformly.
 ## You want microservices this is how you get microservices?
 
 There are drawbacks to this approach. We can increase the complexity of the
-system by by increasing the number of microservices.
+system by increasing the number of microservices.
+
+Microservices are most effective when they maintain a clear, well-defined scope,
+but finding the right level of complexity is key. Simply increasing the number
+of microservices does not necessarily enhance maintainability or scalability.
+
+While microservices offer benefits like scalability and modularity, they also
+introduce logistical challenges. Backend services typically expose versioned
+APIs, requiring coordination among services. Additionally, this approach can
+lead to increased network traffic, potentially causing bottlenecks if not
+managed properly.
 
 ## Why Event Driven Microservice Architecture?
 

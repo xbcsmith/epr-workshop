@@ -43,8 +43,8 @@ The prerequisites for the workshop as as follows:
 ## Requirements
 
 Bring your own unix environment. The workshop is geared towards a Linux
-development environment. While Mac OS works fine most of the time none of us
-have tried this in Windows.
+development environment. While Mac OS and WSL2 work fine most of the time none
+of us have tried this in native Windows without WSL2.
 
 The requirements for the workshop are as follows:
 

@@ -82,7 +82,7 @@ with specific units in the pipeline. This identifier is particularly significant
 for receipts, enabling a comprehensive understanding of events within a specific
 context.
 
-NVRPPExample:
+NVRPP Example:
 
 ```text
 Name: foo

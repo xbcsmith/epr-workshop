@@ -24,8 +24,8 @@ represented in a Normalized Form, ensuring consistency and clarity.
 
 Events in CDEvents are broadcasted, allowing information about Continuous
 Delivery activities to be shared across the environment. The use of a normalized
-form ensures a common understanding of the events, fostering consistency in
-interpretation.
+form ensures a common understanding of the events for artifacts building, tests
+completing, scans completed, etc..., fostering consistency in interpretation.
 
 ### Propagation through Message Brokers or Message Buses
 

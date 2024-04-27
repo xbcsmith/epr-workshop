@@ -7,9 +7,10 @@ though its operation may benefit from a comprehensive understanding. At a high
 level, EPR serves as a centralized system that systematically captures events
 stemming from tasks executed within a pipeline. These events are subsequently
 dispatched to a designated message queue. EPR introduces the concept of
-"watchers," additional services that diligently monitor the message queue for
-events of particular interest. These watchers spring into action when specific
-events align with predefined criteria.
+"watchers", additional services that monitor the message queue for events of
+particular interest. Upon detecting such events, the watcher executes predefined
+logic. For instance, a typical watcher might activate webhooks upon recognizing
+particular events.
 
 ## Functionality
 

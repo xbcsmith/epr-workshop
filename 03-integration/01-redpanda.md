@@ -15,7 +15,7 @@ This command ensures that Redpanda runs in the background. Remember to stop the
 container once you've completed your development tasks.
 
 ```bash
-docker run -d --pull=always --name=redpanda-0 --rm \
+docker run --pull=always --name=redpanda-0 --rm \
     -p 8081:8081 \
     -p 8082:8082 \
     -p 9092:9092 \
@@ -43,8 +43,8 @@ docker exec -it redpanda-0 \
 ### Step 3: Produce a Message
 
 Produce a message into the `epr.dev.events` topic using the following command.
-Type your desired text and press `Ctrl + D` to separate between messages. To
-exit the produce command, press `Ctrl + C`.
+Type your desired text and press `Enter` to separate between messages. To exit
+the produce command, press `Ctrl + C`.
 
 ```bash
 docker exec -it redpanda-0 \
@@ -111,8 +111,8 @@ View the topic in the Redpanda admin console at
 ### Step 3: Produce a Message in Redpanda
 
 Produce a message into the `epr.dev.events` topic using the following command.
-Type your desired text and press `Ctrl + D` to separate between messages. To
-exit the produce command, press `Ctrl + C`.
+Type your desired text and press `Enter` to separate between messages. To exit
+the produce command, press `Ctrl + C`.
 
 ```bash
 docker exec -it redpanda \

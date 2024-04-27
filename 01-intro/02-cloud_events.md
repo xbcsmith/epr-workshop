@@ -44,7 +44,7 @@ Events facilitates adaptive and responsive event consumption. Consumers can
 evolve independently, expressing interest in relevant events as their needs
 change over time.
 
-## Conlcusion
+## Conclusion
 
 Overall, the Cloud Events specification serves as a crucial standard for
 event-driven architectures, fostering an environment where services can evolve
