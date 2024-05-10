@@ -30,7 +30,7 @@ Provenance Registry.
 Install the `kafka-python` library.
 
 ```bash
-python3 pip install --upgrade kafka-python
+python3 -m pip install --upgrade kafka-python-ng
 ```
 
 Create the consumer.
@@ -44,11 +44,11 @@ topic = os.environ.get("EPR_TOPIC", "epr.dev.events")
 
 
 consumer = KafkaConsumer(
-  bootstrap_servers=[brokers],
-  group_id="epr-python-consumer",
-  auto_offset_reset="earliest",
-  enable_auto_commit=False,
-  consumer_timeout_ms=1000
+    bootstrap_servers=[brokers],
+    group_id="epr-python-consumer",
+    auto_offset_reset="earliest",
+    enable_auto_commit=False,
+    consumer_timeout_ms=1000,
 )
 
 consumer.subscribe(topic)

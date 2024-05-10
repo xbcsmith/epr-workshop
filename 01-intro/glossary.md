@@ -72,7 +72,7 @@ A Boolean set on a event to determine whether it successful or not.
 
 ### Watchers
 
-Event watchers are structures within EPR designed to capture and catagorize
+Event watchers are structures within EPR designed to capture and categorize
 events. They act as recipients of specific events, defining the scope and nature
 of events they are interested in. These receivers streamline the categorization
 and handling of events based on predetermined criteria.

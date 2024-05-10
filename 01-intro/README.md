@@ -42,12 +42,16 @@ interspersed to address participant queries and foster engagement.
 
 ## Key Learning Objectives
 
-Gain a foundational understanding of microservice architectures and their
-relevance in achieving scalability and modularity. Explore the benefits of
-event-driven asynchronous communication in CI/CD pipelines. Familiarize
-participants with the Event Provenance Registry (EPR) project and its core
-components. Understand the significance of Cloud Events and the Continuous
-Delivery Events (CDEvents) specification in standardizing event messages.
+Learning objectives for this workshop include:
+
+- Gain a foundational understanding of microservice architectures and their
+  relevance in achieving scalability and modularity.
+- Explore the benefits of event-driven asynchronous communication in CI/CD
+  pipelines.
+- Familiarize participants with the Event Provenance Registry (EPR) project and
+  its core components. Understand the significance of Cloud Events and the
+  Continuous
+- Delivery Events (CDEvents) specification in standardizing event messages.
 
 Note: This workshop session is designed to provide participants with a solid
 understanding of event-driven microservice architectures, leveraging the EPR

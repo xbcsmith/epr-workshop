@@ -55,7 +55,7 @@ provides high flexibility in integrating with diverse tools and processes.
 By focusing on relevant events and automating tasks, Watchers free up
 development teams to dedicate their expertise to more strategic work.
 
-## Conlcusion
+## Conclusion
 
 In essence, EPR Watchers act as the intelligent assistants within your
 Event-Driven CI/CD pipeline, ensuring events are routed to the appropriate
