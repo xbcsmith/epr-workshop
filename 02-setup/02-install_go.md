@@ -1,15 +1,15 @@
 # Install Go
 
-The Golang programming language is used in the Event-Driven CI/CD workshop. To
-install it, follow the steps on the Golang website:
+The Go programming language is used in the Event-Driven CI/CD workshop. To
+install it, follow the steps on the Go website:
 [https://go.dev/doc/install](https://go.dev/doc/install).
 
 ## Windows
 
 Another way is to download and install the
-[Golang Windows Installer](https://go.dev/dl/).
+[Go Windows Installer](https://go.dev/dl/).
 
-## Mac M1
+## Mac OS
 
 Another way is to install from [homebrew](https://brew.sh/).
 

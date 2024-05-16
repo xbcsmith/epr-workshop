@@ -1,6 +1,6 @@
 # EPR Quickstart Guide
 
-## Introduction
+## Overview
 
 This section guides you through the process of getting the codebase of the Event
 Provenance Registry (EPR) project. Starting the backend services and the EPR

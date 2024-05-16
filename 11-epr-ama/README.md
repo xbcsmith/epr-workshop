@@ -1,4 +1,4 @@
-# Workshop Session: Q&A and Discussion
+# Workshop Session: Ask Me Anything
 
 ## Outline
 

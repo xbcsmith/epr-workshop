@@ -4,14 +4,14 @@
 
 ### Event Provenance Registry
 
-Event Provenance Registry (EPR) is a service designed to efficiently manage and
-store events, while also tracking event_receivers and event_receiver_groups.
-Offering a robust API, EPR empowers users to seamlessly create event_receivers
-and event_receiver_groups. Furthermore, it facilitates querying the Event
-Provenance Registry, enabling users to obtain crucial identifying information
-about event_receivers and events. Through these capabilities, EPR plays a
-central role in enhancing the visibility, traceability, and management of events
-within a system.
+[Event Provenance Registry (EPR)](https://github.com/sassoftware/event-provenance-registry)
+is a service designed to efficiently manage and store events, while also
+tracking event_receivers and event_receiver_groups. Offering a robust API, EPR
+empowers users to seamlessly create event_receivers and event_receiver_groups.
+Furthermore, it facilitates querying the Event Provenance Registry, enabling
+users to obtain crucial identifying information about event_receivers and
+events. Through these capabilities, EPR plays a central role in enhancing the
+visibility, traceability, and management of events within a system.
 
 ### Events
 

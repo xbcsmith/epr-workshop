@@ -15,8 +15,7 @@ and query commands can be found below.
 
 ## Mutation using GraphQL
 
-To start lets create an event receiver. We need the event receiver to be created
-first so we can tie events to the event receiver.
+To start, we will need to create an event receiver.
 
 Create an event receiver by pasting the following mutation into the GraphQL
 Playground.
@@ -56,16 +55,13 @@ mutation {
       name: "foobar"
       version: "1.0.0"
       description: "a fake event receiver group"
+      enabled: true
       event_receiver_ids: ["ID_RETURNED_FROM_PREVIOUS_MUTATION"]
       type: "test.test.test"
     }
   )
 }
 ```
-
-01HQK3PW9SY8G0B5FHYSK61VT4
-
-01HQK3RG7NR3XXN2HP1VVBJW1E
 
 This will return the id of the newly created event receiver group.
 

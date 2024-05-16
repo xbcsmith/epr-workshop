@@ -6,19 +6,19 @@ Several resources and tools used in this workshop.
 
 ### General Resources
 
-- [Golang](https://golang.org/)
+- [Go](https://golang.org/)
 - [Python](https://www.python.org/)
 - [Docker](https://docs.docker.com/get-docker/)
 - [Redpanda](https://redpanda.com/)
 - [PostgreSQL](https://www.postgresql.org/)
 - [GraphQL](https://graphql.org/)
 
-### Golang Resources
+### Go Resources
 
-- [Golang](https://golang.org/)
-- [Golang Playground](https://play.golang.org/)
-- [Golang Documentation](https://golang.org/doc/)
-- [Golang Examples](https://golang.org/doc/effective_go.html)
+- [Go](https://golang.org/)
+- [Go Playground](https://play.golang.org/)
+- [Go Documentation](https://golang.org/doc/)
+- [Go Examples](https://golang.org/doc/effective_go.html)
 
 ### GraphQL Resources
 

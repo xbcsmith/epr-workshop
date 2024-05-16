@@ -12,10 +12,68 @@ Create an event receiver using the provided parameters:
 eprcli create event-receiver --name foo-python-cli --version 1.0.0 --type dev.foo.python.cli --description "foo python cli event receiver" --schema "{}"
 ```
 
+We will need the `id` of the newly created event receiver for several of the
+next commands.
+
+```json
+{
+  "events": [],
+  "event_receivers": ["01HXS7PKE40K3E34KSBR8J2Y2N"],
+  "event_receiver_groups": []
+}
+```
+
+We can validate the new event receiver exists with the search command using the
+`ID` from the create receiver command.
+
 Search for an event receiver using the provided parameters:
 
 ```bash
-eprcli search event-receiver --id 01HW3SZ8N3MXA9EWZZY4HSVVNK
+eprcli search event-receiver --id 01HXS7PKE40K3E34KSBR8J2Y2N
+```
+
+The search results will look like this:
+
+```json
+{
+  "events": [],
+  "event_receivers": [
+    {
+      "id": "01HXS7PKE40K3E34KSBR8J2Y2N",
+      "name": "foo-python-cli",
+      "type": "dev.foo.python.cli",
+      "version": "1.0.0",
+      "description": "foo python cli event receiver",
+      "schema": {},
+      "fingerprint": "9fb8af394a9c4cdfefe7b74d7d9e3111f7ffca07abff19dfe57da98e0d349852",
+      "created_at": "2024-05-13T11:03:54.572118-04:00"
+    }
+  ],
+  "event_receiver_groups": []
+}
+```
+
+We can limit the fields returned by the search command using the `fields`
+parameter:
+
+```bash
+eprcli search event-receiver --id 01HXS7PKE40K3E34KSBR8J2Y2N --fields name,version,type
+```
+
+The search results will look like this:
+
+```json
+{
+  "events": [],
+  "event_receivers": [
+    {
+      "name": "foo-python-cli",
+      "version": "1.0.0",
+      "type": "dev.foo.python.cli"
+    }
+  ],
+  "event_receiver_groups": []
+}
 ```
 
 Create a second event receiver using the provided parameters:

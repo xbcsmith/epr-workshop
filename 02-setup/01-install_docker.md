@@ -25,7 +25,7 @@ sudo groupadd docker
 sudo usermod -aG docker ${USER}
 ```
 
-Enable and Start:
+### Enable and Start Docker
 
 ```bash
 sudo systemctl enable docker.service

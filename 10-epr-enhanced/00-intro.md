@@ -1,4 +1,4 @@
-## EPR Enhanced
+# EPR Enhanced
 
 ## Overview
 

@@ -111,8 +111,8 @@ View the topic in the Redpanda admin console at
 ### Step 3: Produce a Message in Redpanda
 
 Produce a message into the `epr.dev.events` topic using the following command.
-Type your desired text and press `Enter` to separate between messages. To exit
-the produce command, press `Ctrl + C`.
+Type your desired text and press `Enter` to separate messages. To exit the
+produce command, press `Ctrl + C`.
 
 ```bash
 docker exec -it redpanda \

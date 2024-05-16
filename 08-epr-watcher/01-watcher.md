@@ -65,7 +65,7 @@ func customTaskHandler(msg *message.Message) error {
 
 ```
 
-Save the file and run `go mod init` then
+Save the file and run `go mod init` in your terminal.
 
 Now we can run `go mod tidy` to fill in our dependencies.
 
@@ -133,5 +133,6 @@ You should now see a message like the one below.
 2023/11/17 16:18:30 I received a task with value '{"success":true,"id":"01HFFJCJYZN02RR1JSCE9DDAS4","specversion":"1.0","type":"foo.bar","source":"","api_version":"v1","name":"magnificent","version":"7.0.1","release":"2023.11.16","platform_id":"linux","package":"docker","data":{"events":[{"id":"01HFFJCJYZN02RR1JSCE9DDAS4","name":"magnificent","version":"7.0.1","release":"2023.11.16","platform_id":"linux","package":"docker","description":"blah","payload":{"name":"joe"},"success":true,"created_at":"16:18:30.000879894","event_receiver_id":"01HFFJ69HHJ506SRDYQMFF1H5A","EventReceiver":{"id":"01HFFJ69HHJ506SRDYQMFF1H5A","name":"watcher-workshop","type":"foo.bar","version":"1.0.0","description":"The event receiver of Brixton","schema":{"type":"object","properties":{"name":{"type":"string"}}},"fingerprint":"b183c34c7ba56b17f89dfe0c0b22c0a340889cae88d8e87a3f16bc5bdc8f7acb","created_at":"16:15:04.000626147"}}],"event_receivers":[{"id":"01HFFJ69HHJ506SRDYQMFF1H5A","name":"watcher-workshop","type":"foo.bar","version":"1.0.0","description":"The event receiver of Brixton","schema":{"type":"object","properties":{"name":{"type":"string"}}},"fingerprint":"b183c34c7ba56b17f89dfe0c0b22c0a340889cae88d8e87a3f16bc5bdc8f7acb","created_at":"16:15:04.000626147"}],"event_receiver_groups":null}}
 ```
 
-**Note**: the matcher being run is looking for kafka messages with the value
-`match`. All other messages will be ignored.
+**Note**: the matcher being run is looking for kafka messages with the type
+`foo.bar`. This aligns with the type of the event receiver we created and posted
+an event to. All other messages will be ignored.

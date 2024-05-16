@@ -38,8 +38,6 @@ The results should look like this:
 
 We need the ULID of the event receiver in the next step.
 
-Create an event using curl.
-
 When you create an event, you must specify an `event_receiver_id` to associate
 it with. An event is the record of some action being completed. You cannot
 create an event for a non-existent receiver ID. The payload field of the event
@@ -212,14 +210,42 @@ follows:
 curl -X POST -H "content-type:application/json" -d '{"query":"mutation ($er: CreateEventReceiverInput!){create_event_receiver(event_receiver: $er)}","variables":{"er": {"name":"foobar","version":"1.3.0","description":"foobar is the description","type": "foobar.test", "schema" : "{}"}}}' http://localhost:8042/api/v1/graphql/query
 ```
 
-Create an event receiver group using the GraphQL with Curl #TODO FIXME
+We will need the event receiver ID returned from this mutation in the next step.
 
-```bash
-curl -X POST -H "content-type:application/json" -d '{"query":"mutation ($obj: CreateEventReceiverGroupInput!){create_event_receiver_group(event_receiver_group: $obj)}", "variables": {"obj": {"name": "foo", "version": "1.0.0"}}}' http://localhost:8042/api/v1/graphql/query
+```json
+{
+  "data": {
+    "create_event_receiver": "01HXS65KV33MP0PSW98P82WKR6"
+  }
+}
 ```
 
-Create an event using the GraphQL with Curl #TODO FIXME
+Create an event receiver group using the GraphQL with Curl. You will need the
+Event Receiver ID returned from the previous mutation.
 
 ```bash
-curl -X POST -H "content-type:application/json" -d '{"query":"mutation ($obj: CreateEventInput!){create_event(event: $obj)}", "variables": {"obj": {"name": "foo", "version": "1.0.0"}}}' http://localhost:8042/api/v1/graphql/query
+curl -X POST -H "content-type:application/json" -d '{"query":"mutation ($obj: CreateEventReceiverGroupInput!){create_event_receiver_group(event_receiver_group: $obj)}", "variables": {"obj": {"name": "foobar", "version": "1.0.0", "type": "test.test.test", "description": "a fake event receiver group", "enabled": true, "event_receiver_ids": ["<ID_RETURNED_FROM_EVENT_RECEIVER_MUTATION>"]}}}' http://localhost:8042/api/v1/graphql/query
+```
+
+```json
+{
+  "data": {
+    "create_event_receiver_group": "01HXS6K78PYDRTMVQCRS4FF2VS"
+  }
+}
+```
+
+Create an event using the GraphQL with Curl. You will need the Event Receiver ID
+returned from the previous mutation.
+
+```bash
+curl -X POST -H "content-type:application/json" -d '{"query":"mutation ($obj: CreateEventInput!){create_event(event: $obj)}", "variables": {"obj": {"name": "foo", "version": "1.0.0", "release": "2023.11.16", "platform_id": "linux", "package": "docker", "description": "blah", "payload": "{\"name\":\"joe\"}", "success": true, "event_receiver_id": "<ID_RETURNED_FROM_EVENT_RECEIVER_MUTATION>"}}}' http://localhost:8042/api/v1/graphql/query
+```
+
+```json
+{
+  "data": {
+    "create_event": "01HXS6RHE2M48RQBZ97Q8YNG49"
+  }
+}
 ```

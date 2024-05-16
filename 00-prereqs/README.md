@@ -9,9 +9,9 @@ learning experience:
 
 ### Basic understanding of Golang
 
-Familiarity with the Golang programming language syntax and basic constructs
-like variables, functions, and packages will be helpful in understanding and
-working with the Event Provenance Registry codebase.
+Familiarity with the Go programming language syntax and basic constructs like
+variables, functions, and packages will be helpful in understanding and working
+with the Event Provenance Registry codebase.
 
 ### DevOps and Containerization
 
@@ -27,12 +27,26 @@ message bus systems like Kafka, including topics, producers, and consumers, will
 help grasp how events are communicated and processed in the Event-Driven CI/CD
 architecture.
 
+## Basic Knowledge of Message Bus Systems (Kafka)
+
+The workshop involves working with message bus systems, specifically Redpanda (a
+Kafka-compatible event streaming platform). Having prior knowledge of message
+bus systems, such as Apache Kafka, will aid in comprehending the event-driven
+architecture concepts covered in the workshop.
+
 ### Databases
 
 Basic knowledge of PostgreSQL: Familiarity with the PostgreSQL database system,
 including basic commands for creating and manipulating data, will be helpful in
 understanding how the Event Provenance Registry stores and retrieves
 information.
+
+## Basic Knowledge of PostgreSQL
+
+The workshop utilizes PostgreSQL as the backend storage for the Event Provenance
+Registry. Basic knowledge of PostgreSQL, including database setup, querying, and
+general database concepts, will be helpful for understanding the storage and
+retrieval aspects of the workshop.
 
 ## Additional Notes
 
