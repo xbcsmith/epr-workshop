@@ -3,6 +3,8 @@
 Building an Event-Driven CI/CD Provenance System with Event Provenance Registry
 (EPR) and CDEvents
 
+![EPR](./images/epr_workshop_light.png)
+
 ## Overview
 
 In this hands-on workshop participants will journey through the architecture of

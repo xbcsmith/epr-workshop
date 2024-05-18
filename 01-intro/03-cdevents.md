@@ -1,5 +1,7 @@
 # Overview of CDEvents: Enhancing Cloud Events for Continuous Delivery
 
+![CDEvents](../images/cdevents_horizontal-color-640.png)
+
 CDEvents extends the principles of Cloud Events to encompass Continuous Delivery
 (CD) processes, providing a specialized language for describing activities
 within this domain. This specification builds upon the well-established
@@ -35,9 +37,11 @@ information across different components of the system.
 
 ### Publish-Subscribe Pattern
 
-Following the Publish-Subscribe pattern, components within the delivery process
-can express interest in specific types of CDEvents. This allows for targeted
-notification and response to relevant activities.
+Following the
+[Publish-Subscribe pattern](https://www.enterpriseintegrationpatterns.com/patterns/messaging/PublishSubscribeChannel.html),
+components within the delivery process can express interest in specific types of
+CDEvents. This allows for targeted notification and response to relevant
+activities.
 
 ### System Agnosticism and Semantic Information
 
@@ -70,3 +74,5 @@ Delivery.
 ## Links
 
 - [CDEvents Specification](https://github.com/cdevents/spec)
+- [CDEvents Primer](https://cdevents.dev/docs/primer/)
+- [Enterprise Integration Patterns - Messaging](https://www.enterpriseintegrationpatterns.com/patterns/messaging/index.html)

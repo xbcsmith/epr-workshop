@@ -2,6 +2,30 @@
 
 ## Tools
 
+### Git
+
+Git is a fast, scalable, distributed revision control system with an unusually
+rich command set that provides both high-level operations and full access to
+internals.
+
+[Git Downloads](https://git-scm.com/downloads)
+
+Linux
+
+```bash
+dnf install git
+```
+
+Mac OS
+
+Apple ships a binary package of Git with Xcode.
+
+or
+
+```bash
+brew install git
+```
+
 ### ULID
 
 Universally Unique Lexicographically Sortable Identifier

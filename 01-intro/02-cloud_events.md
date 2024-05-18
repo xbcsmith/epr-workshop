@@ -1,5 +1,7 @@
 # Overview of Cloud Events Specification
 
+![cloud_events_spec](../images/cloudevents-icon-color-640.png)
+
 The CloudEvents specification aims to establish a foundation for
 interoperability within event systems, enabling services to seamlessly produce
 or consume events independently of each other. This specification is designed to

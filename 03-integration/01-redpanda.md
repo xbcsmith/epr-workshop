@@ -88,7 +88,7 @@ Navigate to the directory where you stored the file in a command prompt and
 deploy Redpanda using Docker Compose.
 
 ```bash
-docker compose -f compose/docker-compose.yaml up
+docker compose -f ./compose/docker-compose.yaml up
 ```
 
 This command runs a single Redpanda broker, configured without authentication,
