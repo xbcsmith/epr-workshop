@@ -1,7 +1,7 @@
 # Event Provenance Registry Workshop
 
 Building an Event-Driven CI/CD Provenance System with Event Provenance Registry
-(EPR) and CDEvents
+(EPR)
 
 ![EPR](./images/epr_workshop_light.png)
 
@@ -57,6 +57,7 @@ The requirements for the workshop are as follows:
 - Docker Compose installed on participants' machines
 - Code editor (e.g., Visual Studio Code, Sublime Text, Vim, Not Emacs)
 - Command line utilities including:
+  - git
   - make
   - curl
   - jq
@@ -100,6 +101,12 @@ The requirements for the workshop are as follows:
 - Walkthrough of building the CLI component
 - Use the CLI to interact with EPR
 
+### Extended EPR: Creating a watcher
+
+- Creating a watcher client using the watcher SDK
+- Create a task for the Watcher
+- Trigger the watcher with an event
+
 ### CDEvents EPR: Creating, Storing, and Retrieving CDEvents
 
 - Hands-on session on utilizing EPR for CDEvents management
@@ -114,12 +121,6 @@ The requirements for the workshop are as follows:
 - Use EPR Events to store SBOMs
 - Use CDEvents to record SBOM creation
 - Retrieving SBOMs from EPR
-
-### Extended EPR: Creating a watcher
-
-- Creating a watcher client using the watcher SDK
-- Create a task for the Watcher
-- Trigger the watcher with an event
 
 ### Python EPR: Working with the python client
 

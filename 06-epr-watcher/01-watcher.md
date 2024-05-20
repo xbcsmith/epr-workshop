@@ -81,7 +81,9 @@ You should see a log stating that we have begin consuming records.
 
 ## Create an event receiver
 
-Create an event receiver:
+Time to create an event receiver.
+
+In a second terminal run the command below:
 
 ```bash
 curl --location --request POST 'http://localhost:8042/api/v1/receivers' \
@@ -104,8 +106,6 @@ curl --location --request POST 'http://localhost:8042/api/v1/receivers' \
 ```
 
 ## Produce message
-
-In a second terminal run the command below:
 
 Create an event:
 

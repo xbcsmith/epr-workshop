@@ -321,3 +321,141 @@ As follows:
   }
 }
 ```
+
+## Query using the GraphQL with Curl
+
+We need to craft a GraphQL query. First thing we need is an event receiver. The
+event receiver acts as a classification and gate for events.
+
+We can find and event receiver by id using the following graphql query:
+
+```json
+{
+  "query": "query ($er: FindEventReceiverInput!){event_receivers(event_receiver: $er) {id,name,type,version,description}}",
+  "variables": {
+    "er": {
+      "id": "01HPW652DSJBHR5K4KCZQ97GJP"
+    }
+  }
+}
+```
+
+We can query the event receiver information using a POST on the graphql endpoint
+as follows:
+
+```bash
+curl -X POST -H "content-type:application/json" -d '{"query":"query ($er: FindEventReceiverInput!){event_receivers(event_receiver: $er) {id,name,type,version,description}}","variables":{"er":{"id":"01HPW652DSJBHR5K4KCZQ97GJP"}}}' http://localhost:8042/api/v1/graphql/query
+```
+
+We can query for an event by name and version using the following graphql query:
+
+```json
+{
+  "query": "query ($e: FindEventInput!){events(event: $e) {id,name,version,release,platform_id,package,description,success,event_receiver_id}}",
+  "variables": {
+    "e": {
+      "name": "foo",
+      "version": "1.0.0"
+    }
+  }
+}
+```
+
+We can query the event receiver information using a POST on the graphql endpoint
+as follows:
+
+```bash
+curl -X POST -H "content-type:application/json" -d '{"query":"query ($e : FindEventInput!){events(event: $e) {id,name,version,release,platform_id,package,description,success,event_receiver_id}}","variables":{"e": {"name":"foo","version":"1.0.0"}}}' http://localhost:8042/api/v1/graphql/query
+```
+
+```bash
+curl -X POST -H "content-type:application/json" -d '{"query":"query {events(event: {name: \"foo\", version: \"1.0.0\"}) {id,name,version,release,platform_id,package,description,success,event_receiver_id}}}' http://localhost:8042/api/v1/graphql/query
+```
+
+We can query for an event receiver group by name and version using the following
+graphql query:
+
+```json
+{
+  "query": "query ($erg: FindEventReceiverGroupInput!){event_receiver_groups(event_receiver_group: $erg) {id,name,type,version,description}}",
+  "variables": {
+    "erg": {
+      "name": "foobar",
+      "version": "1.0.0"
+    }
+  }
+}
+```
+
+We can query the event receiver information using a POST on the graphql endpoint
+as follows:
+
+```bash
+curl -X POST -H "content-type:application/json" -d '{"query":"query ($erg: FindEventReceiverGroupInput!){event_receiver_groups(event_receiver_group: $erg) {id,name,type,version,description}}","variables":{"erg": {"name":"foobar","version":"1.0.0"}}}' http://localhost:8042/api/v1/graphql/query
+```
+
+### Create using GraphQL with Curl
+
+We can create an event receiver using the following graphql query:
+
+```json
+{
+  "query": "mutation ($er: CreateEventReceiverInput!){create_event_receiver(event_receiver: $er)}",
+  "variables": {
+    "er": {
+      "name": "foobar",
+      "version": "1.3.0",
+      "description": "foobar is the description",
+      "type": "foobar.test",
+      "schema": "{}"
+    }
+  }
+}
+```
+
+We can create the event receiver using a POST on the graphql endpoint as
+follows:
+
+```bash
+curl -X POST -H "content-type:application/json" -d '{"query":"mutation ($er: CreateEventReceiverInput!){create_event_receiver(event_receiver: $er)}","variables":{"er": {"name":"foobar","version":"1.3.0","description":"foobar is the description","type": "foobar.test", "schema" : "{}"}}}' http://localhost:8042/api/v1/graphql/query
+```
+
+We will need the event receiver ID returned from this mutation in the next step.
+
+```json
+{
+  "data": {
+    "create_event_receiver": "01HXS65KV33MP0PSW98P82WKR6"
+  }
+}
+```
+
+Create an event receiver group using the GraphQL with Curl. You will need the
+Event Receiver ID returned from the previous mutation.
+
+```bash
+curl -X POST -H "content-type:application/json" -d '{"query":"mutation ($obj: CreateEventReceiverGroupInput!){create_event_receiver_group(event_receiver_group: $obj)}", "variables": {"obj": {"name": "foobar", "version": "1.0.0", "type": "test.test.test", "description": "a fake event receiver group", "enabled": true, "event_receiver_ids": ["<ID_RETURNED_FROM_EVENT_RECEIVER_MUTATION>"]}}}' http://localhost:8042/api/v1/graphql/query
+```
+
+```json
+{
+  "data": {
+    "create_event_receiver_group": "01HXS6K78PYDRTMVQCRS4FF2VS"
+  }
+}
+```
+
+Create an event using the GraphQL with Curl. You will need the Event Receiver ID
+returned from the previous mutation.
+
+```bash
+curl -X POST -H "content-type:application/json" -d '{"query":"mutation ($obj: CreateEventInput!){create_event(event: $obj)}", "variables": {"obj": {"name": "foo", "version": "1.0.0", "release": "2023.11.16", "platform_id": "linux", "package": "docker", "description": "blah", "payload": "{\"name\":\"joe\"}", "success": true, "event_receiver_id": "<ID_RETURNED_FROM_EVENT_RECEIVER_MUTATION>"}}}' http://localhost:8042/api/v1/graphql/query
+```
+
+```json
+{
+  "data": {
+    "create_event": "01HXS6RHE2M48RQBZ97Q8YNG49"
+  }
+}
+```

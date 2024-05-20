@@ -3,7 +3,30 @@
 Redpanda is a Kafka-compatible event streaming platform that provides a message
 bus for our event-driven architecture.
 
-## Setting Up Redpanda: Single Node Deployment
+## Overview of Redpanda
+
+### Redpanda Nodes
+
+Redpanda nodes are designed to be self-contained, with all necessary components
+built-in. This eliminates the need for external dependencies (like JVM or
+KRaft), resulting in rapid boot times, streamlined CI/CD integration, and
+enhanced reliability in production environments.
+
+### Redpanda Keeper (rpk)
+
+Redpanda Keeper (rpk) is a powerful command line interface (CLI) tool for
+managing and tuning your Redpanda clusters. This single binary can be installed
+as a standalone tool, making it ideal for self-hosted setups, cloud deployments,
+and Kubernetes environments.
+
+### Redpanda Console
+
+Redpanda Console is a user-friendly UI for managing your Redpanda or other
+Kafka-compatible clusters. It offers comprehensive Kafka administration,
+improved data observability, and robust security features, including SSO, RBAC,
+and Kerberos support.Setting Up Redpanda: Single Node Deployment
+
+## Single Node Deployment
 
 To begin with, let's deploy Redpanda as a single node, and we'll guide you
 through the process of consuming and producing messages. Follow these steps:
@@ -154,3 +177,4 @@ your development and testing needs.
 - [What is Redpanda](https://redpanda.com/what-is-redpanda)
 - [Redpanda documentation](https://docs.redpanda.com/docs/home/)
 - [Install the Redpanda CLI](https://docs.redpanda.com/docs/get-started/rpk-install/)
+- [Redpanda on GitHub](https://github.com/redpanda-data/redpanda/)

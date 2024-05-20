@@ -1,0 +1,13 @@
+{
+    "name": "magnificent",
+    "version": "7.0.1",
+    "release": "2023.11.16",
+    "platform_id": "linux",
+    "package": "docker",
+    "description": "blah",
+    "payload": {
+      "name": "joe"
+    },
+    "success": true,
+    "event_receiver_id": "01HY9A2KBPPCAH3CMHP71SDHKM"
+  }

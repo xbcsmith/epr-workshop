@@ -50,6 +50,7 @@ Several resources and tools used in this workshop.
 - [Event Provenance Registry](https://github.com/sassoftware/event-provenance-registry)
 - [EPR Documentation](https://github.com/sassoftware/event-provenance-registry/blob/master/docs/README.md)
 - [EPR Workshop](https://github.com/xbcsmith/epr-workshop)
+- [EPR Python Client](https://github.com/xbcsmith/epr-python)
 
 ### ULID
 

@@ -2,7 +2,8 @@
 
 ## Overview
 
-EPR Python is a python client for the Event Provenance Registry server.
+EPR Python is a python client for the Event Provenance Registry server. In this
+section we will walk through the development and usage of the EPR Python client.
 
 ## Development
 

@@ -47,12 +47,6 @@ exchange contact information, and continue discussions beyond the workshop.
 Highlight the importance of building a supportive community for ongoing learning
 and collaboration.
 
-### Certificate of Participation (Optional)
-
-Optionally, provide participants with a certificate of participation to
-recognize their commitment to the workshop and their active engagement in the
-learning process.
-
 ### Closing Remarks and Gratitude
 
 Conclude the workshop with closing remarks, expressing gratitude for
