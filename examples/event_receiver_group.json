@@ -1,0 +1,9 @@
+
+{
+    "name": "the_clash",
+    "type": "foo.bar",
+    "version": "3.3.3",
+    "description": "The only event receiver group that matters",
+    "enabled": true,
+    "event_receiver_ids": ["01HY9A2KBPPCAH3CMHP71SDHKM"]
+}
