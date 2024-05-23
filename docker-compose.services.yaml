@@ -23,6 +23,7 @@ services:
       retries: 5
   redpanda:
     image: "docker.redpanda.com/redpandadata/redpanda:v23.2.17"
+    container_name: redpanda
     restart: unless-stopped
     command:
       - redpanda
