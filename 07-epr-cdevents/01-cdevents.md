@@ -215,7 +215,7 @@ curl --location --request POST 'http://localhost:8042/api/v1/events' \
 }
     ,
     "success": true,
-    "event_receiver_id": "01HQK4JD53RYX04HZTMTEYBDTX"
+    "event_receiver_id": "01HYKM1WBKMHF5DF6ZMDC30SY1"
 }'
 ```
 
@@ -351,6 +351,6 @@ curl --location --request POST 'http://localhost:8042/api/v1/events' \
 }
     ,
     "success": true,
-    "event_receiver_id": "01HFW5HXQR28951NR8NH3WJBN6"
+    "event_receiver_id": "01HYKM1WBKMHF5DF6ZMDC30SY1"
 }'
 ```
