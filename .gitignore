@@ -29,6 +29,8 @@ vendor/
 temp/
 /certs
 
+./*/foo/
+.venv
 .vscode/
 .idea/
 debug

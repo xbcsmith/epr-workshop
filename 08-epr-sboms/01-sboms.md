@@ -71,7 +71,7 @@ curl --location --request POST 'http://localhost:8042/api/v1/receivers' \
 The results of the command should look like this:
 
 ```json
-{ "data": "01HGBDPKPXVYKFNJ1Q6NDK7AMK" }
+{"data":"01HYKMYX2Q45H0G6RJV4E8270W"}
 ```
 
 Create an SBOM to post.
@@ -79,7 +79,9 @@ Create an SBOM to post.
 Run the following command at the root of the event-providence-registry checkout.
 
 ```bash
-cdxgen -o ./docs/tutorials/workshops/sboms/sbom.json --spec-version 1.5
+cd ./event-providence-registry
+cdxgen -o sbom.json --spec-version 1.5
+mv sbom.json epr-workshop/sboms/sbom.json
 ```
 
 Now we create the data for our event.
@@ -89,7 +91,7 @@ cd ./docs/tutorials/workshops/sboms
 ```
 
 ```bash
-echo "{\"name\": \"epr\",\"version\": \"1.0.1\",\"release\": \"2023.11.16\",\"platform_id\": \"aarch64-gnu-linux-7\",\"package\": \"oci\",\"description\": \"scan source code for OCI image EPR\",\"payload\": $(cat sbom.json),\"success\": true,\"event_receiver_id\": \"01HGBDPKPXVYKFNJ1Q6NDK7AMK\"}" | jq > sbom_event.json
+echo "{\"name\": \"epr\",\"version\": \"1.0.1\",\"release\": \"2023.11.16\",\"platform_id\": \"aarch64-gnu-linux-7\",\"package\": \"oci\",\"description\": \"scan source code for OCI image EPR\",\"payload\": $(cat sbom.json),\"success\": true,\"event_receiver_id\": \"01HYKMYX2Q45H0G6RJV4E8270W\"}" | jq > sbom_event.json
 ```
 
 Now that we have the data ready we will POST the event to the event receiver.
@@ -134,7 +136,7 @@ cd ./docs/tutorials/workshops/sboms
 ```
 
 ```bash
-echo "{\"name\": \"epr\",\"version\": \"1.0.1\",\"release\": \"2023.11.16\",\"platform_id\": \"aarch64-gnu-linux-7\",\"package\": \"oci\",\"description\": \"scan of the EPR OCI image\",\"payload\": $(cat oci_sbom.json),\"success\": true,\"event_receiver_id\": \"01HGBDPKPXVYKFNJ1Q6NDK7AMK\"}" | jq > oci_sbom_event.json
+echo "{\"name\": \"epr\",\"version\": \"1.0.1\",\"release\": \"2023.11.16\",\"platform_id\": \"aarch64-gnu-linux-7\",\"package\": \"oci\",\"description\": \"scan of the EPR OCI image\",\"payload\": $(cat oci_sbom.json),\"success\": true,\"event_receiver_id\": \"01HYKMYX2Q45H0G6RJV4E8270W\"}" | jq > oci_sbom_event.json
 ```
 
 Now that we have the data ready we will POST the event to the event receiver.
@@ -151,13 +153,13 @@ curl --location --request POST 'http://localhost:8042/api/v1/events' \
 The results of the command should look like this:
 
 ```json
-{ "data": "01HGBDVCEWE5KYSNMYJPECQEYN" }
+{"data":"01HYKNGK9CDD6M7Q7WTRQ8N6BC"}
 ```
 
 Now we can retrieve the SBOM and use a tool like `grype` to scan it for
 vulnerabilities.
 
 ```bash
-curl --location --request GET 'http://localhost:8042/api/v1/events/01HGBDVCEWE5KYSNMYJPECQEYN' \
+curl --location --request GET 'http://localhost:8042/api/v1/events/01HYKNGK9CDD6M7Q7WTRQ8N6BC' \
 --header 'Content-Type: application/json'  | jq .data.payload | grype
 ```
