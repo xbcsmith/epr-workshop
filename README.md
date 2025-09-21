@@ -130,6 +130,15 @@ The requirements for the workshop are as follows:
 - Creating Events using the EPR Python Client
 - Searching for Events using the EPR Python Client
 
+### MCP EPR: Working with the mcp server
+
+- Hands-on session around writing an EPR MCP server
+- Write an MCP server that talks to an EPR instance
+- Use Claude Desktop to interact with the MCP server
+- Configure an IDE to run the MCP server
+- Use MCP inspector to troubleshoot tools, resources, and prompts
+
+
 ### Workshop Challenge: Enhancing EPR Functionality
 
 - Participants will be given a challenge to enhance a specific aspect of EPR

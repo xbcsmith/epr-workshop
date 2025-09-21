@@ -121,7 +121,7 @@ curl --location --request POST 'http://localhost:8042/api/v1/events' \
     "description": "blah",
     "payload": {"name":"joe"},
     "success": true,
-    "event_receiver_id": "<PASTE EVENT RECEIVER ID FROM FIRST CURL COMMAND>"
+    "event_receiver_id": "01HYKKAHADDHQBA1AX0FYQDT5K"
 }'
 ```
 
