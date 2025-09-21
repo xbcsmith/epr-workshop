@@ -29,11 +29,12 @@ vendor/
 temp/
 /certs
 
-./*/foo/
-.venv
+*.venv
 .vscode/
 .idea/
 debug
 .history/
 commit-message.txt
 *.iml
+
+*-epr-*/src

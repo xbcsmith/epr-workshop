@@ -48,6 +48,11 @@ Registry. Basic knowledge of PostgreSQL, including database setup, querying, and
 general database concepts, will be helpful for understanding the storage and
 retrieval aspects of the workshop.
 
+## Basic Understanding of MCP
+
+A basic knowledge of what MCP is and what an MCP server does is helpful but not required.
+
+
 ## Additional Notes
 
 While prior experience with all these technologies is beneficial, the workshop
