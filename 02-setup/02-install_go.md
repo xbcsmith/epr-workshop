@@ -22,10 +22,10 @@ brew install go
 Easiest way is to install from the [Go downloads page](https://go.dev/dl/).
 
 ```bash
-export GOVERSION=1.22.0
+export GOVERSION=1.25.1
 export GOARCH=amd64
 export GOOS=linux
-export GO_CHECKSUM=f6c8a87aa03b92c4b0bf3d558e28ea03006eb29db78917daec5cfb6ec1046265
+export GO_CHECKSUM=7716a0d940a0f6ae8e1f3b3f4f36299dc53e31b16840dbd171254312c41ca12e
 curl -kLO https://dl.google.com/go/go${GOVERSION}.${GOOS}-${GOARCH}.tar.gz
 echo "${GO_CHECKSUM} go${GOVERSION}.${GOOS}-${GOARCH}.tar.gz" | sha256sum --check
 sudo rm -rfv /usr/local/go
@@ -45,24 +45,6 @@ workshop.
 Install golangci-lint by following the instructions on the website:
 [https://golangci-lint.run/usage/install/](https://golangci-lint.run/usage/install/)
 
-### go tools
-
-Install the tools with the following commands:
-
-```bash
-go install golang.org/x/tools/...@latest
-go install golang.org/x/tools/cmd/goimports@latest
-go install github.com/fzipp/gocyclo/cmd/gocyclo@latest
-go install github.com/uudashr/gocognit/cmd/gocognit@latest
-go install github.com/go-critic/go-critic/cmd/gocritic@latest
-go install github.com/wadey/gocovmerge@latest
-go install github.com/axw/gocov/gocov@latest
-go install github.com/AlekSi/gocov-xml@latest
-go install github.com/tebeka/go2xunit@latest
-go install github.com/josephspurrier/goversioninfo/cmd/goversioninfo@latest
-go install github.com/golang/protobuf/protoc-gen-go@latest
-```
-
 ### alternative install methods for golangci-lint
 
 To install golangci-lint, on a Mac M1, run the following command:
@@ -75,7 +57,7 @@ brew upgrade golangci/tap/golangci-lint
 To install golangci-lint on Linux, run the following command:
 
 ```bash
-export GOLANGCI_LINT_VERSION="1.56.2"
+export GOLANGCI_LINT_VERSION="2.5.0"
 curl -sSfL https://github.com/golangci/golangci-lint/releases/download/v${GOLANGCI_LINT_VERSION}/golangci-lint-${GOLANGCI_LINT_VERSION}-linux-amd64.tar.gz -o golangci-lint-${GOLANGCI_LINT_VERSION}-linux-amd64.tar.gz
 curl -sSfL https://github.com/golangci/golangci-lint/releases/download/v${GOLANGCI_LINT_VERSION}/golangci-lint-${GOLANGCI_LINT_VERSION}-checksums.txt | grep linux-amd64.tar.gz | sha256sum --check
 tar -C $(go env GOPATH)/bin -xvzf golangci-lint-${GOLANGCI_LINT_VERSION}-linux-amd64.tar.gz golangci-lint-${GOLANGCI_LINT_VERSION}-linux-amd64/golangci-lint --strip-components 1
