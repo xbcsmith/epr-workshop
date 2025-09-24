@@ -1,0 +1,3 @@
+httpx>=0.23.0
+ulid-py>=1.0.0
+kafka-python>=2.2.15

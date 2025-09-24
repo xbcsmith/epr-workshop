@@ -21,8 +21,8 @@ In this section of the workshop we will need to create a few files and folders.
 To get started we will make a directory for the tutorial.
 
 ```bash
-mkdir ./cdevents
-cd ./cdevents
+mkdir -p ./src/work
+cd ./src/work
 ```
 
 ## Event Receiver Schema
