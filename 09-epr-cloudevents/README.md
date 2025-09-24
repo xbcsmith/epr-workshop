@@ -1,59 +1,23 @@
-# Workshop Session: CloudEvents Workshop Session
+# Workshop Session: CloudEvents with EPR
 
 ## Outline
 
-### Hands-On Session on Utilizing EPR for CloudEvents Management
+### Understanding CloudEvents Fundamentals
 
-Commence the workshop with a hands-on session, providing participants with
-direct experience in utilizing the Event Provenance Registry (EPR) for managing
-CloudEvents. Participants will be guided through the setup of their development
-environment and introduced to the EPR CLI for seamless interaction.
+This workshop provides hands-on experience using CloudEvents with the Event Provenance Registry (EPR). Participants explore CloudEvents specification structure, learning core attributes like `id`, `source`, `type`, `specversion`, `time`, `datacontenttype`, and `data`. The session covers CloudEvents SDK usage by cloning the Python SDK repository, setting up virtual environments, and running sample client-server applications to understand event production and consumption patterns.
 
-### Creating CloudEvents for Activity in the Pipeline
+### Creating and Testing CloudEvents
 
-Walk participants through the process of creating CloudEvents to capture and
-document activities within an event-driven pipeline. Discuss the significance
-of defining key CloudEvent attributes, such as `id`, `source`, `type`,
-`specversion`, `time`, `subject`, `datacontenttype`, and `data` (payload), as
-well as any application-specific extensions.
+Participants work with practical CloudEvents creation using the Python SDK, implementing Flask-based servers that receive CloudEvents and clients that send structured events. The session includes running pytest tests to validate CloudEvents functionality and exploring different encoding formats. Hands-on exercises demonstrate event interoperability across different transport protocols and encoding methods.
 
-### Storing CloudEvents in EPR
+### EPR Integration for CloudEvents Storage
 
-Guide participants in storing the created CloudEvents within the EPR system.
-Explore the storage mechanism, emphasizing the importance of maintaining a
-comprehensive record of events for provenance and auditing.
-
-### Retrieving and Querying CloudEvents from the EPR Storage
-
-Demonstrate how to retrieve and query CloudEvents from the EPR storage,
-providing participants with the skills to access and analyze historical event
-data. Introduce various querying techniques, including filtering by CloudEvent
-attributes and retrieving specific event details.
-
-### Grouping CloudEvents in Event Receivers
-
-Explore the concept of Event Receivers and guide participants in grouping
-CloudEvents within these receivers. Discuss the benefits of organizing events
-into logical groups, facilitating efficient event handling and management.
+The workshop progresses to EPR integration, covering event receiver creation with CloudEvents schema validation, storing CloudEvents as EPR event payloads, and retrieving events using both REST API calls and epr-cli commands. Participants learn to embed CloudEvents JSON within EPR events, query stored events, and organize CloudEvents using Event Receivers for efficient event management and provenance tracking.
 
 ## Workshop Format
 
-The workshop will be interactive, allowing participants to actively engage in
-creating, storing, and retrieving CloudEvents using the EPR CLI. Practical
-exercises will be provided to reinforce learning, with real-time feedback and
-assistance. Q&A sessions will be included to address participant queries and
-explore specific use cases.
+Interactive exercises combine CloudEvents specification exploration with practical implementation using Python SDK samples. Each section includes immediate hands-on practice with running code examples, from basic event creation to complete client-server scenarios. Participants work through realistic event-driven scenarios, including schema validation, event persistence, and querying patterns using both curl commands and EPR CLI tools.
 
 ## Key Learning Objectives
 
-Gain hands-on experience in using the EPR CLI for managing CloudEvents. Learn
-how to create CloudEvents to capture relevant activity within event-driven
-systems and pipelines. Acquire skills in storing and retrieving CloudEvents
-within the EPR storage. Understand the concept of Event Receivers and the
-importance of grouping CloudEvents for effective management.
-
-Note: This workshop session aims to empower participants with practical skills
-in creating, storing, and retrieving CloudEvents using the Event Provenance
-Registry (EPR). Through hands-on exercises and real-world scenarios,
-participants will be well-equipped to leverage EPR for efficient management of
-event data in event-driven systems and pipelines.
+Master CloudEvents specification structure and core attributes for event interoperability. Develop proficiency with CloudEvents Python SDK for creating producers and consumers. Gain skills in EPR integration for CloudEvents storage, validation, and retrieval. Understand event schema design, versioning strategies, and organized event management using Event Receivers for provenance and auditing workflows.

@@ -68,3 +68,11 @@ architectures, allowing users to track, categorize, and respond to events in a
 streamlined and efficient manner. The support for Redpanda and Kafka, along with
 the well-defined data structures, makes EPR a versatile and adaptable solution
 for a wide range of event-driven scenarios.
+
+## Links
+
+- [Event Provenance Registry](https://github.com/sassoftware/event-provenance-registry)
+- [EPR Documentation](https://github.com/sassoftware/event-provenance-registry/blob/master/docs/README.md)
+- [EPR Workshop](https://github.com/xbcsmith/epr-workshop)
+- [EPR Python Client](https://github.com/xbcsmith/epr-python)
+- [EPR MCP Server](https://github.com/xbcsmith/epr-mcp-python)

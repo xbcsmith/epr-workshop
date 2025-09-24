@@ -1,6 +1,9 @@
 # CloudEvents and EPR
 
-Below is a step‑by‑step workshop session that shows how to create CloudEvents JSON and post them to the Event Provenance Registry (EPR) first with curl (REST API), then with the epr-cli. The workshop uses the EPR REST endpoints shown in the repo (localhost:8042). The CloudEvent JSON will be placed inside the EPR event payload field (so EPR stores the CloudEvent as the event payload).
+In this session we will learn how we can use CloudEvents with the Event Provenance
+Registry (EPR).
+
+This workshop session that walks the user through creating CloudEvents JSON and posting them to the Event Provenance Registry (EPR) first with curl (REST API), then with the epr-cli. The workshop uses the EPR REST endpoints shown in the repo (localhost:8042). The CloudEvent JSON will be placed inside the EPR event payload field (so EPR stores the CloudEvent as the event payload).
 
 ## Prerequisites
 
@@ -118,7 +121,7 @@ curl --location --request POST 'http://localhost:8042/api/v1/events' \
 
 Successful response returns the event ULID in .data:
 
-```bash
+```json
 { "data": "01HXXXXXXXEXAMPLEEVENTID" }
 ```
 

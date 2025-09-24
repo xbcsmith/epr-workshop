@@ -2,7 +2,7 @@
 
 ## Overview
 
-In this section we will cover the CDEvents concepts and how to use them.
+In this section we will cover the [CDEvents]() concepts and how to use them.
 
 ## Introduction
 

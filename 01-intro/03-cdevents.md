@@ -184,9 +184,6 @@ Organizations adopting CDEvents gain not just technical interoperability, but st
 ## Links
 
 - [CDEvents Specification](https://cdevents.dev/)
-- [CNCF CDEvents Project](https://www.cncf.io/projects/cdevents/)
 - [CDEvents SDK Libraries](https://github.com/cdevents)
 - [CDEvents Primer and Getting Started](https://cdevents.dev/docs/)
 - [Enterprise Integration Patterns - Modern Edition](https://www.enterpriseintegrationpatterns.com/)
-- [Software Supply Chain Security with CDEvents](https://slsa.dev/spec/v1.0/integrating-cdevents)
-- [DORA Metrics and CDEvents Integration](https://dora.dev/capabilities/)

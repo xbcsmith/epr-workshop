@@ -246,5 +246,4 @@ async def create_group(epr_url: str, group_data: dict) -> str:
 
 - [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk)
 - [EPR-MCP-Python](https://github.com/xbcsmith/epr-mcp-python)
-
 - [FastMCP 2.0](https://gofastmcp.com/getting-started/welcome)

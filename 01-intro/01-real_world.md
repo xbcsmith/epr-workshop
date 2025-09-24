@@ -4,10 +4,10 @@
 
 What problem are we trying to solve? How can we solve it?
 
-
-![Event Driven Pipeline](../images/event-driven-pipeline.png)
-
 This case study examines a production implementation of event-driven CI/CD at an Independent Software Vendor (ISV) delivering multi-architecture software packages (RPMs, DEBs, OCI containers) to enterprise customers. The transformation from a traditional Jenkins-based pipeline to a sophisticated event-driven architecture demonstrates both the tremendous benefits and practical challenges of implementing these systems at scale.
+
+![Event Driven Pipeline](../images/real_world_devsecops.png)
+
 
 ## The Legacy Challenge
 

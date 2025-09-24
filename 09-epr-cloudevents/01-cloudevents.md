@@ -4,13 +4,11 @@
 
 [CloudEvents](https://github.com/cloudevents/spec) is a specification for describing event data in common formats to provide interoperability across services, platforms and systems.
 
-In this tutorial we will learn how we can use CloudEvents with the Event Provenance
-Registry (EPR).
+In this session we will learn about CloudEvents basics
 
 ## Requirements
 
-The [Quickstart](../quickstart/README.md) has been completed and the EPR server
-is running.
+Python environment
 
 ## Setup
 
