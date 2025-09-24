@@ -1,59 +1,23 @@
-# Workshop Session: CDEvents EPR - Creating, Storing, and Retrieving CDEvents
+# Workshop Session: CDEvents in Practice - Building Event-Driven CI/CD Pipelines
 
 ## Outline
 
-### Hands-On Session on Utilizing EPR for CDEvents Management
+### Understanding CDEvents Fundamentals
 
-Commence the workshop with a hands-on session, providing participants with
-direct experience in utilizing the Event Provenance Registry (EPR) for managing
-Continuous Delivery Events (CDEvents). Participants will be guided through the
-setup of their development environment and introduced to the EPR CLI for
-seamless interaction.
+This workshop provides hands-on experience implementing CDEvents specification within event-driven CI/CD pipelines. Participants explore CDEvents fundamentals by cloning the specification repository and using command-line tools like jq to inspect event structures and understand event correlation through links and context relationships.
 
-### Creating CDEvents for Activity in the Pipeline
+### Building Event-Driven Pipeline Components
 
-Walk participants through the process of creating CDEvents to capture and
-document activities within a Continuous Delivery (CD) pipeline. Discuss the
-significance of defining key attributes in CDEvents, such as name, version,
-release, platform, package, success, description, and payload.
+The session progresses to building complete event-driven pipeline components using Python, including services for repository changes, container builds, security scanning, and deployments. Participants create in-memory event brokers demonstrating publish-subscribe patterns and learn service decoupling through standardized CDEvents communication.
 
-### Storing CDEvents in EPR in Events
+### EPR Integration and Advanced Patterns
 
-Guide participants in storing the created CDEvents within the EPR system.
-Explore the storage mechanism, emphasizing the importance of maintaining a
-comprehensive record of CD activities for provenance.
-
-### Retrieving and Querying CDEvents from the EPR Storage
-
-Demonstrate how to retrieve and query CDEvents from the EPR storage, providing
-participants with the skills to access and analyze historical data. Introduce
-various querying techniques, including filtering by event attributes and
-retrieving specific event details.
-
-### Grouping CDEvents in Event Receivers
-
-Explore the concept of Event Receivers and guide participants in grouping
-CDEvents within these receivers. Discuss the benefits of organizing events into
-logical groups, facilitating efficient event handling and management.
+EPR integration covers creating event receivers with CDEvents JSON schema validation, storing events using NVRPP identifiers, and building Go-based watchers that consume CDEvents from Kafka topics. Advanced topics include distributed tracing patterns, multi-tool pipeline integration, and real-world container pipeline scenarios including security-first deployments and compliance audit trails.
 
 ## Workshop Format
 
-The workshop will be interactive, allowing participants to actively engage in
-creating, storing, and retrieving CDEvents using the EPR CLI. Practical
-exercises will be provided to reinforce learning, with real-time feedback and
-assistance. Q&A sessions will be included to address participant queries and
-explore specific use cases.
+Interactive exercises combine theoretical understanding with extensive hands-on practice. Each concept includes immediate practical implementation using provided tools and frameworks. The session starts with simple event inspection and filtering, progressing through complete event-driven services, and culminating in complex pipeline orchestration scenarios. Participants work through realistic container build and deployment scenarios encountered in production environments.
 
 ## Key Learning Objectives
 
-Gain hands-on experience in using the EPR CLI for managing CDEvents. Learn how
-to create CDEvents to capture relevant activity within a CD pipeline. Acquire
-skills in storing and retrieving CDEvents within the EPR storage. Understand the
-concept of Event Receivers and the importance of grouping CDEvents for effective
-management.
-
-Note: This workshop session aims to empower participants with practical skills
-in creating, storing, and retrieving Continuous Delivery Events (CDEvents) using
-the Event Provenance Registry (EPR). Through hands-on exercises and real-world
-scenarios, participants will be well-equipped to leverage EPR for efficient
-management of event data in Continuous Delivery pipelines.
+Master CDEvents specification structure, event types, and correlation patterns. Develop ability to design and implement loosely coupled services using event-driven communication. Gain proficiency with EPR integration for storing, retrieving, and validating CDEvents. Build skills in event filtering, transformation, and routing systems. Understand multi-tool integration capabilities and migration strategies from existing pipelines to CDEvents-based architectures.
