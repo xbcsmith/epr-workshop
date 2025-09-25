@@ -38,3 +38,4 @@ commit-message.txt
 *.iml
 
 *-epr-*/src
+*-epr-*/src/foo

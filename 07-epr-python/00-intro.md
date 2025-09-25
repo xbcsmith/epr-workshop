@@ -8,13 +8,17 @@ section we will walk through the development and usage of the EPR Python client.
 ## Development
 
 ```bash
-python3 -m venv ~/.virtualenvs/epr-python
-source ~/.virtualenvs/epr-python/bin/activate
+```bash
+mkdir -p ./src/
+cd ./src/
+python3 -m venv ./venv/epr-python
+source ./venv/epr-python/bin/activate
 
 git clone git@github.com:xbcsmith/epr-python.git
 cd epr-python
 
 pip install -e .
+cd ..
 ```
 
 ### Development dependencies
@@ -34,7 +38,14 @@ Install the `kafka-python` library.
 python3 -m pip install --upgrade kafka-python-ng
 ```
 
+```bash
+touch consumer.py
+```
+
+
 Create the consumer.
+
+Add the following to `consumer.py`:
 
 ```python
 import os

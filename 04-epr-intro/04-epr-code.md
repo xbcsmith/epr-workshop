@@ -210,7 +210,7 @@ Run golangci-lint (requires
 [golangci-lint](https://golangci-lint.run/usage/install/) to be installed):
 
 ```bash
-make megalint
+make lint
 ```
 
 ## Usage

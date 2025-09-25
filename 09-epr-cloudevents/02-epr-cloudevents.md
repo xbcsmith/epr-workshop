@@ -5,25 +5,10 @@ Registry (EPR).
 
 This workshop session that walks the user through creating CloudEvents JSON and posting them to the Event Provenance Registry (EPR) first with curl (REST API), then with the epr-cli. The workshop uses the EPR REST endpoints shown in the repo (localhost:8042). The CloudEvent JSON will be placed inside the EPR event payload field (so EPR stores the CloudEvent as the event payload).
 
-## Prerequisites
+## Requirements
 
-EPR server running on `http://localhost:8042` (Quickstart completed).
-curl, jq, and cat available in your shell.
-
-For CLI section: Go toolchain and ability to build/install epr-cli as shown in the repo.
-Workshop flow
-
-Create an event receiver (classification) using curl.
-
-Create a CloudEvent JSON file locally.
-
-Post an event to EPR using curl, embedding the CloudEvent JSON in the payload.
-
-Query the created event via REST to verify.
-
-Install or build epr-cli.
-
-Repeat the same flow using epr-cli (create receiver, then create event using the file content).
+The [Quickstart](../quickstart/README.md) has been completed and the EPR server
+is running.
 
 ## Using curl (step-by-step)
 

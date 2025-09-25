@@ -28,8 +28,8 @@ In this section of the workshop we will need to create a few files and folders.
 To get started we will make a directory for the tutorial.
 
 ```bash
-mkdir ./sboms
-cd ./sboms
+mkdir ./src
+cd ./src
 ```
 
 ## Event Receiver Schema
@@ -46,18 +46,18 @@ receiver.
 Download the CycloneDX bom schema.
 
 ```bash
-curl -ssLO https://raw.githubusercontent.com/CycloneDX/specification/1.5/schema/bom-1.5.schema.json
+curl -ssLO https://raw.githubusercontent.com/CycloneDX/specification/1.6/schema/bom-1.6.schema.json
 ```
 
 ## Create a source SBOM event
 
-First we will create the event receiver and apply the CycloneDX v1.5 schema for
+First we will create the event receiver and apply the CycloneDX v1.6 schema for
 artifact sbom created.
 
 To make this easier we will create the JSON data we need to post first.
 
 ```bash
-echo "{\"name\": \"artifact-cyclonedx-sbom\",\"type\": \"build.artifact.cyclonedx.sbom\",\"version\": \"1.0.0\",\"description\": \"Artifact CycloneDX v1.5 SBOMs\",\"enabled\": true,\"schema\": $(cat bom-1.5.schema.json)}" | jq > er.json
+echo "{\"name\": \"artifact-cyclonedx-sbom\",\"type\": \"build.artifact.cyclonedx.sbom\",\"version\": \"1.0.0\",\"description\": \"Artifact CycloneDX v1.6 SBOMs\",\"enabled\": true,\"schema\": $(cat bom-1.6.schema.json)}" | jq > er.json
 ```
 
 Create the event receiver:
@@ -79,19 +79,19 @@ Create an SBOM to post.
 Run the following command at the root of the event-providence-registry checkout.
 
 ```bash
-cd ./event-providence-registry
-cdxgen -o sbom.json --spec-version 1.5
-mv sbom.json epr-workshop/sboms/sbom.json
+cd ../event-providence-registry
+cdxgen -o sbom.json --spec-version 1.6
+mv sbom.json epr-workshop/08-epr-sboms/src/sbom.json
 ```
 
 Now we create the data for our event.
 
 ```bash
-cd ./docs/tutorials/workshops/sboms
+cd ./src
 ```
 
 ```bash
-echo "{\"name\": \"epr\",\"version\": \"1.0.1\",\"release\": \"2023.11.16\",\"platform_id\": \"aarch64-gnu-linux-7\",\"package\": \"oci\",\"description\": \"scan source code for OCI image EPR\",\"payload\": $(cat sbom.json),\"success\": true,\"event_receiver_id\": \"01HYKMYX2Q45H0G6RJV4E8270W\"}" | jq > sbom_event.json
+echo "{\"name\": \"epr\",\"version\": \"1.0.1\",\"release\": \"2023.11.16\",\"platform_id\": \"aarch64-gnu-linux-7\",\"package\": \"oci\",\"description\": \"scan source code for OCI image EPR\",\"payload\": $(cat sbom.json),\"success\": true,\"event_receiver_id\": \"01K61EV37TXW0FT1EC6ANC86K9\"}" | jq > sbom_event.json
 ```
 
 Now that we have the data ready we will POST the event to the event receiver.
