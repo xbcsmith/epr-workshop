@@ -9,9 +9,25 @@ PostgreSQL as the designated database for data storage.
 
 ## Requirements
 
-- [Golang 1.21+](https://go.dev/dl/)
+- [Golang 1.24+](https://go.dev/dl/)
 - [Docker](https://docs.docker.com/engine/install)
 - [Docker-Compose](https://docs.docker.com/engine/install)
+
+## Clone the Code
+
+Use the following command to clone the EPR project repository:
+
+```bash
+mkdir ./src
+cd ./src
+git clone git@github.com:sassoftware/event-provenance-registry.git
+```
+
+Change directory to event-provenance-registry:
+
+```bash
+cd ./event-provenance-registry
+```
 
 ## Start Dependencies
 
@@ -31,6 +47,6 @@ Either use the admin console to create a topic named "epr.dev.events" or employ
 the Docker container with the following command:
 
 ```bash
-docker exec -it redpanda \
+docker exec -it redpanda-0 \
     rpk topic create epr.dev.events --brokers=localhost:19092
 ```

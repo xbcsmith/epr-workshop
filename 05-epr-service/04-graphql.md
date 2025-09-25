@@ -124,7 +124,7 @@ the previously created event
 
 ```graphql
 query {
-  events_by_id(id: "01HQK3WF99YXWQW7QZCC4TC7FW") {
+  events_by_id(id: "01K61C8NEDP8SDS7HVMFZ69CEF") {
     id
     name
     version

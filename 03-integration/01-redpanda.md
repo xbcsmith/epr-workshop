@@ -151,7 +151,7 @@ Finally, let's consume a message from the `epr.dev.events` topic. Execute the
 following command, and each message will be displayed with its metadata.
 
 ```bash
-docker exec -it redpanda \
+docker exec -it redpanda-0 \
   rpk topic consume epr.dev.events --brokers=localhost:9092
 ```
 

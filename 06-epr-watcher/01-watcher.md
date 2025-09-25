@@ -18,8 +18,8 @@ is running.
 Make a new directory for your watcher and create a `main.go` in that directory.
 
 ```bash
-mkdir foo
-cd foo
+mkdir -p ./src/foo
+cd ./src/foo
 touch main.go
 ```
 
@@ -31,7 +31,6 @@ Add the following code:
 package main
 
 import (
- "encoding/json"
  "log"
 
  "github.com/sassoftware/event-provenance-registry/pkg/message"
@@ -67,7 +66,15 @@ func customTaskHandler(msg *message.Message) error {
 
 Save the file and run `go mod init` in your terminal.
 
+```bash
+go mod init
+```
+
 Now we can run `go mod tidy` to fill in our dependencies.
+
+```bash
+go mod tidy
+```
 
 ## Begin consuming
 
@@ -121,7 +128,7 @@ curl --location --request POST 'http://localhost:8042/api/v1/events' \
     "description": "blah",
     "payload": {"name":"joe"},
     "success": true,
-    "event_receiver_id": "01HYKKAHADDHQBA1AX0FYQDT5K"
+    "event_receiver_id": "01K61CMNCCT3B5CH95YHJDXZ15"
 }'
 ```
 
