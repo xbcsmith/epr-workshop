@@ -12,7 +12,9 @@ Clone the spec and checkout the latest stable version
 mkdir ./src
 cd ./src
 git clone https://github.com/cdevents/spec
+cd spec
 git checkout spec-v0.4
+cd ../
 ```
 
 ## Quick hands-on tasks
@@ -51,13 +53,31 @@ Assume you have an [NDJSON](https://jsonlines.org) file with one JSON event per 
 jq -c 'select(.type | test("artifact\\.packaged"))' events.ndjson
 
 # Extract only taskRun finished events (exact match)
-jq -c 'select(.type == "dev.cdevents.taskrun.finished.0.1.1")' events.ndjson
+jq -c 'select(.type == "dev.cdevents.taskrun.finished.0.2.0")' events.ndjson
 
 # Save filtered events to a file
-jq -c 'select(.type == "dev.cdevents.taskrun.finished.0.1.1")' events.ndjson > taskrun-finished.ndjson
+jq -c 'select(.type == "dev.cdevents.taskrun.finished.0.2.0")' events.ndjson > taskrun-finished.ndjson
 ```
 
 Outcome: You have patterns to implement event filters for consumers and alerts.
+
+### Correlate a taskRun to its pipelineRun
+
+Goal: Practice following references between events to reconstruct a pipeline execution.
+
+Steps:
+
+From a taskRun event file (or NDJSON stream), extract the pipelineRun link:
+
+```bash
+# Extract pipelineRun link from a single event file
+jq -r '.data.context.links.pipelineRun // empty' build-event.json
+```
+
+### Compare time fields to reconstruct ordering.
+
+Outcome: You can trace how a task-level event maps back to its pipeline and reconstruct a simple timeline.
+
 
 ### Run a minimal in-memory publish/subscribe demo
 
@@ -101,7 +121,7 @@ async def main():
     event = {
         "id": str(uuid.uuid4()),
         "source": "example.build",
-        "type": "dev.cdevents.artifact.packaged.0.1.1",
+        "type": "dev.cdevents.artifact.packaged.0.2.0",
         "subject": "registry.example.com/my-app:abc123",
         "time": datetime.utcnow().isoformat() + "Z",
         "data": {
@@ -120,125 +140,104 @@ if __name__ == "__main__":
 
 Outcome: Running this script prints the publish and receive logs, showing how a subscriber reacts without the publisher knowing subscribers exist.
 
-### Correlate a taskRun to its pipelineRun
-
-Goal: Practice following references between events to reconstruct a pipeline execution.
-
-Steps:
-
-From a taskRun event file (or NDJSON stream), extract the pipelineRun link:
-
-```bash
-# Extract pipelineRun link from a single event file
-jq -r '.data.context.links.pipelineRun // empty' build-event.json
-```
-
-### Compare time fields to reconstruct ordering.
-
-Outcome: You can trace how a task-level event maps back to its pipeline and reconstruct a simple timeline.
-
 When you've finished these quick tasks, continue to the larger "CDEvents-based Event-Driven CI/CD Pipeline for OCI Containers" example below.
 
 ## CDEvents-based Event-Driven CI/CD Pipeline for OCI Containers
 
+Now we will create a pipeline simulation that creates events for simulated tasks in our pipeline run using CDEvents specification.
 
-This example demonstrates a complete pipeline using CDEvents specification
+We can start with creating a python file called `pipeline`
 
-```python
-import json
-import uuid
-import asyncio
-from datetime import datetime
-from typing import Dict, Any, Optional, List
-from dataclasses import dataclass, asdict
-from abc import ABC, abstractmethod
-import aiohttp
-import logging
+```bash
+touch pipeline.py
 ```
 
-## Configure logging
+Add the content from each section to the file.
+
+### Imports
+
+First start wit our imports section
+
+```python
+import asyncio
+import json
+import logging
+import uuid
+from abc import ABC, abstractmethod
+from dataclasses import asdict, dataclass
+from datetime import datetime, timezone
+from typing import Any, Dict, List, Optional
+```
+
+### Configure logging
+
+Add logging.
 
 ```python
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(**name**)
+logger = logging.getLogger(__name__)
 ```
 
-## CDEvents Core Classes
+### CDEvents Core Classes
+
+Add the following CDEvents Core Classes. This is not a comprehensive implementation it is only enough data for the simulation. 
+
 
 ```python
 @dataclass
-    class CDEventContext:
-    """CDEvents context following CloudEvents specification"""
-    version: str = "0.4.0"
-    id: str = None
-    source: str = None
-    type: str = None
-    subject: str = None
-    time: str = None
+class CDEventContext:
+    """CDEvents context following the specification"""
 
+    version: str = "0.4.1"
+    id: str = ""
+    chainId: str = ""
+    source: str = ""
+    type: str = ""
+    timestamp: str = ""
+    schemaUri: Optional[str] = None
+    links: Optional[List[Dict[str, Any]]] = None
 
     def __post_init__(self):
         if not self.id:
             self.id = str(uuid.uuid4())
-        if not self.time:
-            self.time = datetime.utcnow().isoformat() + "Z"
+        if not self.chainId:
+            self.chainId = str(uuid.uuid4())
+        if not self.timestamp:
+            self.timestamp = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
 @dataclass
-class CDEventData:
-    """Base CDEvent data structure"""
-    pass
+class CDEventSubject:
+    """CDEvent subject following the specification"""
 
-@dataclass
-class RepositoryData(CDEventData):
-    """Data for repository events"""
-    repository: Dict[str, str]
-    change: Dict[str, Any]
+    id: str
+    source: str
+    type: str
+    content: Dict[str, Any]
 
-@dataclass
-class BuildData(CDEventData):
-    """Data for build events"""
-    build: Dict[str, Any]
-    artifact: Optional[Dict[str, Any]] = None
-
-@dataclass
-class TestData(CDEventData):
-    """Data for test events"""
-    test: Dict[str, Any]
-    artifact: Dict[str, Any]
-
-@dataclass
-class DeploymentData(CDEventData):
-    """Data for deployment events"""
-    deployment: Dict[str, Any]
-    artifact: Dict[str, Any]
-    environment: Dict[str, str]
 
 class CDEvent:
     """CDEvent wrapper following the specification"""
 
-
-    def __init__(self, context: CDEventContext, data: CDEventData):
+    def __init__(self, context: CDEventContext, subject: CDEventSubject):
         self.context = context
-        self.data = data
+        self.subject = subject
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert to CloudEvents format"""
-        event_dict = asdict(self.context)
-        event_dict["data"] = asdict(self.data)
-        return event_dict
+        """Convert to CDEvents format"""
+        return {"context": asdict(self.context), "subject": asdict(self.subject)}
 
     def to_json(self) -> str:
         """Convert to JSON string"""
         return json.dumps(self.to_dict(), indent=2)
+
 ```
 
-# Event Broker Interface
+### Event Broker Interface
 
 ```python
 class EventBroker(ABC):
     """Abstract event broker interface"""
-
 
     @abstractmethod
     async def publish(self, event: CDEvent):
@@ -249,9 +248,8 @@ class EventBroker(ABC):
         pass
 
 
-    class InMemoryEventBroker(EventBroker):
-        """Simple in-memory event broker for demonstration"""
-
+class InMemoryEventBroker(EventBroker):
+    """Simple in-memory event broker for demonstration"""
 
     def __init__(self):
         self.subscribers = {}
@@ -261,7 +259,7 @@ class EventBroker(ABC):
         """Publish event to all relevant subscribers"""
         logger.info(f"Publishing event: {event.context.type}")
         self.events.append(event)
-        
+
         # Notify subscribers
         for event_type, callbacks in self.subscribers.items():
             if event.context.type == event_type or event_type == "*":
@@ -276,38 +274,27 @@ class EventBroker(ABC):
             self.subscribers[event_type].append(callback)
 ```
 
-# Pipeline Services
+### Pipeline Services
 
 ```python
 class RepositoryService:
     """Simulates a Git repository service"""
-
 
     def __init__(self, broker: EventBroker):
         self.broker = broker
 
     async def simulate_code_push(self, repo_url: str, commit_sha: str):
         """Simulate a code push event"""
-        context = CDEventContext(
-            source="git.example.com/webhook",
-            type="dev.cdevents.repository.modified.0.1.2",
-            subject=repo_url
+        context = CDEventContext(source="/event/source/git", type="dev.cdevents.repository.modified.0.2.0")
+
+        subject = CDEventSubject(
+            id=f"repo/{commit_sha}",
+            source="/event/source/git",
+            type="repository",
+            content={"name": "my-app", "owner": "my-org", "url": repo_url, "viewUrl": repo_url},
         )
-        
-        data = RepositoryData(
-            repository={
-                "id": repo_url,
-                "name": "my-app",
-                "url": repo_url
-            },
-            change={
-                "id": commit_sha,
-                "type": "push",
-                "author": "developer@example.com"
-            }
-        )
-        
-        event = CDEvent(context, data)
+
+        event = CDEvent(context, subject)
         await self.broker.publish(event)
         logger.info(f"Code pushed to {repo_url}, commit: {commit_sha}")
 
@@ -315,183 +302,134 @@ class RepositoryService:
 class BuildService:
     """Container build service"""
 
-
     def __init__(self, broker: EventBroker):
         self.broker = broker
-        # Subscribe to repository events
-        asyncio.create_task(
-            self.broker.subscribe(
-                ["dev.cdevents.repository.modified.0.1.2"], 
-                self.handle_repository_change
-            )
-        )
+
+    async def initialize(self):
+        """Initialize subscriptions"""
+        await self.broker.subscribe(["dev.cdevents.repository.modified.0.2.0"], self.handle_repository_change)
 
     async def handle_repository_change(self, event: CDEvent):
         """Handle repository change events"""
-        repo_data = event.data
-        await self.start_build(repo_data.repository["url"], repo_data.change["id"])
+        logger.info(f"Build service handling repository change: {event.subject.id}")
+        await self.start_build(event.subject.content["url"], event.subject.id, event.context.chainId)
 
-    async def start_build(self, repo_url: str, commit_sha: str):
+    async def start_build(self, repo_url: str, repo_id: str, chain_id: str):
         """Start container build process"""
         build_id = str(uuid.uuid4())
-        
-        # Emit build started event
-        context = CDEventContext(
-            source="build.example.com",
-            type="dev.cdevents.taskrun.started.0.1.1",
-            subject=f"build/{build_id}"
-        )
-        
-        build_data = BuildData(
-            build={
-                "id": build_id,
-                "source": repo_url,
-                "commit": commit_sha,
-                "status": "started"
-            }
-        )
-        
-        await self.broker.publish(CDEvent(context, build_data))
-        
+
         # Simulate build process
-        logger.info(f"Building container for commit {commit_sha}")
+        logger.info(f"Building container for repository {repo_id}")
         await asyncio.sleep(2)  # Simulate build time
-        
-        # Build completed - emit artifact packaged event
-        image_tag = f"my-app:{commit_sha[:8]}"
+
+        # Build completed - emit build finished event
         image_digest = f"sha256:{'a' * 64}"  # Simulated digest
-        
+        artifact_id = f"pkg:oci/my-app@{image_digest}"
+
         context = CDEventContext(
-            source="build.example.com",
-            type="dev.cdevents.artifact.packaged.0.1.1",
-            subject=f"registry.example.com/{image_tag}"
+            source="/event/source/build",
+            type="dev.cdevents.build.finished.0.2.0",
+            chainId=chain_id,
         )
-        
-        build_data = BuildData(
-            build={
-                "id": build_id,
-                "status": "completed"
-            },
-            artifact={
-                "id": f"registry.example.com/{image_tag}@{image_digest}",
-                "type": "container",
-                "digest": image_digest,
-                "tags": [image_tag]
-            }
+
+        subject = CDEventSubject(
+            id=f"build/{build_id}", source="/event/source/build", type="build", content={"artifactId": artifact_id}
         )
-        
-        await self.broker.publish(CDEvent(context, build_data))
-        logger.info(f"Container built: {image_tag}")
+
+        await self.broker.publish(CDEvent(context, subject))
+        logger.info(f"Build finished: {artifact_id}")
 
 
 class SecurityScanService:
     """Container security scanning service"""
 
-
     def __init__(self, broker: EventBroker):
         self.broker = broker
-        # Subscribe to artifact packaged events
-        asyncio.create_task(
-            self.broker.subscribe(
-                ["dev.cdevents.artifact.packaged.0.1.1"], 
-                self.handle_artifact_packaged
-            )
-        )
 
-    async def handle_artifact_packaged(self, event: CDEvent):
-        """Handle new artifact events"""
-        build_data = event.data
-        if build_data.artifact:
-            await self.scan_container(build_data.artifact)
+    async def initialize(self):
+        """Initialize subscriptions"""
+        await self.broker.subscribe(["dev.cdevents.build.finished.0.2.0"], self.handle_build_finished)
 
-    async def scan_container(self, artifact: Dict[str, Any]):
+    async def handle_build_finished(self, event: CDEvent):
+        """Handle build finished events"""
+        logger.info(f"Security service handling build finished: {event.subject.id}")
+        artifact_id = event.subject.content["artifactId"]
+        await self.scan_container(artifact_id, event.context.chainId)
+
+    async def scan_container(self, artifact_id: str, chain_id: str):
         """Perform security scan on container"""
         scan_id = str(uuid.uuid4())
-        
-        logger.info(f"Starting security scan for {artifact['id']}")
-        
+
+        logger.info(f"Starting security scan for {artifact_id}")
+
         # Simulate scanning
         await asyncio.sleep(1)
-        
+
         # Emit test finished event
         context = CDEventContext(
-            source="security-scanner.example.com",
-            type="dev.cdevents.testcase.finished.0.1.1",
-            subject=f"scan/{scan_id}"
+            source="/event/source/security", type="dev.cdevents.testsuiterun.finished.0.2.0", chainId=chain_id
         )
-        
-        test_data = TestData(
-            test={
-                "id": scan_id,
-                "type": "security-scan",
-                "outcome": "pass",  # or "fail"
-                "reason": "No critical vulnerabilities found"
+
+        subject = CDEventSubject(
+            id=f"scan/{scan_id}",
+            source="/event/source/security",
+            type="testSuiteRun",
+            content={
+                "testSuite": {"id": scan_id, "name": "security-scan"},
+                "outcome": "pass",
+                "artifactId": artifact_id,
             },
-            artifact=artifact
         )
-        
-        await self.broker.publish(CDEvent(context, test_data))
-        logger.info(f"Security scan completed for {artifact['id']}")
+
+        await self.broker.publish(CDEvent(context, subject))
+        logger.info(f"Security scan completed for {artifact_id}")
 
 
 class DeploymentService:
     """Container deployment service"""
 
-
     def __init__(self, broker: EventBroker):
         self.broker = broker
-        # Subscribe to successful test events
-        asyncio.create_task(
-            self.broker.subscribe(
-                ["dev.cdevents.testcase.finished.0.1.1"], 
-                self.handle_test_finished
-            )
-        )
+
+    async def initialize(self):
+        """Initialize subscriptions"""
+        await self.broker.subscribe(["dev.cdevents.testsuiterun.finished.0.2.0"], self.handle_test_finished)
 
     async def handle_test_finished(self, event: CDEvent):
         """Handle test completion events"""
-        test_data = event.data
-        if test_data.test["outcome"] == "pass":
-            await self.deploy_container(test_data.artifact, "staging")
+        logger.info(f"Deployment service handling test finished: {event.subject.id}")
+        if event.subject.content["outcome"] == "pass":
+            artifact_id = event.subject.content["artifactId"]
+            await self.deploy_container(artifact_id, "staging", event.context.chainId)
 
-    async def deploy_container(self, artifact: Dict[str, Any], environment: str):
+    async def deploy_container(self, artifact_id: str, environment: str, chain_id: str):
         """Deploy container to specified environment"""
         deployment_id = str(uuid.uuid4())
-        
-        # Emit deployment started event
-        context = CDEventContext(
-            source="deployment.example.com",
-            type="dev.cdevents.environment.created.0.1.1",
-            subject=f"deployment/{deployment_id}"
-        )
-        
-        deployment_data = DeploymentData(
-            deployment={
-                "id": deployment_id,
-                "status": "started"
-            },
-            artifact=artifact,
-            environment={
-                "id": environment,
-                "name": environment,
-                "type": "development" if environment == "staging" else "production"
-            }
-        )
-        
-        await self.broker.publish(CDEvent(context, deployment_data))
-        
+
         # Simulate deployment
-        logger.info(f"Deploying {artifact['id']} to {environment}")
+        logger.info(f"Deploying {artifact_id} to {environment}")
         await asyncio.sleep(1)
-        
+
         # Emit deployment finished event
-        context.type = "dev.cdevents.environment.modified.0.1.1"
-        deployment_data.deployment["status"] = "completed"
-        
-        await self.broker.publish(CDEvent(context, deployment_data))
-        logger.info(f"Deployment completed: {artifact['id']} in {environment}")
+        context = CDEventContext(
+            source="/event/source/deployment", type="dev.cdevents.service.deployed.0.2.0", chainId=chain_id
+        )
 
+        subject = CDEventSubject(
+            id=f"deployment/{deployment_id}",
+            source="/event/source/deployment",
+            type="service",
+            content={"environment": {"id": environment}, "artifactId": artifact_id},
+        )
 
+        await self.broker.publish(CDEvent(context, subject))
+        logger.info(f"Deployment completed: {artifact_id} in {environment}")
+
+```
+
+### Pipeline Orchestrator
+
+```bash
 class PipelineOrchestrator:
     """Main pipeline orchestrator"""
 
@@ -501,41 +439,45 @@ class PipelineOrchestrator:
         self.build_service = BuildService(self.broker)
         self.security_service = SecurityScanService(self.broker)
         self.deployment_service = DeploymentService(self.broker)
-        
-        # Subscribe to all events for monitoring
-        asyncio.create_task(
-            self.broker.subscribe(["*"], self.monitor_events)
-        )
+
+    async def initialize(self):
+        """Initialize all service subscriptions"""
+        await self.build_service.initialize()
+        await self.security_service.initialize()
+        await self.deployment_service.initialize()
+        await self.broker.subscribe(["*"], self.monitor_events)
 
     async def monitor_events(self, event: CDEvent):
         """Monitor all pipeline events"""
-        logger.info(f"Pipeline Event: {event.context.type} - {event.context.subject}")
+        logger.info(f"Pipeline Event: {event.context.type} - {event.subject.id}")
 
     async def run_pipeline(self):
         """Simulate a complete pipeline run"""
         logger.info("Starting pipeline simulation...")
-        
-        # Simulate code push
-        await self.repository_service.simulate_code_push(
-            "https://git.example.com/my-org/my-app",
-            "abc123def456"
-        )
-        
-        # Wait for pipeline to complete
-        await asyncio.sleep(5)
-        
+
+        # Initialize all subscriptions first
+        await self.initialize()
+
+        # Simulate code push - this should trigger the entire pipeline
+        await self.repository_service.simulate_code_push("https://git.example.com/my-org/my-app", "abc123def456")
+
+        # Wait for pipeline to complete - increased time to allow all async operations
+        await asyncio.sleep(10)
+
         logger.info("Pipeline simulation completed!")
-        
+
         # Print event history
         print("\n--- Event History ---")
         for i, event in enumerate(self.broker.events, 1):
             print(f"{i}. {event.context.type}")
-            print(f"   Subject: {event.context.subject}")
-            print(f"   Time: {event.context.time}")
+            print(f"   Subject: {event.subject.id}")
+            print(f"   Chain ID: {event.context.chainId}")
+            print(f"   Timestamp: {event.context.timestamp}")
             print()
 ```
 
-# Example usage
+
+### Main
 
 ```python
 async def main():
@@ -543,24 +485,81 @@ async def main():
     orchestrator = PipelineOrchestrator()
     await orchestrator.run_pipeline()
 
-if __name__ == __main__:
-   asyncio.run(main())
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
-Example Build CDEvent
+### Example Usage
+
+Run the example:
+
+```bash
+python3 pipeline.py
+```
+
+Output:
+
+```bash
+INFO:__main__:Starting pipeline simulation...
+INFO:__main__:Publishing event: dev.cdevents.repository.modified.0.2.0
+INFO:__main__:Build service handling repository change: repo/abc123def456
+INFO:__main__:Building container for repository repo/abc123def456
+INFO:__main__:Publishing event: dev.cdevents.build.finished.0.2.0
+INFO:__main__:Security service handling build finished: build/26edf235-6b92-4634-b6c2-f98f87432397
+INFO:__main__:Starting security scan for pkg:oci/my-app@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+INFO:__main__:Publishing event: dev.cdevents.testsuiterun.finished.0.2.0
+INFO:__main__:Deployment service handling test finished: scan/d6fc8613-6215-4c85-970b-09c66452d899
+INFO:__main__:Deploying pkg:oci/my-app@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa to staging
+INFO:__main__:Publishing event: dev.cdevents.service.deployed.0.2.0
+INFO:__main__:Pipeline Event: dev.cdevents.service.deployed.0.2.0 - deployment/5c2b7e7a-3026-4e33-a898-3dfc951f02b1
+INFO:__main__:Deployment completed: pkg:oci/my-app@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa in staging
+INFO:__main__:Pipeline Event: dev.cdevents.testsuiterun.finished.0.2.0 - scan/d6fc8613-6215-4c85-970b-09c66452d899
+INFO:__main__:Security scan completed for pkg:oci/my-app@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+INFO:__main__:Pipeline Event: dev.cdevents.build.finished.0.2.0 - build/26edf235-6b92-4634-b6c2-f98f87432397
+INFO:__main__:Build finished: pkg:oci/my-app@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+INFO:__main__:Pipeline Event: dev.cdevents.repository.modified.0.2.0 - repo/abc123def456
+INFO:__main__:Code pushed to https://git.example.com/my-org/my-app, commit: abc123def456
+INFO:__main__:Pipeline simulation completed!
+
+--- Event History ---
+1. dev.cdevents.repository.modified.0.2.0
+   Subject: repo/abc123def456
+   Chain ID: 5e73c83a-f2f6-4870-8067-2679ae987911
+   Timestamp: 2025-09-26T15:29:36.996225Z
+
+2. dev.cdevents.build.finished.0.2.0
+   Subject: build/26edf235-6b92-4634-b6c2-f98f87432397
+   Chain ID: 5e73c83a-f2f6-4870-8067-2679ae987911
+   Timestamp: 2025-09-26T15:29:38.997909Z
+
+3. dev.cdevents.testsuiterun.finished.0.2.0
+   Subject: scan/d6fc8613-6215-4c85-970b-09c66452d899
+   Chain ID: 5e73c83a-f2f6-4870-8067-2679ae987911
+   Timestamp: 2025-09-26T15:29:39.999818Z
+
+4. dev.cdevents.service.deployed.0.2.0
+   Subject: deployment/5c2b7e7a-3026-4e33-a898-3dfc951f02b1
+   Chain ID: 5e73c83a-f2f6-4870-8067-2679ae987911
+   Timestamp: 2025-09-26T15:29:41.001536Z
+```
+
+## Cloud Event/CDEvent Example
+
+Example Build CDEvent wrapped in a CloudEvent
 
 ```json
 {
     "specversion": "1.0",
     "id": "271069a8-fc18-44f1-b38f-9d70a1695819",
     "source": "https://cd.example.com/build-system",
-    "type": "dev.cdevents.taskrun.finished.0.1.1",
+    "type": "dev.cdevents.taskrun.finished.0.2.0",
     "subject": "builds/my-app/12345",
     "time": "2025-08-20T14: 30: 25.123456Z",
     "datacontenttype": "application/json",
     "data": {
         "context": {
-            "version": "0.4.0",
+            "version": "0.4.1",
             "id": "271069a8-fc18-44f1-b38f-9d70a1695819",
             "timestamp": "2025-08-20T14: 30: 25.123456Z",
             "links": {
@@ -675,11 +674,11 @@ Example Build CDEvent
 
 ## Explanation 
 
-Let me break down this CDEvents build event and explain each component:
+THe following is a break down the CDEvents build event and explain each component:
 
 ### Event Structure Overview
 
-This is a **`dev.cdevents.taskrun.finished.0.1.1`** event representing a completed container build task. It follows both the CloudEvents specification (outer structure) and CDEvents specification (data content).
+This is a **`dev.cdevents.taskrun.finished.0.2.0`** event representing a completed container build task. It follows both the CloudEvents specification (outer structure) and CDEvents specification (data content).
 
 ### CloudEvents Headers
 

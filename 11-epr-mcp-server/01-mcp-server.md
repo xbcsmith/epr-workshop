@@ -2,15 +2,22 @@
 
 ## Workshop: Building an MCP Server with Python and FastMCP
 
-In this workshop, you'll learn how to build a simple MCP (Multi-Channel Processor) server using Python and the [FastMCP](https://github.com/xbcsmith/fastmcp) framework. We'll walk through the structure and logic of a real-world `run` function from `server.py` to illustrate best practices.
+In this workshop, you'll learn how to build a simple MCP (Multi-Channel Processor) server using Python and FastMCP 1.0 in the MCP [python-sdk](https://github.com/modelcontextprotocol/python-sdk) framework. We'll walk through the structure and logic of a real-world MCP Server.
 
 ## Setup
+
+Create a work directory
+
+```bash
+mkdir ./src
+cd ./src
+```
 
 Create and activate a virtual environment:
 
 ```bash
-python3 -m venv epr-mcp-server
-source epr-mcp-server/bin/activate
+python3 -m venv ./venv/epr-mcp-server
+source ./venv/epr-mcp-server/bin/activate
 ```
 
 Install the required dependencies:
