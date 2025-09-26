@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
-"""mini_broker.py
-
-Minimal in-memory publish/subscribe demo used by the CDEvents quick hands-on
-section. Run with: python3 mini_broker.py
-"""
+# mini_broker.py
 import asyncio
 import uuid
 from datetime import datetime
@@ -40,15 +36,10 @@ async def main():
     event = {
         "id": str(uuid.uuid4()),
         "source": "example.build",
-        "type": "dev.cdevents.artifact.packaged.0.1.1",
+        "type": "dev.cdevents.artifact.packaged.0.2.0",
         "subject": "registry.example.com/my-app:abc123",
         "time": datetime.utcnow().isoformat() + "Z",
-        "data": {
-            "artifact": {
-                "id": "registry.example.com/my-app:abc123",
-                "digest": "sha256:aaaaaaaa..."
-            }
-        }
+        "data": {"artifact": {"id": "registry.example.com/my-app:abc123", "digest": "sha256:aaaaaaaa..."}},
     }
 
     await broker.publish(event)

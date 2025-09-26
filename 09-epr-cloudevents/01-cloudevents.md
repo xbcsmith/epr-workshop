@@ -17,8 +17,8 @@ In this section of the workshop we will need to create a few files and folders.
 To get started we will make a directory for the tutorial.
 
 ```bash
-mkdir ./cloudevents
-cd ./cloudevents
+mkdir ./src
+cd ./src
 ```
 
 Clone the spec and the python sdk.
@@ -32,8 +32,8 @@ git clone git@github.com:cloudevents/sdk-python.git
 Create and activate a Python virtual environment (Unix/macOS)
 
 ```bash
-python3 -m venv venv
-source venv/bin/activate
+python3 -m venv .venv/cloudevents
+source .venv/cloudevents/bin/activate
 ```
 
 If you are on Windows (PowerShell), use:
@@ -53,14 +53,14 @@ pip install cloudevents flask requests pytest
 Verify the sample files exist (optional)
 
 ```bash
-ls -l sdk-python/samples/http-json-cloudevents/
+ls -l ./sdk-python/samples/http-json-cloudevents/
 ```
 
 Run the sample Flask server (binds to port 3000)
 Leave this terminal running to accept incoming CloudEvents.
 
 ```bash
-python3 sdk-python/samples/http-json-cloudevents/json_sample_server.py
+python3 ./sdk-python/samples/http-json-cloudevents/json_sample_server.py
 ```
 
 If you prefer to run the server in the background (Unix), open a new terminal or use: (from the project dir)
@@ -73,8 +73,8 @@ In a second terminal (activate the same venv), send sample events
 Activate venv in the second terminal too:
 
 ```bash
-source ./venv/bin/activate
-python3 sdk-python/samples/http-json-cloudevents/client.py http://localhost:3000/
+source ./venv/cloudevents/bin/activate
+python3 ./sdk-python/samples/http-json-cloudevents/client.py http://localhost:3000/
 ```
 
 You should see client output confirming sent events and the server terminal should print messages like:
@@ -86,7 +86,7 @@ Found <id> from <source> with type <type> and specversion <specversion>
 Run the included pytest tests (these use Flask test_client and do not require the server process)
 
 ```bash
-pytest -q sdk-python/samples/http-json-cloudevents/json_sample_test.py
+pytest -q ./sdk-python/samples/http-json-cloudevents/json_sample_test.py
 ```
 
 Quick cleanup when finished
