@@ -2,11 +2,14 @@
 
 ## Overview
 
-In this section wee will hook up a live LLM to our MCP server. Several AI assistants and tools support MCP, including: VSCode, Claude Desktop, MCP Inspector.
+In this section we will cover connecting the EPR MCP server to AI assistants and development tools that support Model Context Protocol integration. The setup enables natural language interaction with EPR systems through tools like VSCode, Claude Desktop, and MCP Inspector.
 
-### Connecting VSCode
+## Connecting VSCode
 
-## VSCode Config
+The section provides two configuration approaches for integrating the EPR MCP server with VSCode's chat functionality. The first approach uses a separate .vscode/mcp.json configuration file that defines input prompts for EPR URL and API token, along with server configuration that runs the MCP server via Docker. The second approach embeds the same configuration directly in VSCode's settings.json file.
+Both configurations use Docker to run the MCP server with environment variables for EPR_URL and EPR_TOKEN, enabling secure credential management through VSCode's input system. The setup includes password masking for the API token and a default localhost URL for development environments.
+
+### VSCode Config
 
 In settings `settings.json` add the following configuration to enable MCP discovery and set up the MCP servers:
 
@@ -98,7 +101,9 @@ Adding the MCP servers directly to the `settings.json` file looks like this:
     },
 ```
 
-### Connecting with Claude desktop
+## Connecting with Claude desktop
+
+This section covers Claude Desktop's built-in MCP support, showing a command to register the server (mcp install ./main.py). Once registered, users can interact with EPR through natural language queries in Claude's interface, such as requesting to list events or create new receivers.
 
 Anthropic’s Claude Desktop application has built-in support for local MCP servers. To integrate:
 
@@ -106,9 +111,12 @@ Anthropic’s Claude Desktop application has built-in support for local MCP serv
 mcp install ./main.py
 ```
 
-This registers your server with Claude. In Claude’s interface, you should see your “To-Do API MCP Server” available. Now when you have a conversation with Claude, you can:
+This registers your server with Claude. In Claude’s interface, you should see your “EPR MCP Server” available. Now when you have a conversation with Claude, you can:
 
-Ask: “List my to-do tasks” - Claude will use the todo://list resource
-Request: “Add a to-do item to buy milk” - Claude will use the add_task tool
+Ask: list tools
 
 Claude will handle running the MCP server and routing requests when the AI decides to use it.
+
+## Summary
+
+The configuration enables seamless integration between AI assistants and the EPR system, allowing users to query events, manage receivers, and perform other EPR operations through conversational interfaces rather than direct API calls or CLI commands. The Docker-based deployment ensures consistent execution across different development environments.
