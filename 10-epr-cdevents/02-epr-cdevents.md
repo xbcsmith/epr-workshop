@@ -51,7 +51,7 @@ cp spec/schemas/artifactpackaged.json .
 Create the Event Receiver data:
 
 ```bash
-echo "{\"name\": \"artifact-packaged\",\"type\": \"dev.cdevents.artifact.packaged.0.2.0\",\"version\": \"1.0.0\",\"description\": \"CDEvents Artifact Packaged\",\"enabled\": true,\"schema\": $(cat artifactpackaged.json)}" | jq > artifact_packaged_er.json
+echo "{\"name\": \"artifact-packaged\",\"type\": \"dev.cdevents.artifact.packaged.0.2.0\",\"version\": \"1.0.0\",\"description\": \"CDEvents Artifact Packaged\", \"schema\": $(cat artifactpackaged.json)}" | jq > artifact_packaged_er.json
 
 
 Create the event receiver:

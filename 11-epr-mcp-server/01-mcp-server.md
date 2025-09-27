@@ -26,14 +26,6 @@ Install the required dependencies:
 pip install mcp[cli] mcp httpx
 ```
 
-## Project Setup
-
-First, ensure you have the required dependencies:
-
-```bash
-pip install mcp[cli] mcp httpx
-```
-
 ---
 
 ## Understanding the Server Structure
@@ -48,17 +40,41 @@ Your MCP server will:
 
 ## The `run` Function: Core of the Server
 
-The `run(cfg)` function is the entry point for your MCP server. Here’s how it works:
+The `run()` function is the entry point for your MCP server. 
+
+### Imports
+
+```python
+import logging
+import os
+import sys
+
+import httpx
+from mcp.server.fastmcp import FastMCP
+```
 
 ### Debugging and Logging
 
 Set up debugging and logging based on configuration or environment variables:
 
 ```python
-debug = cfg.debug or os.environ.get("EPR_DEBUG", False)
+def debug_except_hook(type, value, tb):
+    print(f"epr python hates {type.__name__}")
+    print(str(type))
+    import pdb
+    import traceback
+    traceback.print_exception(type, value, tb)
+    pdb.post_mortem(tb)
+
+
+debug = os.environ.get("EPR_DEBUG", False)
+level = logging.INFO
 if debug:
     sys.excepthook = debug_except_hook
-    logger.setLevel(logging.DEBUG)
+    level = logging.DEBUG
+log_format = "%(asctime)s %(name)s:[%(levelname)s] %(message)s"
+logging.basicConfig(stream=sys.stderr, level=level, format=log_format)
+logger = logging.getLogger(__name__)
 ```
 
 ### Initialize FastMCP
@@ -102,141 +118,76 @@ mcp.run()
 
 ---
 
-## Extending Your Server
+## Build the Server
 
-- Add more tools for additional API endpoints.
-- Implement authentication or custom error handling as needed.
-- Use the `get_search_query` helper to build flexible search queries.
+### Create a project config
 
----
-
-## Example: Registering a Tool
-
-Here’s a minimal example of registering a tool:
-
-```python
-@mcp.tool(title="Fetch Event", description="Fetch an event from EPR")
-async def fetch_event(epr_url: str, id: str) -> str:
-    """Fetch an event from the EPR"""
-    async with httpx.AsyncClient() as client:
-        response = await client.get(f"{epr_url}/api/v1/events/{id}")
-        return response.text
-```
-
----
-
-## Running the Server
-
-Call the `run(cfg)` function with your configuration object to start the MCP server.
-
----
-
-## Expanding the server
-
-Add two more fetch tools.
+Create the pyproject.toml
 
 ```bash
-@mcp.tool(title="Fetch Event Receiver", description="Fetch an event receiver from EPR")
-async def fetch_receiver(epr_url: str, id: str) -> str:
-    """Fetch an event receiver from the EPR"""
-    async with httpx.AsyncClient() as client:
-        response = await client.get(f"{epr_url}/api/v1/receivers/{id}")
-        return response.text
-
-@mcp.tool(title="Fetch Event Receiver Group", description="Fetch an event receiver group from EPR")
-async def fetch_group(epr_url: str, id: str) -> str:
-    """Fetch an event receiver group from the EPR"""
-    async with httpx.AsyncClient() as client:
-        response = await client.get(f"{epr_url}/api/v1/groups/{id}")
-        return response.text
+touch pyproject.toml
 ```
 
-## Leverage the GraphQL endpoint
+Add the following:
 
 ```bash
-@mcp.tool(title="Search Events", description="Search for events in EPR")
-async def search_events(epr_url: str, data: dict) -> str:
-    """Search for events in the EPR"""
-    fields = [
-        "id",
-        "name",
-        "version",
-        "release",
-        "platform_id",
-        "package",
-        "description",
-        "success",
-        "event_receiver_id",
-    ]
-    query = get_search_query(operation="events", params=data, fields=fields)
-    async with httpx.AsyncClient() as client:
-        headers = {"Content-Type": "application/json"}
-        response = await client.post(f"{epr_url}/api/v1/graphql/query", json=query.as_dict_query(), headers=headers)
-        if response.status_code == 200:
-            return response.text
-        else:
-            return f"Failed to search events: {response.text}"
+[build-system]
+requires = ["setuptools>=40.8.0", "wheel"]
+build-backend = "setuptools.build_meta:__legacy__"
 
-@mcp.tool(title="Search Event Receivers", description="Search for event receivers in EPR")
-async def search_receivers(epr_url: str, data: dict) -> str:
-    """Search for event receivers in the EPR"""
-    fields = ["id", "name", "type", "version", "description"]
-    query = get_search_query(operation="event_receivers", params=data, fields=fields)
-    async with httpx.AsyncClient() as client:
-        headers = {"Content-Type": "application/json"}
-        response = await client.post(f"{epr_url}/api/v1/graphql/query", json=query.as_dict_query(), headers=headers)
-        if response.status_code == 200:
-            return response.text
-        else:
-            return f"Failed to search event receivers: {response.text}"
-
-@mcp.tool(title="Search Event Receiver Groups", description="Search for event receiver groups in EPR")
-async def search_groups(epr_url: str, data: dict) -> str:
-    """Search for event receiver groups in the EPR"""
-    fields = ["id", "name", "type", "version", "description"]
-    query = get_search_query(operation="event_receiver_groups", params=data, fields=fields)
-    async with httpx.AsyncClient() as client:
-        headers = {"Content-Type": "application/json"}
-        response = await client.post(f"{epr_url}/api/v1/graphql/query", json=query.as_dict_query(), headers=headers)
-        if response.status_code == 200:
-            return response.text
-        else:
-            return f"Failed to search event receiver groups: {response.text}"
+[project]
+name = "epr-mcp-server"
+version = "0.1.0"
+description = "MCP server for EPR workshop"
+requires-python = ">= 3.12"
+dependencies = [
+    "httpx",
+    "mcp",
+]
 ```
 
-## Add Danger
+### Create Dockerfile
+
+Create a Dockerfile
 
 ```bash
-@mcp.tool(title="Create Event", description="Create a new event in EPR")
-async def create_event(epr_url: str, event_data: dict) -> str:
-    """Create a new event in the EPR"""
-    async with httpx.AsyncClient() as client:
-        response = await client.post(f"{epr_url}/api/v1/events", json=event_data)
-        if response.status_code == 201:
-            return "Event created successfully"
-        else:
-            return f"Failed to create event: {response.text}"
-
-@mcp.tool(title="Create Event Receiver", description="Create a new event receiver in EPR")
-async def create_receiver(epr_url: str, receiver_data: dict) -> str:
-    """Create a new event receiver in the EPR"""
-    async with httpx.AsyncClient() as client:
-        response = await client.post(f"{epr_url}/api/v1/receivers", json=receiver_data)
-        if response.status_code == 201:
-            return "Event receiver created successfully"
-        else:
-            return f"Failed to create event receiver: {response.text}"
-
-@mcp.tool(title="Create Event Receiver Group", description="Create a new event receiver group in EPR")
-async def create_group(epr_url: str, group_data: dict) -> str:
-    """Create a new event receiver group in the EPR"""
-    async with httpx.AsyncClient() as client:
-        response = await client.post(f"{epr_url}/api/v1/groups", json=group_data)
-        if response.status_code == 201:
-            return "Event receiver group created successfully"
-        else:
-            return f"Failed to create event receiver group: {response.text}"
+touch Dockerfile
 ```
+
+Add the following content to the Dockerfile:
+
+```bash
+FROM python:3.12-slim-bullseye
+
+USER root
+WORKDIR /app
+
+# Install uv
+RUN pip install --no-cache-dir uv
+COPY pyproject.toml main.py ./
+
+RUN uv venv /app/.venv \
+    && uv run main.py
+
+ENV VIRTUAL_ENV="/app/.venv"
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+ENV EPR_URL=http://localhost:8024
+ENV EPR_DEBUG=false
+
+# Expose the port your MCP server listens on
+EXPOSE 8000
+
+
+# Command to run your MCP server application
+CMD ["/app/.venv/bin/python3", "-m", "main"]
+```
+
+### Build docker image
+
+```bash
+docker build -t epr-mcp-server:latest .
+```
+
 
 ## Summary
 
@@ -246,8 +197,6 @@ async def create_group(epr_url: str, group_data: dict) -> str:
 - Leverage logging and debugging for robust development.
 
 ---
-
-**Now try adding your own tools and experiment with the endpoints!**
 
 ## Links
 
