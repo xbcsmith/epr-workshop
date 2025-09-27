@@ -12,5 +12,5 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      redpanda:
+      redpanda-0:
         condition: service_healthy
