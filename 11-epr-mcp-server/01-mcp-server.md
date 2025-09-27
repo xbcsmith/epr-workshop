@@ -38,9 +38,11 @@ Your MCP server will:
 
 ---
 
-## The `run` Function: Core of the Server
+## Create a Basic MCP Server 
 
-The `run()` function is the entry point for your MCP server. 
+```bash
+touch main.py
+```
 
 ### Imports
 
@@ -77,12 +79,19 @@ logging.basicConfig(stream=sys.stderr, level=level, format=log_format)
 logger = logging.getLogger(__name__)
 ```
 
+### Add ENV Vars
+
+```bash
+epr_url = os.environ.get("EPR_URL", "http://localhost:8042")
+epr_token = os.environ.get("EPR_TOKEN", "<N/A>")
+```
+
 ### Initialize FastMCP
 
 Create an instance of FastMCP, giving your server a name:
 
 ```python
-mcp = FastMCP("epr-mcp")
+mcp = FastMCP("EPR Workshop MCP Server", "0.1.0")
 ```
 
 ### Register Tools (Endpoints)
@@ -91,9 +100,9 @@ Each tool is an async function decorated with `@mcp.tool`. For example, to fetch
 
 ```python
 @mcp.tool(title="Fetch Event", description="Fetch an event from EPR")
-async def fetch_event(epr_url: str, id: str) -> str:
+async def fetch_event(id: str) -> str:
     async with httpx.AsyncClient() as client:
-        response = await client.get(f"{epr_url}/api/v1/events/{id}")
+        response = await client.get(f"http://localhost:8042/api/v1/events/{id}")
         return response.text
 ```
 
@@ -111,8 +120,8 @@ Finally, start the server and log the configuration:
 
 ```python
 logger.info("MCP is running with the following configuration:")
-logger.info(f"URL: {cfg.url}")
-logger.info(f"Token: {cfg.token}")
+logger.info(f"URL: {epr_url}")
+logger.info(f"Token: {epr_token}")
 mcp.run()
 ```
 
@@ -130,7 +139,7 @@ touch pyproject.toml
 
 Add the following:
 
-```bash
+```python
 [build-system]
 requires = ["setuptools>=40.8.0", "wheel"]
 build-backend = "setuptools.build_meta:__legacy__"

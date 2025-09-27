@@ -6,7 +6,6 @@ build-backend = "setuptools.build_meta:__legacy__"
 name = "epr-mcp-server"
 version = "0.1.0"
 description = "MCP server for EPR workshop"
-requires-python = ">= 3.12"
 dependencies = [
     "httpx",
     "mcp",

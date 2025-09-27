@@ -2,36 +2,25 @@
 
 ## Overview
 
-In this section we will extend our MCP server capabilities.
+In this section we will extend the Model Context Protocol (MCP) server capabilities for EPR integration. The extensions add comprehensive CRUD operations and search functionality for all EPR resource types.
 
-## Extending Your Server
+### Core Extensions
 
-- Add more tools for additional API endpoints.
-- Implement authentication or custom error handling as needed.
-- Use the `get_search_query` helper to build flexible search queries.
+Fetch Operations: Adds two new fetch tools for retrieving Event Receivers and Event Receiver Groups by ID using REST API endpoints. These complement the existing event fetching capability.
 
----
+GraphQL Search Integration: Implements three search functions that leverage EPR's GraphQL endpoint to query events, event receivers, and event receiver groups. Each search function uses the get_search_query helper to build flexible queries with configurable fields and parameters.
 
-## Example: Registering a Tool
+Create Operations: Introduces "danger zone" functionality with three creation tools that can add new events, event receivers, and event receiver groups to EPR. These operations modify EPR state and require appropriate caution in usage.
 
-Here’s a minimal example of registering a tool:
+### Technical Implementation
 
-```python
-@mcp.tool(title="Fetch Event", description="Fetch an event from EPR")
-async def fetch_event(epr_url: str, id: str) -> str:
-    """Fetch an event from the EPR"""
-    async with httpx.AsyncClient() as client:
-        response = await client.get(f"{epr_url}/api/v1/events/{id}")
-        return response.text
-```
+The extensions follow consistent patterns using httpx for HTTP requests and proper error handling. Search operations use GraphQL queries with predefined field sets, while creation operations use REST POST endpoints with JSON payloads. All functions are properly decorated as MCP tools with descriptive titles and documentation.
 
----
+###  Deployment and Alternatives
 
-## Running the Server
+The document includes Docker rebuild instructions and server restart procedures to apply the extensions. An alternative implementation section covers using UV (a Rust-based Python package manager) instead of traditional pip/venv workflows, along with various command options for running the MCP server locally or in containers.
 
-Call the `run(cfg)` function with your configuration object to start the MCP server.
-
----
+The extensions transform the basic MCP server into a comprehensive EPR management interface that supports both read and write operations across all EPR resource types.
 
 ## Expanding the server
 
@@ -153,45 +142,9 @@ Restart your MCP server in MCP Inspector or VSCode to see results.
 
 ## Summary
 
-- Extend tools
+Extending Your Server
 
-## Misc
+- Add more tools for additional API endpoints.
+- Implement authentication or custom error handling as needed.
+- Use the `get_search_query` helper to build flexible search queries.
 
-Random info that could be helpful
-
-## Alternative UV
-
-UV - An extremely fast Python package and project manager, written in Rust.
-
-[Docs](https://docs.astral.sh/uv)
-
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-
-```bash
-export UV_INDEX_URL=$PIP_INDEX_URL
-```
-
-```bash
-cd src/
-uv venv
-source .venv/bin/activate
-uv add "mcp[cli]" mcp httpx
-```
-
-## Altenative Run Commands
-
-To run the MCP server, use the following command:
-
-```bash 
-docker run -i --rm --network=host -e EPR_URL -e EPR_TOKEN epr-mcp-server:latest
-```
-
-```bash
-mcp dev main.py
-```
-
-```bash
-uv run --with mcp --with mcp[cli] --with pydantic --with httpx mcp run main.py
-```
