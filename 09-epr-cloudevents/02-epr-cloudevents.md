@@ -52,6 +52,8 @@ curl --location --request POST 'http://localhost:8042/api/v1/receivers' \
 The server returns a JSON object with the data field containing the event
 receiver ULID.
 
+---
+
 Capture it:
 
 ```bash
@@ -62,6 +64,8 @@ RESPONSE=$(curl -s --location --request POST 'http://localhost:8042/api/v1/recei
 RECEIVER_ID=$(echo "$RESPONSE" | jq -r .data)
 echo "Receiver ID: $RECEIVER_ID"
 ```
+
+---
 
 Create a CloudEvent JSON file locally
 
@@ -89,6 +93,8 @@ will be placed into the EPR event payload.
 ```
 
 Save that JSON into the workshop directory as `cloud_event.json`.
+
+---
 
 Post an event to EPR (embedding the CloudEvent JSON in payload)
 
@@ -122,6 +128,8 @@ Successful response returns the event ULID in .data:
 ```json
 { "data": "01HXXXXXXXEXAMPLEEVENTID" }
 ```
+
+---
 
 Verify the created event via REST GET
 
@@ -157,6 +165,8 @@ If on macOS M1:
 make PREFIX=$(go env GOPATH) install-darwin-arm64
 ```
 
+---
+
 Create an event receiver with epr-cli
 
 Use epr-cli receiver create to create the same receiver. You can pass the schema
@@ -179,6 +189,8 @@ epr-cli receiver create --name "cloudevents-cli" --version "1.0.0" \
 The successful command prints the ULID of the created receiver. Capture it for
 the event step.
 
+---
+
 Create an event with epr-cli using the cloud_event.json file
 
 The CLI examples in the repo use --payload with an inline JSON string. To use a
@@ -199,6 +211,8 @@ epr-cli event create --name "order-created" --version 1.0.0 --release "2025.09" 
   --platform-id "linux-x86_64" --package "example-app" --description "Order created with CloudEvent payload" \
   --success true --event-receiver-id "${RECEIVER_ULID}" --payload "$(cat cloud_event.json)"
 ```
+
+---
 
 Capture the printed event ID and verify with epr-cli event search or the REST
 GET:
@@ -231,7 +245,9 @@ If the CloudEvent file contains quotes/newlines that break shell interpolation,
 use --payload "$(jq -c . cloud_event.json)" to compactify the JSON before
 passing to the CLI.
 
-Appendix — compact command examples for copy/paste
+---
+
+## Appendix — compact command examples for copy/paste
 
 Create receiver via REST (single-line):
 
@@ -257,3 +273,5 @@ curl --location --request POST 'http://localhost:8042/api/v1/events' \
 You now know how to craft a structured CloudEvent JSON, embed it as the payload
 in an EPR event and create that event both via the REST API (curl) and via the
 epr-cli.
+
+---

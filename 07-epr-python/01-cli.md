@@ -25,6 +25,8 @@ next commands.
 }
 ```
 
+---
+
 We can validate the new event receiver exists with the search command using the
 `ID` from the create receiver command.
 
@@ -55,6 +57,8 @@ The search results will look like this:
 }
 ```
 
+---
+
 We can limit the fields returned by the search command using the `fields`
 parameter:
 
@@ -78,6 +82,8 @@ The search results will look like this:
 }
 ```
 
+---
+
 Create a second event receiver using the provided parameters:
 
 ```bash
@@ -96,6 +102,8 @@ Create an event using the provided parameters:
 eprcli create event --name foo --version 1.0.1 --release 2023.11.16 --platform-id x86_64-gnu-linux-40 --package rpm  --description "The Foo of Brixton" --payload '{"name": "foo"}' --success --event-receiver-id 01HW3SZ8N3MXA9EWZZY4HSVVNK
 ```
 
+---
+
 Search for an event using the provided parameters:
 
 ```bash
@@ -105,3 +113,5 @@ eprcli search event --id 01HQK4MD17NXY7XAQ4B7V32DRS
 ```bash
 eprcli search event --name foo --version 1.0.1 --release 2023.11.16
 ```
+
+---

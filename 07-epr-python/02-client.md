@@ -25,6 +25,8 @@ print(f"Type: {event_receiver_foo.type}")
 print(f"Fingerprint: {event_receiver_foo.compute_fingerprint()}")
 ```
 
+---
+
 A model example a dictionary and the models in the `epr` package.
 
 ```python
@@ -62,7 +64,6 @@ headers = {}
 client = Client(url, headers=headers)
 
 # Create an event receiver
-
 event_receiver_foo = EventReceiver()
 event_receiver_foo.name = "foo-receiver-2"
 event_receiver_foo.type = "dev.events.foo"
@@ -72,7 +73,6 @@ event_receiver_foo.schema = "{}"
 
 event_receiver_foo_res = client.create_event_receiver(params=event_receiver_foo)
 event_receiver_foo_id = event_receiver_foo_res["data"]["create_event_receiver"]
-
 
 event_receiver_bar = EventReceiver()
 event_receiver_bar.name = "bar-receiver-1"
@@ -85,7 +85,6 @@ event_receiver_bar_res = client.create_event_receiver(params=event_receiver_bar)
 event_receiver_bar_id = event_receiver_bar_res["data"]["create_event_receiver"]
 
 # Create an event receiver group
-
 event_receiver_group_foo = EventReceiverGroup()
 event_receiver_group_foo.name = "foo-bar-receiver-group-1"
 event_receiver_group_foo.type = "dev.events.foo.bar.complete"
@@ -98,7 +97,6 @@ event_receiver_group_foo_res = client.create_event_receiver_group(params=event_r
 event_receiver_group_foo_id = event_receiver_group_foo_res["data"]["create_event_receiver_group"]
 
 # Create an event
-
 event_foo = Event()
 event_foo.name = "foo"
 event_foo.version = "1.0.0"
@@ -287,6 +285,8 @@ event_receiver_results = client.search_event_receivers(params=erbs.as_dict_query
 print(f"{event_receiver_results}")
 ```
 
+---
+
 Last we will search for event receiver groups using the name, version, and type.
 
 ```python
@@ -299,3 +299,5 @@ ergs.type = "dev.events.foo.bar.complete"
 event_receiver_group_results = client.search_event_receiver_groups(params=ergs.as_dict_query(), fields=erg_fields)
 print(f"{event_receiver_group_results}")
 ```
+
+---

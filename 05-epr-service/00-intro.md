@@ -36,7 +36,7 @@ Follow the linked pages in this folder for step-by-step commands and examples.
 
 ## Requirements
 
-- Golang 1.21+ (for building/running EPR service from source)
+- Golang 1.24+ (for building/running EPR service from source)
 - Docker and Docker Compose (for the Redpanda broker, Postgres DB and other
   dependencies)
 - jq (optional, helpful for inspecting JSON)

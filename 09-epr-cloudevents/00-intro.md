@@ -104,3 +104,5 @@ domain-specific event schemas.
 
 - [CloudEvents Spec](https://github.com/cloudevents/spec)
 - [CloudEvents Python SDK](https://github.com/cloudevents/sdk-python)
+
+---

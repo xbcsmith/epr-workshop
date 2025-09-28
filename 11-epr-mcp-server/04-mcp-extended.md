@@ -181,3 +181,5 @@ Extending Your Server
 - Add more tools for additional API endpoints.
 - Implement authentication or custom error handling as needed.
 - Use the `get_search_query` helper to build flexible search queries.
+
+---

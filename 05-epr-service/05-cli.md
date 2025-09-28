@@ -17,6 +17,8 @@ completed and the EPR server is running.
 
 In this step we will build the EPR CLI and install it into our `GOPATH`.
 
+---
+
 ### Installation
 
 To install in your go path directory set `PREFIX` to your go path. For example,
@@ -62,12 +64,16 @@ receiver.
 }
 ```
 
+---
+
 We can validate the new event receiver exists with the search command using the
 `ID` from the create receiver command.
 
 ```bash
 epr-cli receiver search --id 01HKX0J9KS8AASMRYX61458N41 --fields all
 ```
+
+---
 
 Now we will create a second event receiver as follows.
 
@@ -82,6 +88,8 @@ epr-cli receiver create --name "bar-cli" --version "1.0.0" --description "bar cl
   "data": "01HKX0KY3B31MR3XKJWTDZ4EQ0"
 }
 ```
+
+---
 
 And validate we have created the `bar-cli` receiver.
 
@@ -121,6 +129,8 @@ epr-cli group create --name "foo-group-cli" --version "1.0.0" --description "foo
 }
 ```
 
+---
+
 And validate we have created the `foo-group-cli` receiver group.
 
 ```bash
@@ -141,6 +151,8 @@ epr-cli event create --name foo --version 1.0.0 --release 2024.01 --platform-id 
 epr-cli event create --name foo --version 1.0.0 --release 2024.01 --platform-id x86-64-gnu-linux-9 --package rpm --success true --description "the foo event for foo" --success true --event-receiver-id 01HKX0J9KS8AASMRYX61458N41 --payload '{"name":"foo"}'
 ```
 
+---
+
 We can validate we have created the `foo` event with the following command:
 
 ```bash
@@ -152,6 +164,8 @@ or search by name and version
 ```bash
 epr-cli event search --name foo --version 1.0.0 --fields all
 ```
+
+---
 
 Next we can create a `bar` event and post it to the other receiver in the
 receiver group.
@@ -169,6 +183,8 @@ epr-cli event create --name bar --version 1.0.0 --release 2024.01 --platform-id 
   "data": "01HKX7HKVDVH0HRQN0P2VDJ7Y6"
 }
 ```
+
+---
 
 We can validate we have created the `bar` event with the following command:
 
@@ -193,3 +209,5 @@ the message in the redpanda UI and in the event queue.
 ## Generating Events from files with the CLI
 
 TODO
+
+---

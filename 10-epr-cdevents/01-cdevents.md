@@ -826,3 +826,5 @@ understand the specific build system’s API
 This event structure enables truly event-driven pipelines where each service can
 make intelligent decisions based on rich, standardized metadata rather than just
 simple success/failure notifications.​​​​​​​​​​​​​​​​
+
+---

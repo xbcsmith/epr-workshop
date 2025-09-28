@@ -74,6 +74,8 @@ this:
 }
 ```
 
+---
+
 Adding the MCP servers directly to the `settings.json` file looks like this:
 
 ```json
@@ -150,3 +152,5 @@ system, allowing users to query events, manage receivers, and perform other EPR
 operations through conversational interfaces rather than direct API calls or CLI
 commands. The Docker-based deployment ensures consistent execution across
 different development environments.
+
+---

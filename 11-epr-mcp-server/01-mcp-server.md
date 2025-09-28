@@ -7,6 +7,8 @@ Processor) server using Python and FastMCP 1.0 in the MCP
 [python-sdk](https://github.com/modelcontextprotocol/python-sdk) framework.
 We'll walk through the structure and logic of a real-world MCP Server.
 
+---
+
 ## Setup
 
 Create a work directory
@@ -230,3 +232,5 @@ docker build -t epr-mcp-server:latest .
 - [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk)
 - [EPR-MCP-Python](https://github.com/xbcsmith/epr-mcp-python)
 - [FastMCP 2.0](https://gofastmcp.com/getting-started/welcome)
+
+---

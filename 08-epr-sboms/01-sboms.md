@@ -84,6 +84,8 @@ The results of the command should look like this:
 { "data": "01HYKMYX2Q45H0G6RJV4E8270W" }
 ```
 
+---
+
 Create an SBOM to post.
 
 Run the following command at the root of the event-providence-registry checkout.
@@ -94,6 +96,8 @@ cdxgen -o sbom.json --spec-version 1.6
 mv sbom.json epr-workshop/08-epr-sboms/src/sbom.json
 ```
 
+---
+
 Now we create the data for our event.
 
 ```bash
@@ -103,6 +107,8 @@ cd ./src
 ```bash
 echo "{\"name\": \"epr\",\"version\": \"1.0.1\",\"release\": \"2023.11.16\",\"platform_id\": \"aarch64-gnu-linux-7\",\"package\": \"oci\",\"description\": \"scan source code for OCI image EPR\",\"payload\": $(cat sbom.json),\"success\": true,\"event_receiver_id\": \"01K61EV37TXW0FT1EC6ANC86K9\"}" | jq > sbom_event.json
 ```
+
+---
 
 Now that we have the data ready we will POST the event to the event receiver.
 The event payload will be in the form of a CycloneDX SBOM.
@@ -141,6 +147,8 @@ We can create the SBOM for the image using `syft` as follows:
 syft epr-server:local  --scope all-layers -o cyclonedx-json=./sboms/oci_sbom.json
 ```
 
+---
+
 Now we create the data for our event.
 
 ```bash
@@ -150,6 +158,8 @@ cd ./docs/tutorials/workshops/sboms
 ```bash
 echo "{\"name\": \"epr\",\"version\": \"1.0.1\",\"release\": \"2023.11.16\",\"platform_id\": \"aarch64-gnu-linux-7\",\"package\": \"oci\",\"description\": \"scan of the EPR OCI image\",\"payload\": $(cat oci_sbom.json),\"success\": true,\"event_receiver_id\": \"01HYKMYX2Q45H0G6RJV4E8270W\"}" | jq > oci_sbom_event.json
 ```
+
+---
 
 Now that we have the data ready we will POST the event to the event receiver.
 The event payload will be in the form of a CycloneDX SBOM.
@@ -168,6 +178,8 @@ The results of the command should look like this:
 { "data": "01HYKNGK9CDD6M7Q7WTRQ8N6BC" }
 ```
 
+---
+
 Now we can retrieve the SBOM and use a tool like `grype` to scan it for
 vulnerabilities.
 
@@ -175,3 +187,5 @@ vulnerabilities.
 curl --location --request GET 'http://localhost:8042/api/v1/events/01HYKNGK9CDD6M7Q7WTRQ8N6BC' \
 --header 'Content-Type: application/json'  | jq .data.payload | grype
 ```
+
+---

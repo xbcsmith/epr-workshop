@@ -111,3 +111,5 @@ The key advantage of CDEvents in container pipelines is the decoupling it
 provides - each tool focuses on its core responsibility while communicating
 through standardized events, making your pipeline more resilient, observable,
 and easier to evolve over time.​​​​​​​​​​​​​​​​
+
+---

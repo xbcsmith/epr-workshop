@@ -48,6 +48,8 @@ python3 -m pip install --upgrade kafka-python-ng
 touch consumer.py
 ```
 
+---
+
 Create the consumer.
 
 Add the following to `consumer.py`:
@@ -81,6 +83,8 @@ finally:
     consumer.close()
 ```
 
+---
+
 In a separate terminal run the following command:
 
 ```bash
@@ -91,3 +95,5 @@ export EPR_BROKERS=localhost:19092
 ```bash
 python3 consumer.py
 ```
+
+---

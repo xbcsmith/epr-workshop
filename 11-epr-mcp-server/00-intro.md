@@ -61,3 +61,5 @@ to and use a wide variety of external resources with minimal effort.
 
 In this workshop, you'll learn how MCP servers work and how to build your own to
 extend AI capabilities in real-world applications.
+
+---

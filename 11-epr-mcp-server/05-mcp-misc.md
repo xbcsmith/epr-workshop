@@ -44,3 +44,5 @@ mcp dev main.py
 ```bash
 uv run --with mcp --with mcp[cli] --with pydantic --with httpx mcp run main.py
 ```
+
+---
