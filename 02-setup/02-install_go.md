@@ -35,6 +35,8 @@ go version
 rm -v go${GOVERSION}.${GOOS}-${GOARCH}.tar.gz
 ```
 
+---
+
 ## Tools
 
 Once you have installed go you can install the tools that are used in the

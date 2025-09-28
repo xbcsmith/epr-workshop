@@ -5,6 +5,8 @@
 To install Docker Desktop, follow the instructions on the website:
 [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/)
 
+---
+
 ## Alternate Install on Linux
 
 Alternative install methods for Docker on Linux.
@@ -25,6 +27,8 @@ sudo groupadd docker
 sudo usermod -aG docker ${USER}
 ```
 
+---
+
 ### Enable and Start Docker
 
 ```bash
@@ -40,6 +44,8 @@ docker run hello-world
 To install Docker Compose, follow the instructions on the website:
 
 [https://docs.docker.com/compose/install/](https://docs.docker.com/compose/install/)
+
+---
 
 ## Helper Scripts
 

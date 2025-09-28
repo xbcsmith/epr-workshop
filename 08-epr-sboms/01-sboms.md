@@ -9,6 +9,8 @@ capabilities for cyber risk reduction.
 In this tutorial we will learn how we can use CycloneDX SBOMs with the Event
 Provenance Registry (EPR).
 
+---
+
 ## Requirements
 
 The [Quickstart](../quickstart/README.md) has been completed and the EPR server
@@ -21,6 +23,8 @@ is running.
 - [syft](https://github.com/anchore/syft)
 - [grype](https://github.com/anchore/grype)
 
+---
+
 ## Setup
 
 In this section of the workshop we will need to create a few files and folders.
@@ -32,6 +36,8 @@ mkdir ./src
 cd ./src
 ```
 
+---
+
 ## Event Receiver Schema
 
 Event receivers have a `schema` we can attach a JSON Schema object to as part of
@@ -41,6 +47,8 @@ receiver. Leveraging this feature allows us to guarantee that event payloads
 conforms to the expected data structure defined for that specific event
 receiver.
 
+---
+
 ## CycloneDX bom schema
 
 Download the CycloneDX bom schema.
@@ -48,6 +56,8 @@ Download the CycloneDX bom schema.
 ```bash
 curl -ssLO https://raw.githubusercontent.com/CycloneDX/specification/1.6/schema/bom-1.6.schema.json
 ```
+
+---
 
 ## Create a source SBOM event
 
@@ -71,7 +81,7 @@ curl --location --request POST 'http://localhost:8042/api/v1/receivers' \
 The results of the command should look like this:
 
 ```json
-{"data":"01HYKMYX2Q45H0G6RJV4E8270W"}
+{ "data": "01HYKMYX2Q45H0G6RJV4E8270W" }
 ```
 
 Create an SBOM to post.
@@ -110,6 +120,8 @@ The results of the command should look like this:
 ```json
 { "data": "01HGBDRPZRT96R4586GFA13W91" }
 ```
+
+---
 
 ## Create an SBOM for an OCI image
 
@@ -153,7 +165,7 @@ curl --location --request POST 'http://localhost:8042/api/v1/events' \
 The results of the command should look like this:
 
 ```json
-{"data":"01HYKNGK9CDD6M7Q7WTRQ8N6BC"}
+{ "data": "01HYKNGK9CDD6M7Q7WTRQ8N6BC" }
 ```
 
 Now we can retrieve the SBOM and use a tool like `grype` to scan it for

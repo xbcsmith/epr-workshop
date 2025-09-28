@@ -7,6 +7,8 @@ interaction between its components to ensure efficient event tracking and
 processing. This document outlines the key workflows involving the EPR Server,
 Database, CLI, and Watcher components.
 
+---
+
 ## Workflows
 
 ### EPR Server: Storing Events in the Database
@@ -34,12 +36,16 @@ of interest. Action Execution: Upon detecting relevant messages, the Watcher
 performs predefined actions. Event Notification: The EPR Watcher sends an event
 to the EPR Server, explaining the action taken.
 
+---
+
 ## EPR Message Bus: Interacting with Redpanda
 
 Messaging Interaction: Both the EPR Server and EPR Watcher interact with
 Redpanda for sending and receiving messages. Data Propagation: Redpanda serves
 as the communication backbone, ensuring seamless flow of messages between EPR
 components.
+
+---
 
 ## Conclusion
 

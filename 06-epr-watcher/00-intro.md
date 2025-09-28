@@ -9,6 +9,8 @@ matching logic provided by the EPR SDK, they selectively process events based on
 criteria like project identifier, event type (e.g., test result), and even
 success/failure status.
 
+---
+
 ## Key functionalities of EPR Watchers
 
 ### Targeted event processing
@@ -38,6 +40,8 @@ and management.
 Performing any user-defined action based on specific event criteria, allowing
 for tailored integration with various tools and processes.
 
+---
+
 ## Benefits of using EPR Watcher
 
 ### Improved responsiveness
@@ -54,6 +58,8 @@ provides high flexibility in integrating with diverse tools and processes.
 
 By focusing on relevant events and automating tasks, Watchers free up
 development teams to dedicate their expertise to more strategic work.
+
+---
 
 ## Conclusion
 

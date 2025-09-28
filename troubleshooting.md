@@ -32,8 +32,6 @@ local     server-dependencies_postgres-data
 docker volume rm server-dependencies_postgres-data
 ```
 
-
-
 ## Python
 
 Error:

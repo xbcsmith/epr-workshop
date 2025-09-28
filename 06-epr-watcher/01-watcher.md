@@ -8,10 +8,14 @@ server. Watchers serve the purpose of monitoring messages within Redpanda,
 initiating actions based on these messages, and subsequently dispatching event
 notifications to the EPR Server.
 
+---
+
 ## Requirements
 
 The [Quickstart](../quickstart/README.md) has been completed and the EPR server
 is running.
+
+---
 
 ## Create a new watcher
 
@@ -76,6 +80,8 @@ Now we can run `go mod tidy` to fill in our dependencies.
 go mod tidy
 ```
 
+---
+
 ## Begin consuming
 
 We can now start up the watcher and start consuming messages.
@@ -85,6 +91,8 @@ go run main.go
 ```
 
 You should see a log stating that we have begin consuming records.
+
+---
 
 ## Create an event receiver
 
@@ -112,6 +120,8 @@ curl --location --request POST 'http://localhost:8042/api/v1/receivers' \
 }'
 ```
 
+---
+
 ## Produce message
 
 Create an event:
@@ -131,6 +141,8 @@ curl --location --request POST 'http://localhost:8042/api/v1/events' \
     "event_receiver_id": "01K61CMNCCT3B5CH95YHJDXZ15"
 }'
 ```
+
+---
 
 ## Receive message
 

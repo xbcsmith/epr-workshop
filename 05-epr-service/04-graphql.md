@@ -7,6 +7,8 @@ The graphql playground will now be accessible at:
 
 [http://localhost:8042/api/v1/graphql](http://localhost:8042/api/v1/graphql)
 
+---
+
 ## Making a request
 
 The current schema for all requests is available through the UI. Mutations are
@@ -116,6 +118,8 @@ This will return the id of the newly created event.
   }
 }
 ```
+
+---
 
 ## Query using GraphQL
 
@@ -322,6 +326,8 @@ As follows:
 }
 ```
 
+---
+
 ## Query using the GraphQL with Curl
 
 We need to craft a GraphQL query. First thing we need is an event receiver. The
@@ -393,6 +399,8 @@ as follows:
 ```bash
 curl -X POST -H "content-type:application/json" -d '{"query":"query ($erg: FindEventReceiverGroupInput!){event_receiver_groups(event_receiver_group: $erg) {id,name,type,version,description}}","variables":{"erg": {"name":"foobar","version":"1.0.0"}}}' http://localhost:8042/api/v1/graphql/query
 ```
+
+---
 
 ### Create using GraphQL with Curl
 

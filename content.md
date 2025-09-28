@@ -7,7 +7,9 @@
 - What are CDEvents?
 - What is EPR and how does it fit in an event driven CI/CD system?
 
-Exercise: Discuss how and why to build out event driven services. Setup the tools and message bus (RedPanda) needed to run an event driven system locally. We will also cover how RedPanda (Kafka alternative) works. 
+Exercise: Discuss how and why to build out event driven services. Setup the
+tools and message bus (RedPanda) needed to run an event driven system locally.
+We will also cover how RedPanda (Kafka alternative) works.
 
 ## Session 2: Introduction to Event Provenance Registry
 
@@ -15,7 +17,9 @@ Exercise: Discuss how and why to build out event driven services. Setup the tool
 - Create a microservice to interact with EPR and events.
 - Overview of the EPR Python SDK with examples.
 
-Exercise: Deploy EPR, RedPanda, and Postgres locally. Create a microservice to watch for events and another to produce events. Leverage the python SDK to create, retrieve, and query events in the system.
+Exercise: Deploy EPR, RedPanda, and Postgres locally. Create a microservice to
+watch for events and another to produce events. Leverage the python SDK to
+create, retrieve, and query events in the system.
 
 ## Session #3: CDEvents and SBOMs
 
@@ -23,7 +27,8 @@ Exercise: Deploy EPR, RedPanda, and Postgres locally. Create a microservice to w
 - Discuss how to leverage CDEvents and events in general.
 - Use EPR to store and retrieve SBOMs.
 
-Exercise: Create CDEvents and SBOMs using them to create events in our system to trigger actions for microservices.
+Exercise: Create CDEvents and SBOMs using them to create events in our system to
+trigger actions for microservices.
 
 ## Session #4 EPR MCP Server
 
@@ -32,11 +37,16 @@ Exercise: Create CDEvents and SBOMs using them to create events in our system to
 - Expand our microservices to do more things.
 - Wrap up.
 
-Exercise: Write an MCP server to interact with EPR to provide us with incite into the data and events we created.
+Exercise: Write an MCP server to interact with EPR to provide us with incite
+into the data and events we created.
 
 ## Why attend?
 
-If you work on the architecture, security, and reliability of your teams pipelines this workshop will help you understand how you can introduce asynchronous events as triggers to accelerate velocity, improve auditability, and increase interoperability in your pipelines. We might cover how to responsibly add AI to your pipeline as well. 
+If you work on the architecture, security, and reliability of your teams
+pipelines this workshop will help you understand how you can introduce
+asynchronous events as triggers to accelerate velocity, improve auditability,
+and increase interoperability in your pipelines. We might cover how to
+responsibly add AI to your pipeline as well.
 
 Attendee Takeaways
 
@@ -47,7 +57,7 @@ Answers for the following questions:
 - How can I speed up my pipelines?
 - How can I improve my auditability of the actions in my pipelines?
 - How can I create systems that are interoperable and use a common language?
-- Where can I add agentic AI into my pipeline? 
+- Where can I add agentic AI into my pipeline?
 
 ## Target Group and Requirements
 

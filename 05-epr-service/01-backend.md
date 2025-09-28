@@ -7,11 +7,15 @@ essential for working with EPR. Docker Compose will be employed to launch these
 services, with Redpanda serving as the message broker for event transmission and
 PostgreSQL as the designated database for data storage.
 
+---
+
 ## Requirements
 
 - [Golang 1.24+](https://go.dev/dl/)
 - [Docker](https://docs.docker.com/engine/install)
 - [Docker-Compose](https://docs.docker.com/engine/install)
+
+---
 
 ## Clone the Code
 
@@ -28,6 +32,8 @@ Change directory to event-provenance-registry:
 ```bash
 cd ./event-provenance-registry
 ```
+
+---
 
 ## Start Dependencies
 

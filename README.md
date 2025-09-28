@@ -138,7 +138,6 @@ The requirements for the workshop are as follows:
 - Configure an IDE to run the MCP server
 - Use MCP inspector to troubleshoot tools, resources, and prompts
 
-
 ### Workshop Challenge: Enhancing EPR Functionality
 
 - Participants will be given a challenge to enhance a specific aspect of EPR
