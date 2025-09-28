@@ -59,3 +59,5 @@ Follow the linked pages in this folder for step-by-step commands and examples.
   workshop root README for build instructions.
 - Hands-on REST API examples: `03-curl.md` (create receivers, events, groups,
   queries)
+
+---

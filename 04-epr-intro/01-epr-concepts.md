@@ -165,3 +165,5 @@ was created in EPR.
 
 **UpdatedAt**: The timestamp representing the time when the event receiver group
 was last updated in EPR.
+
+---

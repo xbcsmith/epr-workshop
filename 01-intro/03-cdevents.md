@@ -322,3 +322,5 @@ agility that compound over time as their delivery capabilities mature.
 - [CDEvents SDK Libraries](https://github.com/cdevents)
 - [CDEvents Primer and Getting Started](https://cdevents.dev/docs/)
 - [Enterprise Integration Patterns - Modern Edition](https://www.enterpriseintegrationpatterns.com/)
+
+---

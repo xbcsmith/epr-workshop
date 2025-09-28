@@ -56,3 +56,5 @@ the Docker container with the following command:
 docker exec -it redpanda-0 \
     rpk topic create epr.dev.events --brokers=localhost:19092
 ```
+
+---

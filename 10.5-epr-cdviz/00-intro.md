@@ -17,3 +17,5 @@ By the end of this workshop, participants will be able to:
 - Explore and interpret visualization dashboards in Grafana
 - Create custom dashboards for specific metrics
 - Integrate CDViz into existing CI/CD workflows
+
+---

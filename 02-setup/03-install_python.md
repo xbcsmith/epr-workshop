@@ -14,6 +14,8 @@ brew install python3
 brew install virtualenv virtualenvwrapper pyenv
 ```
 
+---
+
 ## Linux
 
 ### Fedora
@@ -33,3 +35,5 @@ sudo dnf install -y \
     python3-tox \
     ruff
 ```
+
+---

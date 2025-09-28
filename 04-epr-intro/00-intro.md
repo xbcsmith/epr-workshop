@@ -74,3 +74,5 @@ event-driven architectures. You will understand how EPR's persistence and
 querying capabilities enable sophisticated pipeline analytics, compliance
 reporting, and debugging workflows that are essential for production CI/CD
 systems.
+
+---

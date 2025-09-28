@@ -81,3 +81,5 @@ workshop, all demos will be presented using VSCode.
 
 You can download the VSCode installer from the
 [VSCode downloads page](https://code.visualstudio.com/download).
+
+---

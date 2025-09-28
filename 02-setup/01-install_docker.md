@@ -65,6 +65,8 @@ if [[ $answer == 'Y' ]];then
 fi
 ```
 
+---
+
 A script to delete all OCI images from your machine. Useful for cleaning up
 images after you are done.
 
@@ -82,3 +84,5 @@ if [[ $answer == 'Y' ]];then
         && [[ ! -z $IMAGES ]] && docker rmi -f $IMAGES
 fi
 ```
+
+---

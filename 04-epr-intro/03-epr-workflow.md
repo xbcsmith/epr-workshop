@@ -54,3 +54,5 @@ Database, CLI, and Watcher components, allowing for efficient event tracking,
 storage, and action execution within the Event Provenance Registry system. The
 integration with Redpanda further enhances communication capabilities, providing
 a robust foundation for event-driven workflows in CI/CD and beyond.
+
+---

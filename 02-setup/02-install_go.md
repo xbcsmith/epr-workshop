@@ -17,6 +17,8 @@ Another way is to install from [homebrew](https://brew.sh/).
 brew install go
 ```
 
+---
+
 ## Linux
 
 Easiest way is to install from the [Go downloads page](https://go.dev/dl/).
@@ -42,6 +44,8 @@ rm -v go${GOVERSION}.${GOOS}-${GOARCH}.tar.gz
 Once you have installed go you can install the tools that are used in the
 workshop.
 
+---
+
 ### golangci-lint
 
 Install golangci-lint by following the instructions on the website:
@@ -55,6 +59,8 @@ To install golangci-lint, on a Mac M1, run the following command:
 brew install golangci/tap/golangci-lint
 brew upgrade golangci/tap/golangci-lint
 ```
+
+---
 
 To install golangci-lint on Linux, run the following command:
 
@@ -71,3 +77,5 @@ To run golangci-lint with a Docker container, run the following command:
 ```bash
 docker run --rm -v $(pwd):/app;rw,z -w /app golangci/golangci-lint:v1.56.2 golangci-lint run -v
 ```
+
+---
