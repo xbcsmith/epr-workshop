@@ -27,6 +27,8 @@ cd ./src/foo
 touch main.go
 ```
 
+---
+
 Now open the `main.go` in your favorite editor (Vim).
 
 Add the following code:
@@ -67,6 +69,8 @@ func customTaskHandler(msg *message.Message) error {
 }
 
 ```
+
+---
 
 Save the file and run `go mod init` in your terminal.
 
@@ -155,3 +159,5 @@ You should now see a message like the one below.
 **Note**: the matcher being run is looking for kafka messages with the type
 `foo.bar`. This aligns with the type of the event receiver we created and posted
 an event to. All other messages will be ignored.
+
+---

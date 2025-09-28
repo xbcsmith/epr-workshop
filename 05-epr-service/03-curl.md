@@ -37,6 +37,8 @@ The results should look like this:
 { "data": "01HPW0DY340VMM3DNMX8JCQDGN" }
 ```
 
+---
+
 We need the ULID of the event receiver in the next step.
 
 When you create an event, you must specify an `event_receiver_id` to associate
@@ -65,18 +67,13 @@ curl --location --request POST 'http://localhost:8042/api/v1/events' \
 }
 ```
 
-curl --location --request POST 'http://localhost:8042/api/v1/events' \
---header 'Content-Type: application/json' \
---data-raw '{ "name": "magnificent", "version": "7.0.1", "release":
-"2023.11.16", "platform_id": "linux", "package": "docker", "description":
-"blah", "payload": { "name": "joe" }, "success": true, "event_receiver_id":
-"01K61BP7CRT5YXQW6SAJK91H5C" }
-
 The results of the command should look like this:
 
 ```json
 { "data": "01HPW0GV9PY8HT2Q0XW1QMRBY9" }
 ```
+
+---
 
 Event Receiver Groups are a way to group together several event receivers. When
 all the event receivers in a group have successful events for a given unit the
@@ -128,3 +125,5 @@ curl --header 'Content-Type: application/json' --location \
   --request GET 'http://localhost:8042/api/v1/groups/01HPW0JXG82Q0FBEC9M8P2Q6J8
 '
 ```
+
+---

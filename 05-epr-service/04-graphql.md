@@ -48,7 +48,12 @@ receiver groups.
 }
 ```
 
-This can then be used to create a new event receiver group
+This can then be used to create a new event receiver group.
+
+---
+
+Now we will use the event receiver id from above to create a new event receiver
+group.
 
 ```graphql
 mutation {
@@ -75,6 +80,8 @@ This will return the id of the newly created event receiver group.
 }
 ```
 
+---
+
 Event receiver Groups can be updated using the following mutation
 
 ```graphql
@@ -88,6 +95,8 @@ mutation {
   set_event_receiver_group_disabled(id: "01HPW02R3G3QP3EJB036M41J9J")
 }
 ```
+
+---
 
 Now can create a new event for the event receiver ID in the previous step
 
@@ -144,6 +153,8 @@ query {
 }
 ```
 
+---
+
 This query is only returning a subset of the available fields. Pass in the ID of
 the previously created event_receiver
 
@@ -160,6 +171,8 @@ query {
   }
 }
 ```
+
+---
 
 This query is only returning a subset of the available fields. Pass in the ID of
 the previously created event_receiver_group
@@ -178,6 +191,8 @@ query {
   }
 }
 ```
+
+---
 
 We can use graphql to search for events by name and version.
 
@@ -201,6 +216,8 @@ mutation {
 }
 ```
 
+---
+
 In the graphql window create a query with the following:
 
 ```graphql
@@ -220,6 +237,8 @@ query {
   }
 }
 ```
+
+---
 
 This query will return all events with the name foo and version 1.0.0
 
@@ -264,6 +283,8 @@ As follows:
 }
 ```
 
+---
+
 We can use graphql to search for event receivers by name and version.
 
 Create another event receiver
@@ -296,6 +317,8 @@ query {
   }
 }
 ```
+
+---
 
 This query will return all events with the name the_clash and version 1.0.0
 
@@ -346,12 +369,16 @@ We can find and event receiver by id using the following graphql query:
 }
 ```
 
+---
+
 We can query the event receiver information using a POST on the graphql endpoint
 as follows:
 
 ```bash
 curl -X POST -H "content-type:application/json" -d '{"query":"query ($er: FindEventReceiverInput!){event_receivers(event_receiver: $er) {id,name,type,version,description}}","variables":{"er":{"id":"01HPW652DSJBHR5K4KCZQ97GJP"}}}' http://localhost:8042/api/v1/graphql/query
 ```
+
+---
 
 We can query for an event by name and version using the following graphql query:
 
@@ -367,6 +394,8 @@ We can query for an event by name and version using the following graphql query:
 }
 ```
 
+---
+
 We can query the event receiver information using a POST on the graphql endpoint
 as follows:
 
@@ -377,6 +406,8 @@ curl -X POST -H "content-type:application/json" -d '{"query":"query ($e : FindEv
 ```bash
 curl -X POST -H "content-type:application/json" -d '{"query":"query {events(event: {name: \"foo\", version: \"1.0.0\"}) {id,name,version,release,platform_id,package,description,success,event_receiver_id}}}' http://localhost:8042/api/v1/graphql/query
 ```
+
+---
 
 We can query for an event receiver group by name and version using the following
 graphql query:
@@ -392,6 +423,8 @@ graphql query:
   }
 }
 ```
+
+---
 
 We can query the event receiver information using a POST on the graphql endpoint
 as follows:
@@ -421,6 +454,8 @@ We can create an event receiver using the following graphql query:
 }
 ```
 
+---
+
 We can create the event receiver using a POST on the graphql endpoint as
 follows:
 
@@ -438,6 +473,8 @@ We will need the event receiver ID returned from this mutation in the next step.
 }
 ```
 
+---
+
 Create an event receiver group using the GraphQL with Curl. You will need the
 Event Receiver ID returned from the previous mutation.
 
@@ -453,6 +490,8 @@ curl -X POST -H "content-type:application/json" -d '{"query":"mutation ($obj: Cr
 }
 ```
 
+---
+
 Create an event using the GraphQL with Curl. You will need the Event Receiver ID
 returned from the previous mutation.
 
@@ -467,3 +506,5 @@ curl -X POST -H "content-type:application/json" -d '{"query":"mutation ($obj: Cr
   }
 }
 ```
+
+---

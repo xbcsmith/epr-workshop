@@ -126,3 +126,5 @@ Results should look like this
 ## Links
 
 - [MCP inspector](https://modelcontextprotocol.io/docs/tools/inspector)
+
+---

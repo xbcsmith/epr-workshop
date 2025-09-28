@@ -58,9 +58,11 @@ cp spec/schemas/artifactpackaged.json .
 
 Create the Event Receiver data:
 
-````bash
+```bash
 echo "{\"name\": \"artifact-packaged\",\"type\": \"dev.cdevents.artifact.packaged.0.2.0\",\"version\": \"1.0.0\",\"description\": \"CDEvents Artifact Packaged\", \"schema\": $(cat artifactpackaged.json)}" | jq > artifact_packaged_er.json
+```
 
+---
 
 Create the event receiver:
 
@@ -68,13 +70,15 @@ Create the event receiver:
 curl --location --request POST 'http://localhost:8042/api/v1/receivers' \
 --header 'Content-Type: application/json' \
 --data @artifact_packaged_er.json
-````
+```
 
 The results of the command should look like this:
 
 ```json
 { "data": "01K63HRQPJ4VTJES34PX2AT810" }
 ```
+
+---
 
 Next we will POST an event to the event receiver. The event payload will be in
 the form of an artifact published event.
@@ -92,6 +96,8 @@ The results of the command should look like this:
 ```json
 { "data": "01HFW5MZARPAQME9M9VKC3Z2ZD" }
 ```
+
+---
 
 Now we send an event with a payload that doesn't match the schema and it should
 error out.
@@ -111,6 +117,8 @@ curl --location --request POST 'http://localhost:8042/api/v1/events' \
     "event_receiver_id": "01K63HRQPJ4VTJES34PX2AT810"
 }'
 ```
+
+---
 
 Error Message
 
@@ -134,6 +142,8 @@ mkdir foo
 cd foo
 touch main.go
 ```
+
+---
 
 Now open the `main.go` in your favorite editor (Vim).
 
@@ -176,6 +186,8 @@ func customTaskHandler(msg *message.Message) error {
 }
 
 ```
+
+---
 
 Finish the setup
 
@@ -237,3 +249,5 @@ curl --location --request POST 'http://localhost:8042/api/v1/events' \
     "event_receiver_id": "01K63HRQPJ4VTJES34PX2AT810"
 }'
 ```
+
+---

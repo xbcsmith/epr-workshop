@@ -2,11 +2,15 @@
 
 In this section of the workshop, we will introduce the SBOMs.
 
+---
+
 ## What are SBOMs?
 
 SBOMs are short for Software Bill of Materials. They are a format for storing
 and tracking software components, their dependencies, and their versions. They
 are becoming a fundamental part of the software development lifecycle.
+
+---
 
 ## Formats of SBOMs
 
@@ -53,3 +57,5 @@ The specification supports:
 - Vulnerability Disclosure Reports (VDR)
 - Vulnerability Exploitability eXchange (VEX)
 - CycloneDX Attestations (CDXA)
+
+---

@@ -33,6 +33,8 @@ git clone git@github.com:cloudevents/spec.git
 git clone git@github.com:cloudevents/sdk-python.git
 ```
 
+---
+
 Create and activate a Python virtual environment (Unix/macOS)
 
 ```bash
@@ -54,11 +56,15 @@ pip install --upgrade pip
 pip install cloudevents flask requests pytest
 ```
 
+---
+
 Verify the sample files exist (optional)
 
 ```bash
 ls -l ./sdk-python/samples/http-json-cloudevents/
 ```
+
+---
 
 Run the sample Flask server (binds to port 3000) Leave this terminal running to
 accept incoming CloudEvents.
@@ -74,6 +80,8 @@ use: (from the project dir)
 nohup python3 src/sdk-python/samples/http-json-cloudevents/json_sample_server.py > server.log 2>&1 &
 ```
 
+---
+
 In a second terminal (activate the same venv), send sample events Activate venv
 in the second terminal too:
 
@@ -82,12 +90,16 @@ source ./venv/cloudevents/bin/activate
 python3 ./sdk-python/samples/http-json-cloudevents/client.py http://localhost:3000/
 ```
 
+---
+
 You should see client output confirming sent events and the server terminal
 should print messages like:
 
 ```bash
 Found <id> from <source> with type <type> and specversion <specversion>
 ```
+
+---
 
 Run the included pytest tests (these use Flask test_client and do not require
 the server process)
@@ -101,6 +113,8 @@ Quick cleanup when finished
 ```bash
 deactivate
 ```
+
+---
 
 Troubleshooting quick commands:
 
@@ -120,3 +134,5 @@ ss -ltnp | grep 3000   # or: lsof -i :3000
 - To inspect request headers on the server, edit:
   `sdk-python/samples/http-json-cloudevents/json_sample_server.py` add:
   `print(dict(request.headers))` to the file
+
+---
