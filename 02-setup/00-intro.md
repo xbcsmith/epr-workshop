@@ -10,3 +10,5 @@ Install the following dependencies:
 - [Docker Compose](https://docs.docker.com/compose/install/)
 - [Golang](https://go.dev/doc/install)
 - [Python](https://www.python.org/downloads/)
+
+---

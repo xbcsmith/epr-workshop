@@ -57,6 +57,8 @@ Application Bundle) payloads, containing:
 - NVRPP (Name, Version, Release, Platform ID, Package) identifier for unit
   tracking
 
+---
+
 ### Gates and Stages Orchestration
 
 **Gates** represent logical checkpoints that collect receipts for related
@@ -67,6 +69,8 @@ compilation and packaging activities.
 downstream activities. When all gates in a stage have successful receipts
 (multipass: true), the stage emits an event to the Kafka topic, creating the
 cascading effect that drives the pipeline.
+
+---
 
 ### Unique Identification with ULIDs
 
@@ -88,6 +92,8 @@ timestamps, enabling efficient querying and debugging.
 - **HTTP/REST Integration**: Legacy systems integrate via simple HTTP POST
   requests rather than requiring Kafka clients
 
+---
+
 ### The Gatekeeper Service
 
 The central communication hub built in Go with PostgreSQL storage provides:
@@ -98,6 +104,8 @@ The central communication hub built in Go with PostgreSQL storage provides:
   revoked or disabled
 - **Single Source of Truth**: Only the Gatekeeper service publishes to main
   Kafka topics
+
+---
 
 ### Watcher Architecture
 
@@ -128,6 +136,8 @@ event-driven orchestration:
 4. **Automatic Promotion**: Successful test stages trigger repository promotion
    without human intervention
 
+---
+
 ### Incorporating Destructive Testing
 
 For testing that cannot run alongside automated suites (database destructive
@@ -140,6 +150,8 @@ gate validation:
   automated cycles
 - **Consolidated Results**: External test results integrate seamlessly with
   automated pipeline decisions
+
+---
 
 ### DevSecOps and Security Integration
 
@@ -170,6 +182,8 @@ behavior, leading to several key insights:
 - **UI Limitations**: GraphQL APIs are excellent for known queries but poor for
   exploratory debugging
 
+---
+
 ### Schema Validation Prevents Issues
 
 Rigorous JSON schema validation proved essential:
@@ -180,11 +194,15 @@ Rigorous JSON schema validation proved essential:
 - **xUnit Schemas**: Test result parsing requires validated xUnit input to
   prevent data corruption
 
+---
+
 ### Authentication and Security
 
 Initial token-based authentication proved inadequate when developers committed
 tokens to git repositories. OIDC implementation significantly improved security
 posture and should be implemented from the beginning.
+
+---
 
 ### Essential Guardrails
 
@@ -199,6 +217,8 @@ that overwhelmed downstream services when replayed without rate limiting
 
 **Input Sanitization**: Developers attempted to store binary data as base64 in
 receipts, requiring strict input validation
+
+---
 
 ### SDK and Developer Experience
 
@@ -361,3 +381,5 @@ well-designed event-driven architectures.
 - [CD Foundation](https://cd.foundation/)
 - [SLSA Framework](https://slsa.dev/)
 - [Enterprise Integration Patterns](https://www.enterpriseintegrationpatterns.com/)
+
+---

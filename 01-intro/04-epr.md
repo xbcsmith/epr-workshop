@@ -30,8 +30,6 @@ structures:
 
 ## Data Structures
 
----
-
 ### Events
 
 Events represent the core data entities within EPR. An event is simply a record
@@ -90,3 +88,5 @@ for a wide range of event-driven scenarios.
 - [EPR Workshop](https://github.com/xbcsmith/epr-workshop)
 - [EPR Python Client](https://github.com/xbcsmith/epr-python)
 - [EPR MCP Server](https://github.com/xbcsmith/epr-mcp-python)
+
+---

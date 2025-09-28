@@ -27,6 +27,8 @@ docker compose -f docker-compose.yaml pull
 docker compose -f docker-compose.yaml up --remove-orphans
 ```
 
+---
+
 Verify the services are running:
 
 ```bash
@@ -181,6 +183,8 @@ own service details.
      }
    }
    ```
+
+---
 
 2. **Test Completed Event:**
    ```json
@@ -507,6 +511,8 @@ docker compose down -v
 docker compose up -d
 ```
 
+---
+
 ### Sample Event Templates
 
 ```json
@@ -548,6 +554,8 @@ docker compose up -d
   http://localhost:3000/d/cdevents-activity/cdevents-activity
 - Event Webhook: http://localhost:8080/webhook/github-actions
 
+---
+
 ## Post CDEvents
 
 ```bash
@@ -555,6 +563,8 @@ curl -v -X POST http://localhost:8080/webhook/000-cdevents \
     -H "Content-Type: application/json" \
     -d @01K5S8WZ0WQBK64MJNNVX2SW8Y.example.deployed.json
 ```
+
+---
 
 ## Scripts
 
@@ -580,3 +590,5 @@ python3 ./generate_cdevents.py
 ```
 
 Look at the dashboard to see the events.
+
+---

@@ -15,6 +15,8 @@ Suggestions:
 
 - Add a watcher to fire a webhook.
 
+---
+
 ## CDEvents
 
 Add CDEvents to the EPR system and expand on the example from the previous
@@ -32,6 +34,8 @@ Suggestions:
 
 - Add a watcher to create a SBOM.
 
+---
+
 ## Python
 
 Add Python to the EPR system and expand on the example from the previous
@@ -45,3 +49,5 @@ Suggestions:
 
 Add whatever you want to the EPR system and expand on the example from the
 previous section.
+
+---

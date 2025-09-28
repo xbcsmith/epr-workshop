@@ -30,6 +30,8 @@ related event streams. Each topic maintains events in an immutable, append-only
 log that enables replay capabilities essential for event sourcing patterns and
 system recovery scenarios.
 
+---
+
 ### Performance and Design Philosophy
 
 Redpanda's engine is written in modern C++ for raw speed and efficiency, with a
@@ -44,6 +46,8 @@ tolerance while using less computing and memory resources. This efficiency makes
 Redpanda particularly suitable for resource-constrained environments and
 cost-conscious deployments.
 
+---
+
 ### Kafka Compatibility and Migration
 
 Built on the Kafka protocol, Redpanda delivers low-latency, high-throughput
@@ -54,3 +58,5 @@ seamless migration of existing Kafka-based applications without code changes.
 This compatibility extends to client libraries, monitoring tools, and
 integration patterns, allowing organizations to leverage existing Kafka
 ecosystem investments while gaining Redpanda's operational advantages.
+
+---

@@ -13,3 +13,5 @@ In this diagram:
   action to the "EPR Server."
 - Both the "EPR Server" and "EPR Watcher" interact with "Redpanda" for sending
   and receiving messages.
+
+---
