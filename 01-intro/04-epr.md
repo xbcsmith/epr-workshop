@@ -12,6 +12,8 @@ particular interest. Upon detecting such events, the watcher executes predefined
 logic. For instance, a typical watcher might activate webhooks upon recognizing
 particular events.
 
+---
+
 ## Functionality
 
 EPR possesses the capability to gate events based on specified criteria,
@@ -24,7 +26,11 @@ their preferred messaging infrastructure.
 To facilitate the organized collection of events, EPR employs three key data
 structures:
 
+---
+
 ## Data Structures
+
+---
 
 ### Events
 
@@ -34,6 +40,8 @@ executed in the pipeline. Events are created to represent a set of event_types
 that are performed on a unit. Events act as the foundational building blocks of
 the provenance tracking system.
 
+---
+
 ### Event Receivers
 
 Event receivers are structures within EPR designed to capture and categorize
@@ -42,6 +50,8 @@ of events they are interested in. These receivers streamline the categorization
 and handling of events based on predetermined criteria. Event Receivers are
 reusable lists of requirements. When an event receiver receives an event, it
 publishes a message that specifies the type of event.
+
+---
 
 ### Event Receiver Groups
 
@@ -61,6 +71,8 @@ disabled, messages for the event_receiver_group will not be published. Messages
 will still be published for the underlying event_receivers should they receive
 successful events.
 
+---
+
 ## Conclusion
 
 In practical terms, EPR serves as a powerful tool for orchestrating event-driven
@@ -68,6 +80,8 @@ architectures, allowing users to track, categorize, and respond to events in a
 streamlined and efficient manner. The support for Redpanda and Kafka, along with
 the well-defined data structures, makes EPR a versatile and adaptable solution
 for a wide range of event-driven scenarios.
+
+---
 
 ## Links
 

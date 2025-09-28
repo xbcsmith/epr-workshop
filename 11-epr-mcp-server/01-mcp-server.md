@@ -2,7 +2,10 @@
 
 ## Workshop: Building an MCP Server with Python and FastMCP
 
-In this workshop, you'll learn how to build a simple MCP (Multi-Channel Processor) server using Python and FastMCP 1.0 in the MCP [python-sdk](https://github.com/modelcontextprotocol/python-sdk) framework. We'll walk through the structure and logic of a real-world MCP Server.
+In this workshop, you'll learn how to build a simple MCP (Multi-Channel
+Processor) server using Python and FastMCP 1.0 in the MCP
+[python-sdk](https://github.com/modelcontextprotocol/python-sdk) framework.
+We'll walk through the structure and logic of a real-world MCP Server.
 
 ## Setup
 
@@ -32,13 +35,14 @@ pip install mcp[cli] mcp httpx
 
 Your MCP server will:
 
-- Register tools (API endpoints) for interacting with an Event Provenance Registry (EPR)
+- Register tools (API endpoints) for interacting with an Event Provenance
+  Registry (EPR)
 - Use async HTTP requests to communicate with the EPR backend
 - Provide logging and debugging support
 
 ---
 
-## Create a Basic MCP Server 
+## Create a Basic MCP Server
 
 ```bash
 touch main.py
@@ -54,6 +58,8 @@ import sys
 import httpx
 from mcp.server.fastmcp import FastMCP
 ```
+
+---
 
 ### Debugging and Logging
 
@@ -79,6 +85,8 @@ logging.basicConfig(stream=sys.stderr, level=level, format=log_format)
 logger = logging.getLogger(__name__)
 ```
 
+---
+
 ### Add ENV Vars
 
 ```bash
@@ -94,9 +102,12 @@ Create an instance of FastMCP, giving your server a name:
 mcp = FastMCP("EPR Workshop MCP Server", "0.1.0")
 ```
 
+---
+
 ### Register Tools (Endpoints)
 
-Each tool is an async function decorated with `@mcp.tool`. For example, to fetch an event:
+Each tool is an async function decorated with `@mcp.tool`. For example, to fetch
+an event:
 
 ```python
 @mcp.tool(title="Fetch Event", description="Fetch an event from EPR")
@@ -113,6 +124,8 @@ You can register as many tools as needed, such as:
 - Creating new events, receivers, and groups
 
 Each tool should handle HTTP requests and return results or error messages.
+
+---
 
 ### Run the MCP Server
 
@@ -155,6 +168,8 @@ dependencies = [
 ]
 ```
 
+---
+
 ### Create Dockerfile
 
 Create a Dockerfile
@@ -191,12 +206,15 @@ EXPOSE 8000
 CMD ["/app/.venv/bin/python3", "-m", "main"]
 ```
 
+---
+
 ### Build docker image
 
 ```bash
 docker build -t epr-mcp-server:latest .
 ```
 
+---
 
 ## Summary
 

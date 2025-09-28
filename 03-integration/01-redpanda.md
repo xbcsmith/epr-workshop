@@ -26,10 +26,14 @@ Kafka-compatible clusters. It offers comprehensive Kafka administration,
 improved data observability, and robust security features, including SSO, RBAC,
 and Kerberos support.Setting Up Redpanda: Single Node Deployment
 
+---
+
 ## Single Node Deployment
 
 To begin with, let's deploy Redpanda as a single node, and we'll guide you
 through the process of consuming and producing messages. Follow these steps:
+
+---
 
 ### Step 1: Start Redpanda in a Docker Container
 
@@ -53,6 +57,8 @@ docker run --pull=always --name=redpanda-0 --rm \
     --check=false
 ```
 
+---
+
 ### Step 2: Create a Topic
 
 Now, let's create a topic named `epr.dev.events`. Execute the following command
@@ -62,6 +68,8 @@ to create the topic within the running Redpanda container.
 docker exec -it redpanda-0 \
   rpk topic create epr.dev.events --brokers=localhost:9092
 ```
+
+---
 
 ### Step 3: Produce a Message
 
@@ -73,6 +81,8 @@ the produce command, press `Ctrl + C`.
 docker exec -it redpanda-0 \
   rpk topic produce epr.dev.events --brokers=localhost:9092
 ```
+
+---
 
 ### Step 4: Consume a Message
 
@@ -100,6 +110,8 @@ These steps demonstrate a straightforward single node deployment of Redpanda,
 allowing you to create topics, produce messages, and consume them for your
 development and testing purposes.
 
+---
+
 ## Setting up Redpanda: Multi-Node Deployment
 
 In this section we will delve into deploying Redpanda in a multi-node
@@ -118,6 +130,8 @@ This command runs a single Redpanda broker, configured without authentication,
 accessible from `localhost:9092`. You can access the web console in your browser
 at [http://localhost:8080/overview](http://localhost:8080/overview).
 
+---
+
 ### Step 2: Create a Topic in Redpanda
 
 Now, let's create a topic named `epr.dev.events`. Execute the following command
@@ -130,6 +144,8 @@ docker exec -it redpanda \
 
 View the topic in the Redpanda admin console at
 [http://localhost:8080/topics/epr.dev.events](http://localhost:8080/topics/epr.dev.events).
+
+---
 
 ### Step 3: Produce a Message in Redpanda
 
@@ -144,6 +160,8 @@ docker exec -it redpanda \
 
 View the message in the Redpanda admin console (refresh the page if needed) at
 [http://localhost:8080/topics/epr.dev.events](http://localhost:8080/topics/epr.dev.events).
+
+---
 
 ### Step 4: Consume a Message from Redpanda
 
@@ -171,6 +189,8 @@ content, partition, offset, and timestamp.
 These steps showcase a straightforward multi-node deployment of Redpanda,
 enabling you to seamlessly create topics, produce messages, and consume them for
 your development and testing needs.
+
+---
 
 ## Documentation
 

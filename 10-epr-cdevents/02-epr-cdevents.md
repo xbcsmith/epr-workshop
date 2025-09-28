@@ -9,10 +9,14 @@ ecosystem.
 In this tutorial we will learn how we can use CDEvents with the Event Provenance
 Registry (EPR).
 
+---
+
 ## Requirements
 
 The [Quickstart](../quickstart/README.md) has been completed and the EPR server
 is running.
+
+---
 
 ## Setup
 
@@ -25,6 +29,8 @@ mkdir -p ./src.
 cd ./src
 ```
 
+---
+
 ## Event Receiver Schema
 
 Event receivers have a `schema` we can attach a JSON Schema object to as part of
@@ -34,10 +40,12 @@ receiver. Leveraging this feature allows us to guarantee that event payloads
 conforms to the expected data structure defined for that specific event
 receiver.
 
+---
+
 ## Create the Event Receiver
 
 First we will create the event receiver and apply the cdevents schema for
-artifact packaged event type. 
+artifact packaged event type.
 
 The schema is available at
 [this link](https://raw.githubusercontent.com/cdevents/spec/refs/heads/spec-v0.4/schemas/artifactpackaged.json)
@@ -50,7 +58,7 @@ cp spec/schemas/artifactpackaged.json .
 
 Create the Event Receiver data:
 
-```bash
+````bash
 echo "{\"name\": \"artifact-packaged\",\"type\": \"dev.cdevents.artifact.packaged.0.2.0\",\"version\": \"1.0.0\",\"description\": \"CDEvents Artifact Packaged\", \"schema\": $(cat artifactpackaged.json)}" | jq > artifact_packaged_er.json
 
 
@@ -60,12 +68,12 @@ Create the event receiver:
 curl --location --request POST 'http://localhost:8042/api/v1/receivers' \
 --header 'Content-Type: application/json' \
 --data @artifact_packaged_er.json
-```
+````
 
 The results of the command should look like this:
 
 ```json
-{"data":"01K63HRQPJ4VTJES34PX2AT810"}
+{ "data": "01K63HRQPJ4VTJES34PX2AT810" }
 ```
 
 Next we will POST an event to the event receiver. The event payload will be in
@@ -114,6 +122,8 @@ Error Message
   ]
 }
 ```
+
+---
 
 ## Create a watcher to match CDEvent
 
@@ -180,11 +190,16 @@ We can now start up the watcher and start consuming messages.
 go run main.go
 ```
 
+---
+
+## Send a CDEvent
+
 You should see a log stating that we have begin consuming records.
 
 Now we create a new event with a CDEvents payload:
 
-Note: make sure to change the `event_receiver_id` to match the receiver we created earlier.
+Note: make sure to change the `event_receiver_id` to match the receiver we
+created earlier.
 
 Create an event:
 

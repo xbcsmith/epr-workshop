@@ -2,6 +2,8 @@
 
 In this section we will build the Event Provenance Registry (EPR) server.
 
+---
+
 ## Clone the Code
 
 Use the following command to clone the EPR project repository:
@@ -15,6 +17,8 @@ Change into the EPR project directory:
 ```bash
 cd event-provenance-registry
 ```
+
+---
 
 ## Start Event Provenance Registry server
 
@@ -37,6 +41,8 @@ We can stop the server using `CTRL + C`.
 
 Later we will build the server binary with `make`.
 
+---
+
 ## Access graphql playground
 
 On successful startup the server will display the message below:
@@ -48,6 +54,8 @@ time=2024-02-26T09:44:52.943-05:00 level=INFO msg="connect to http://localhost:8
 
 The graphql playground will now be accessible at:
 <http://localhost:8042/api/v1/graphql>
+
+---
 
 ## Install the server
 

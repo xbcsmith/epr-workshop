@@ -1,20 +1,29 @@
 # CloudEvents and EPR
 
-In this session we will learn how we can use CloudEvents with the Event Provenance
-Registry (EPR).
+In this session we will learn how we can use CloudEvents with the Event
+Provenance Registry (EPR).
 
-This workshop session that walks the user through creating CloudEvents JSON and posting them to the Event Provenance Registry (EPR) first with curl (REST API), then with the epr-cli. The workshop uses the EPR REST endpoints shown in the repo (localhost:8042). The CloudEvent JSON will be placed inside the EPR event payload field (so EPR stores the CloudEvent as the event payload).
+This workshop session that walks the user through creating CloudEvents JSON and
+posting them to the Event Provenance Registry (EPR) first with curl (REST API),
+then with the epr-cli. The workshop uses the EPR REST endpoints shown in the
+repo (localhost:8042). The CloudEvent JSON will be placed inside the EPR event
+payload field (so EPR stores the CloudEvent as the event payload).
+
+---
 
 ## Requirements
 
 The [Quickstart](../quickstart/README.md) has been completed and the EPR server
 is running.
 
+---
+
 ## Using curl (step-by-step)
 
 Create an event receiver (with schema)
 
-This receiver defines the schema that event payload should match (EPR expects an event receiver ID when creating events).
+This receiver defines the schema that event payload should match (EPR expects an
+event receiver ID when creating events).
 
 ```bash
 curl --location --request POST 'http://localhost:8042/api/v1/receivers' \
@@ -40,7 +49,8 @@ curl --location --request POST 'http://localhost:8042/api/v1/receivers' \
   }'
 ```
 
-The server returns a JSON object with the data field containing the event receiver ULID. 
+The server returns a JSON object with the data field containing the event
+receiver ULID.
 
 Capture it:
 
@@ -55,7 +65,8 @@ echo "Receiver ID: $RECEIVER_ID"
 
 Create a CloudEvent JSON file locally
 
-Create a file called cloud_event.json containing a structured CloudEvent. This will be placed into the EPR event payload.
+Create a file called cloud_event.json containing a structured CloudEvent. This
+will be placed into the EPR event payload.
 
 ```json
 {
@@ -81,7 +92,9 @@ Save that JSON into the workshop directory as `cloud_event.json`.
 
 Post an event to EPR (embedding the CloudEvent JSON in payload)
 
-Use the event create REST endpoint. Set the event_receiver_id to the ID you captured. The payload field must contain the CloudEvent object (as JSON). Here we use command 
+Use the event create REST endpoint. Set the event_receiver_id to the ID you
+captured. The payload field must contain the CloudEvent object (as JSON). Here
+we use command
 
 substitution to insert the file contents.
 
@@ -120,14 +133,17 @@ curl --header 'Content-Type: application/json' \
   --location --request GET "http://localhost:8042/api/v1/events/${EVENT_ID}" | jq .
 ```
 
-You should see your top-level event fields and the payload containing the CloudEvent JSON you posted.
+You should see your top-level event fields and the payload containing the
+CloudEvent JSON you posted.
 
+---
 
 ### Using the EPR CLI (step-by-step)
 
 Install / build the epr-cli
 
-Build and install into your Go path (example from the repo). Adjust PREFIX as desired.
+Build and install into your Go path (example from the repo). Adjust PREFIX as
+desired.
 
 From the project root:
 
@@ -143,7 +159,8 @@ make PREFIX=$(go env GOPATH) install-darwin-arm64
 
 Create an event receiver with epr-cli
 
-Use epr-cli receiver create to create the same receiver. You can pass the schema inline or keep it minimal with {} for this demo.
+Use epr-cli receiver create to create the same receiver. You can pass the schema
+inline or keep it minimal with {} for this demo.
 
 ```bash
 # Dry-run to preview the receiver payload
@@ -159,11 +176,14 @@ epr-cli receiver create --name "cloudevents-cli" --version "1.0.0" \
   --schema '{}'
 ```
 
-The successful command prints the ULID of the created receiver. Capture it for the event step.
+The successful command prints the ULID of the created receiver. Capture it for
+the event step.
 
 Create an event with epr-cli using the cloud_event.json file
 
-The CLI examples in the repo use --payload with an inline JSON string. To use a file, pass the file content via command substitution so the CLI receives a valid JSON string.
+The CLI examples in the repo use --payload with an inline JSON string. To use a
+file, pass the file content via command substitution so the CLI receives a valid
+JSON string.
 
 ```bash
 # Replace RECEIVER_ULID with the receiver id returned by the cli create command.
@@ -180,7 +200,8 @@ epr-cli event create --name "order-created" --version 1.0.0 --release "2025.09" 
   --success true --event-receiver-id "${RECEIVER_ULID}" --payload "$(cat cloud_event.json)"
 ```
 
-Capture the printed event ID and verify with epr-cli event search or the REST GET:
+Capture the printed event ID and verify with epr-cli event search or the REST
+GET:
 
 ```bash
 # Example using epr-cli search by id:
@@ -192,14 +213,23 @@ curl --header 'Content-Type: application/json' \
   --location --request GET "http://localhost:8042/api/v1/events/${EVENT_ULID}" | jq .
 ```
 
+---
+
 ### Notes, tips, and variations
 
-- CloudEvent as payload: storing the structured CloudEvent inside the EPR event payload keeps the CloudEvent intact for later retrieval, replay, or auditing.
-- Schema compatibility: ensure the EPR event receiver schema allows the CloudEvent JSON shape. If you create a strict schema, your payload must validate. Use `--dry-run` with epr-cli commands to preview payloads before creating resources.
-- Multi-event workflows: create multiple receivers and post different CloudEvents to each to simulate pipelines; you can then create receiver groups (see earlier docs) to produce aggregated behavior.
+- CloudEvent as payload: storing the structured CloudEvent inside the EPR event
+  payload keeps the CloudEvent intact for later retrieval, replay, or auditing.
+- Schema compatibility: ensure the EPR event receiver schema allows the
+  CloudEvent JSON shape. If you create a strict schema, your payload must
+  validate. Use `--dry-run` with epr-cli commands to preview payloads before
+  creating resources.
+- Multi-event workflows: create multiple receivers and post different
+  CloudEvents to each to simulate pipelines; you can then create receiver groups
+  (see earlier docs) to produce aggregated behavior.
 
-
-If the CloudEvent file contains quotes/newlines that break shell interpolation, use --payload "$(jq -c . cloud_event.json)" to compactify the JSON before passing to the CLI.
+If the CloudEvent file contains quotes/newlines that break shell interpolation,
+use --payload "$(jq -c . cloud_event.json)" to compactify the JSON before
+passing to the CLI.
 
 Appendix — compact command examples for copy/paste
 
@@ -220,6 +250,10 @@ curl --location --request POST 'http://localhost:8042/api/v1/events' \
   --data-raw "{\"name\":\"order-created\",\"version\":\"1.0.0\",\"payload\":$(jq -c . cloud_event.json),\"success\":true,\"event_receiver_id\":\"${RECEIVER_ID}\"}" | jq .
 ```
 
+---
+
 ### Wrap-up
 
-You now know how to craft a structured CloudEvent JSON, embed it as the payload in an EPR event and create that event both via the REST API (curl) and via the epr-cli.
+You now know how to craft a structured CloudEvent JSON, embed it as the payload
+in an EPR event and create that event both via the REST API (curl) and via the
+epr-cli.

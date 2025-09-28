@@ -4,6 +4,8 @@
 
 Random info that could be helpful
 
+---
+
 ## Alternative UV
 
 UV - An extremely fast Python package and project manager, written in Rust.
@@ -25,11 +27,13 @@ source .venv/bin/activate
 uv add "mcp[cli]" mcp httpx
 ```
 
-## Altenative Run Commands
+---
+
+## Alternative Run Commands
 
 To run the MCP server, use the following command:
 
-```bash 
+```bash
 docker run -i --rm --network=host -e EPR_URL -e EPR_TOKEN epr-mcp-server:latest
 ```
 

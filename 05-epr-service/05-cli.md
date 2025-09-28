@@ -4,10 +4,14 @@
 
 In this section we will cover getting started with the EPR CLI.
 
+---
+
 ## Requirements
 
 This tutorial requires that the [Quickstart](../quickstart/README.md) has been
 completed and the EPR server is running.
+
+---
 
 ## Install the CLI
 
@@ -29,6 +33,8 @@ Mac OS X M1
 ```bash
 make PREFIX=$(go env GOPATH) install-darwin-arm64
 ```
+
+---
 
 ### Create Event Receivers
 
@@ -95,6 +101,8 @@ And search for event receivers by name and version
 epr-cli receiver search --name foo-cli --version 1.0.0 --fields all
 ```
 
+---
+
 ### Create Event Receiver Groups
 
 Next we Next we will create an event receiver group.
@@ -118,6 +126,8 @@ And validate we have created the `foo-group-cli` receiver group.
 ```bash
 epr-cli group search --id 01HKX90FKWQZ49F6H5V5NQT95Z --fields all
 ```
+
+---
 
 ### Create Events
 
@@ -172,6 +182,8 @@ Or we can search by name and version and success
 epr-cli event search --name bar --version 1.0.0 --success true --fields all
 ```
 
+---
+
 ### Triggering the Event Receiver Group Message
 
 By posting the `foo` event to the first receiver and `bar` to the second
@@ -179,3 +191,5 @@ receiver we trigger the receiver group message to fire. We should be able to see
 the message in the redpanda UI and in the event queue.
 
 ## Generating Events from files with the CLI
+
+TODO

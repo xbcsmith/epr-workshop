@@ -26,6 +26,8 @@ or
 brew install git
 ```
 
+---
+
 ### ULID
 
 Universally Unique Lexicographically Sortable Identifier
@@ -45,6 +47,8 @@ Or you can install ULID with the following command:
 ```bash
 go get github.com/oklog/ulid/v2
 ```
+
+---
 
 ### jq
 
@@ -67,6 +71,8 @@ brew install jq
 ```bash
 sudo dnf install jq
 ```
+
+---
 
 ### VSCode
 

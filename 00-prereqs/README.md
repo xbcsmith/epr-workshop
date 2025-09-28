@@ -50,8 +50,8 @@ retrieval aspects of the workshop.
 
 ## Basic Understanding of MCP
 
-A basic knowledge of what MCP is and what an MCP server does is helpful but not required.
-
+A basic knowledge of what MCP is and what an MCP server does is helpful but not
+required.
 
 ## Additional Notes
 

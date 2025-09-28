@@ -3,6 +3,8 @@
 Begin your exploration of the Event Provenance Registry (EPR) project by gaining
 access to the codebase and understanding its structure.
 
+---
+
 ## Clone the Code
 
 Use the following command to clone the EPR project repository:
@@ -10,6 +12,8 @@ Use the following command to clone the EPR project repository:
 ```bash
 git clone git@github.com:sassoftware/event-provenance-registry.git
 ```
+
+---
 
 ## Repository Structure
 
@@ -112,6 +116,8 @@ The codebase is structured as follows:
 └── tests
 ```
 
+---
+
 ### Event Provenance Registry (EPR) CLI
 
 ```bash
@@ -150,6 +156,8 @@ The codebase is structured as follows:
 │   └── testdata
 ```
 
+---
+
 ## Develop
 
 EPR provides a `Makefile` which can be used to build and install the project.
@@ -161,6 +169,8 @@ Build the server binaries for several platforms.
 ```bash
 make
 ```
+
+---
 
 ## Installation
 
@@ -196,6 +206,8 @@ Mac OS X M1
 make PREFIX=$(go env GOPATH) install-darwin-arm64
 ```
 
+---
+
 ## Tests
 
 Run the go unit tests:
@@ -212,6 +224,8 @@ Run golangci-lint (requires
 ```bash
 make lint
 ```
+
+---
 
 ## Usage
 

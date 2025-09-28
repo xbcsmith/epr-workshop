@@ -17,6 +17,8 @@ The two most common formats are:
 - SPDX
 - CycloneDX
 
+---
+
 ## SPDX
 
 From the [SPDX](https://spdx.dev) website.
@@ -29,6 +31,8 @@ supporting a range of risk management use cases.
 
 The SPDX specification is a freely available international open standard
 (ISO/IEC 5692:2021).
+
+---
 
 ## CycloneDX
 

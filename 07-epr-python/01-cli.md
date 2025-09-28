@@ -4,6 +4,8 @@
 
 In this section we will cover the EPR Python CLI and how to use it.
 
+---
+
 ## CLI Examples
 
 Create an event receiver using the provided parameters:

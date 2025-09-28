@@ -5,9 +5,11 @@
 EPR Python is a python client for the Event Provenance Registry server. In this
 section we will walk through the development and usage of the EPR Python client.
 
+---
+
 ## Development
 
-```bash
+````bash
 ```bash
 mkdir -p ./src/
 cd ./src/
@@ -19,13 +21,17 @@ cd epr-python
 
 pip install -e .
 cd ..
-```
+````
+
+---
 
 ### Development dependencies
 
 ```bash
 pip install -e .[lint,test,build]
 ```
+
+---
 
 ## Consumer
 
@@ -41,7 +47,6 @@ python3 -m pip install --upgrade kafka-python-ng
 ```bash
 touch consumer.py
 ```
-
 
 Create the consumer.
 

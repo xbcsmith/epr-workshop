@@ -6,6 +6,8 @@ Event Provenance Registry (EPR) provides a centralized, secure, and efficient
 means to track and process events. This document outlines the key concepts
 involved in the EPR system.
 
+---
+
 ## Components
 
 ### Server
@@ -29,6 +31,8 @@ the EPR Server.
 
 Interacts with Redpanda for sending and receiving messages.
 
+---
+
 ## Data Structures
 
 ### Events
@@ -36,6 +40,8 @@ Interacts with Redpanda for sending and receiving messages.
 Events are the fundamental data structure in EPR. They represent the core data
 entities and act as the foundational building blocks of the provenance tracking
 system.
+
+---
 
 #### Event Data Structures
 
@@ -72,6 +78,8 @@ EPR.
 **EventReceiver**: The event receiver object assigned to the event upon creation
 in EPR.
 
+---
+
 #### NVRPP Identifier
 
 A crucial aspect of event identification in EPR is the NVRPP identifier,
@@ -95,6 +103,8 @@ Package: docker
 The structure of the NVRPP is inspired by the RPM NEVRA format, providing a
 standardized and consistent way to identify and categorize events within the EPR
 system.
+
+---
 
 ### Event Receivers
 
@@ -122,6 +132,8 @@ event receiver is initialized.
 
 **CreatedAt**: The timestamp representing the time when the event receiver was
 created in EPR.
+
+---
 
 ### Event Receiver Groups
 

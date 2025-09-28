@@ -4,6 +4,8 @@
 
 In this section we will cover the EPR Python Client and how to use it.
 
+---
+
 ## Model Example
 
 A model example using the models in the `epr` package.
@@ -42,6 +44,8 @@ print(f"Name: {erf_obj.name}")
 print(f"Type: {erf_obj.type}")
 print(f"Fingerprint: {erf_obj.compute_fingerprint()}")
 ```
+
+---
 
 ## Client Create Example
 
@@ -132,6 +136,8 @@ results = {
 print(f"{results}")
 ```
 
+---
+
 ### TL;DR Client Example
 
 Create an event receiver and event receiver group. Then send events.
@@ -213,6 +219,8 @@ results = {"events": [ef_id, eb_id], "event_receivers": [erf_id, erb_id], "event
 
 print(f"{results}")
 ```
+
+---
 
 ## Client Search Example
 
