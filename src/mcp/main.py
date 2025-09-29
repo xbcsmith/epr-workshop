@@ -231,4 +231,5 @@ async def create_group(group_data: dict) -> str:
 logger.info("MCP is running with the following configuration:")
 logger.info(f"URL: {cfg.url}")
 logger.info(f"Token: {cfg.token}")
-mcp.run()
+mcp.run(transport="stdio")
+
