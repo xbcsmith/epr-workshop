@@ -9,5 +9,6 @@ description = "MCP server for EPR workshop"
 dependencies = [
     "httpx",
     "mcp",
+    "pydantic>=2.0.0",
 ]
 

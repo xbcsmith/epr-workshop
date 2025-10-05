@@ -37,6 +37,27 @@ this:
 
 ```json
 {
+  "servers": {
+    "epr-mcp-server": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "--network=host",
+        "-e",
+        "EPR_URL",
+        "-e",
+        "EPR_TOKEN",
+        "epr-mcp-server:latest"
+      ],
+      "env": {
+        "EPR_URL": "${input:epr_url}",
+        "EPR_TOKEN": "${input:epr_token}"
+      },
+      "type": "stdio"
+    }
+  },
   "inputs": [
     {
       "type": "promptString",
@@ -51,26 +72,7 @@ this:
       "default": "http://localhost:8042",
       "password": false
     }
-  ],
-  "servers": {
-    "epr-mcp-server": {
-      "command": "docker",
-      "args": [
-        "run",
-        "-i",
-        "--rm",
-        "-e",
-        "EPR_URL",
-        "-e",
-        "EPR_TOKEN",
-        "epr-mcp-server:latest"
-      ],
-      "env": {
-        "EPR_URL": "${input:epr_url}",
-        "EPR_TOKEN": "${input:epr_token}"
-      }
-    }
-  }
+  ]
 }
 ```
 

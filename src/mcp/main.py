@@ -9,8 +9,10 @@ from dataclasses import asdict, dataclass, field
 from typing import Any, Dict, List, Optional
 
 import httpx
+from pydantic import ValidationError
 
 from mcp.server.fastmcp import FastMCP
+from schemas import validate_input
 
 
 def debug_except_hook(type, value, tb):
@@ -91,8 +93,9 @@ def get_operation(name: str, operation: str) -> str:
     return operation_map[name][operation]
 
 
-def get_search_query(operation: str, params: Optional[dict] = None, fields: Optional[list] = None) -> GraphQLQuery:
+def get_search_query(operation: str, data: dict, fields: Optional[list] = None) -> GraphQLQuery:
     """Convert a query dictionary to a GraphQL query string."""
+    params = data.get("data", {})
     variables = dict(obj=params)
     method = get_operation("search", operation)
     op = get_operation("operation", operation)
@@ -101,8 +104,9 @@ def get_search_query(operation: str, params: Optional[dict] = None, fields: Opti
     return GraphQLQuery(query=query, variables=variables)
 
 
-def get_mutation_query(operation: str, params: Optional[dict] = None) -> GraphQLQuery:
+def get_mutation_query(operation: str, data: dict) -> GraphQLQuery:
     """Convert a mutation dictionary to a GraphQL mutation string."""
+    params = data.get("data", {})
     variables = dict(obj=params)
     method = get_operation("mutation", operation)
     op = get_operation("create", operation)
@@ -121,30 +125,53 @@ mcp = FastMCP("epr-workshop-mcp")
 @mcp.tool(title="Fetch Event", description="Fetch an event from EPR")
 async def fetch_event(id: str) -> str:
     """Fetch an event from the EPR"""
+    try:
+        validated_data = validate_input("fetch_event", id)
+        event_id = validated_data["id"]
+    except (ValidationError, ValueError) as e:
+        return f"Validation error: {str(e)}"
+    
     async with httpx.AsyncClient() as client:
-        response = await client.get(f"{cfg.url}/api/v1/events/{id}")
+        response = await client.get(f"{cfg.url}/api/v1/events/{event_id}")
         return response.text
 
 
 @mcp.tool(title="Fetch Event Receiver", description="Fetch an event receiver from EPR")
 async def fetch_receiver(id: str) -> str:
     """Fetch an event receiver from the EPR"""
+    try:
+        validated_data = validate_input("fetch_receiver", id)
+        receiver_id = validated_data["id"]
+    except (ValidationError, ValueError) as e:
+        return f"Validation error: {str(e)}"
+    
     async with httpx.AsyncClient() as client:
-        response = await client.get(f"{cfg.url}/api/v1/receivers/{id}")
+        response = await client.get(f"{cfg.url}/api/v1/receivers/{receiver_id}")
         return response.text
 
 
 @mcp.tool(title="Fetch Event Receiver Group", description="Fetch an event receiver group from EPR")
 async def fetch_group(id: str) -> str:
     """Fetch an event receiver group from the EPR"""
+    try:
+        validated_data = validate_input("fetch_group", id)
+        group_id = validated_data["id"]
+    except (ValidationError, ValueError) as e:
+        return f"Validation error: {str(e)}"
+    
     async with httpx.AsyncClient() as client:
-        response = await client.get(f"{cfg.url}/api/v1/groups/{id}")
+        response = await client.get(f"{cfg.url}/api/v1/groups/{group_id}")
         return response.text
 
 
 @mcp.tool(title="Search Events", description="Search for events in EPR")
 async def search_events(data: dict) -> str:
     """Search for events in the EPR"""
+    try:
+        validated_data = validate_input("search_events", data)
+    except (ValidationError, ValueError) as e:
+        return f"Validation error: {str(e)}"
+    
     fields = [
         "id",
         "name",
@@ -156,7 +183,7 @@ async def search_events(data: dict) -> str:
         "success",
         "event_receiver_id",
     ]
-    query = get_search_query(operation="events", params=data, fields=fields)
+    query = get_search_query(operation="events", data=validated_data, fields=fields)
     async with httpx.AsyncClient() as client:
         headers = {"Content-Type": "application/json"}
         response = await client.post(f"{cfg.url}/api/v1/graphql/query", json=query.as_dict_query(), headers=headers)
@@ -169,8 +196,13 @@ async def search_events(data: dict) -> str:
 @mcp.tool(title="Search Event Receivers", description="Search for event receivers in EPR")
 async def search_receivers(data: dict) -> str:
     """Search for event receivers in the EPR"""
+    try:
+        validated_data = validate_input("search_receivers", data)
+    except (ValidationError, ValueError) as e:
+        return f"Validation error: {str(e)}"
+    
     fields = ["id", "name", "type", "version", "description"]
-    query = get_search_query(operation="event_receivers", params=data, fields=fields)
+    query = get_search_query(operation="event_receivers", data=validated_data, fields=fields)
     async with httpx.AsyncClient() as client:
         headers = {"Content-Type": "application/json"}
         response = await client.post(f"{cfg.url}/api/v1/graphql/query", json=query.as_dict_query(), headers=headers)
@@ -183,8 +215,13 @@ async def search_receivers(data: dict) -> str:
 @mcp.tool(title="Search Event Receiver Groups", description="Search for event receiver groups in EPR")
 async def search_groups(data: dict) -> str:
     """Search for event receiver groups in the EPR"""
+    try:
+        validated_data = validate_input("search_groups", data)
+    except (ValidationError, ValueError) as e:
+        return f"Validation error: {str(e)}"
+    
     fields = ["id", "name", "type", "version", "description"]
-    query = get_search_query(operation="event_receiver_groups", params=data, fields=fields)
+    query = get_search_query(operation="event_receiver_groups", data=validated_data, fields=fields)
     async with httpx.AsyncClient() as client:
         headers = {"Content-Type": "application/json"}
         response = await client.post(f"{cfg.url}/api/v1/graphql/query", json=query.as_dict_query(), headers=headers)
@@ -195,10 +232,16 @@ async def search_groups(data: dict) -> str:
 
 
 @mcp.tool(title="Create Event", description="Create a new event in EPR")
-async def create_event(event_data: dict) -> str:
+async def create_event(data: dict) -> str:
     """Create a new event in the EPR"""
+    try:
+        validated_data = validate_input("create_event", data)
+        params = validated_data.get("data", {})
+    except (ValidationError, ValueError) as e:
+        return f"Validation error: {str(e)}"
+    
     async with httpx.AsyncClient() as client:
-        response = await client.post(f"{cfg.url}/api/v1/events", json=event_data)
+        response = await client.post(f"{cfg.url}/api/v1/events", json=params)
         if response.status_code == 201:
             return "Event created successfully"
         else:
@@ -206,10 +249,16 @@ async def create_event(event_data: dict) -> str:
 
 
 @mcp.tool(title="Create Event Receiver", description="Create a new event receiver in EPR")
-async def create_receiver(receiver_data: dict) -> str:
+async def create_receiver(data: dict) -> str:
     """Create a new event receiver in the EPR"""
+    try:
+        validated_data = validate_input("create_receiver", data)
+        params = validated_data.get("data", {})
+    except (ValidationError, ValueError) as e:
+        return f"Validation error: {str(e)}"
+    
     async with httpx.AsyncClient() as client:
-        response = await client.post(f"{cfg.url}/api/v1/receivers", json=receiver_data)
+        response = await client.post(f"{cfg.url}/api/v1/receivers", json=params)
         if response.status_code == 201:
             return "Event receiver created successfully"
         else:
@@ -217,10 +266,16 @@ async def create_receiver(receiver_data: dict) -> str:
 
 
 @mcp.tool(title="Create Event Receiver Group", description="Create a new event receiver group in EPR")
-async def create_group(group_data: dict) -> str:
+async def create_group(data: dict) -> str:
     """Create a new event receiver group in the EPR"""
+    try:
+        validated_data = validate_input("create_group", data)
+        params = validated_data.get("data", {})
+    except (ValidationError, ValueError) as e:
+        return f"Validation error: {str(e)}"
+    
     async with httpx.AsyncClient() as client:
-        response = await client.post(f"{cfg.url}/api/v1/groups", json=group_data)
+        response = await client.post(f"{cfg.url}/api/v1/groups", json=params)
         if response.status_code == 201:
             return "Event receiver group created successfully"
         else:
@@ -229,7 +284,7 @@ async def create_group(group_data: dict) -> str:
 
 """Run the MCP"""
 logger.info("MCP is running with the following configuration:")
-logger.info(f"URL: {cfg.url}")
-logger.info(f"Token: {cfg.token}")
-mcp.run(transport="stdio")
+logger.info(f"EPR URL: {cfg.url}")
+logger.info(f"EPR Token: {cfg.token}")
+mcp.run()
 

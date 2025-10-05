@@ -51,7 +51,7 @@ resource types.
 
 Add two more fetch tools.
 
-```bash
+```python
 @mcp.tool(title="Fetch Event Receiver", description="Fetch an event receiver from EPR")
 async def fetch_receiver(id: str) -> str:
     """Fetch an event receiver from the EPR"""
@@ -71,7 +71,7 @@ async def fetch_group(id: str) -> str:
 
 ## Leverage the GraphQL endpoint
 
-```bash
+```python
 @mcp.tool(title="Search Events", description="Search for events in EPR")
 async def search_events(data: dict) -> str:
     """Search for events in the EPR"""
@@ -126,7 +126,7 @@ async def search_groups(data: dict) -> str:
 
 ## Add Danger
 
-```bash
+```python
 @mcp.tool(title="Create Event", description="Create a new event in EPR")
 async def create_event(event_data: dict) -> str:
     """Create a new event in the EPR"""

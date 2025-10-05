@@ -40,4 +40,6 @@ commit-message.txt
 *-epr-*/src
 *-epr-*/src/*
 *-epr-*/src/foo
+*-epr-*/src/epr_reports
+src/epr_reports
 slides.md

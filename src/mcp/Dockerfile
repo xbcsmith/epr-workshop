@@ -5,7 +5,7 @@ WORKDIR /app
 
 # Install uv
 RUN pip install --no-cache-dir uv
-COPY pyproject.toml main.py ./
+COPY pyproject.toml main.py schemas.py mcp.json ./
 
 RUN uv venv /app/.venv \
     && uv run main.py
