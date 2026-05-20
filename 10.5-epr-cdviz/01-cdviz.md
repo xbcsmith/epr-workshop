@@ -186,7 +186,8 @@ own service details.
 
 ---
 
-2. **Test Completed Event:**
+1. **Test Completed Event:**
+
    ```json
    {
      "context": {
@@ -403,6 +404,7 @@ CI/CD monitoring?
    - Memory usage
 
 3. **Check the Docker container logs:**
+
    ```bash
    docker compose logs cdviz-collector
    docker compose logs cdviz-db
@@ -474,9 +476,9 @@ CI/CD monitoring?
 
 ### Resources for Continued Learning
 
-- **CDViz Documentation:** https://cdviz.dev/docs/
-- **CD Events Specification:** https://cdevents.dev/
-- **Grafana Documentation:** https://grafana.com/docs/
+- **CDViz Documentation:** <https://cdviz.dev/docs/>
+- **CD Events Specification:** <https://cdevents.dev/>
+- **Grafana Documentation:** <https://grafana.com/docs/>
 - **DORA Metrics:** Research and best practices
 
 ---
@@ -549,10 +551,10 @@ docker compose up -d
 ### Common URLs
 
 - Main Dashboard:
-  http://localhost:3000/d/demo-service-deployed/demo-service-deployed
+  <http://localhost:3000/d/demo-service-deployed/demo-service-deployed>
 - Activity Dashboard:
-  http://localhost:3000/d/cdevents-activity/cdevents-activity
-- Event Webhook: http://localhost:8080/webhook/github-actions
+  <http://localhost:3000/d/cdevents-activity/cdevents-activity>
+- Event Webhook: <http://localhost:8080/webhook/github-actions>
 
 ---
 

@@ -197,7 +197,7 @@ RUN uv venv /app/.venv \
 
 ENV VIRTUAL_ENV="/app/.venv"
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-ENV EPR_URL=http://localhost:8024
+ENV EPR_URL=http://localhost:8042
 ENV EPR_DEBUG=false
 
 # Expose the port your MCP server listens on

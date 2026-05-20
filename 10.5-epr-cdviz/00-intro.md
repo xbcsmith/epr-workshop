@@ -1,4 +1,4 @@
-## Intro to CDViz and CDEvents
+# Intro to CDViz and CDEvents
 
 ## Overview
 

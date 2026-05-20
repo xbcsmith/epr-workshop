@@ -17,14 +17,6 @@ Continuous Delivery (CI/CD) pipelines. Explore how event-driven paradigms enable
 services to operate independently, facilitating a more resilient and responsive
 CI/CD ecosystem.
 
-### Explanation of EPR Project and Its Components (Server, CLI, Client)
-
-Introduce the Event Provenance Registry (EPR) project as an exemplary
-implementation of an event-driven microservice architecture. Break down the
-components of the EPR project, including the server responsible for handling
-events, the command-line interface (CLI) for user interaction, and the client
-component for external system integration.
-
 ### Introduction to Cloud Events and CDEvents Spec
 
 Dive into the essential concepts of Cloud Events, emphasizing their role in
@@ -32,6 +24,14 @@ providing a standardized format for event messages. Introduce the Continuous
 Delivery Events (CDEvents) specification as an extension of Cloud Events,
 specifically tailored for capturing and conveying information within CI/CD
 processes.
+
+### Explanation of EPR Project and Its Components (Server, CLI, Client)
+
+Introduce the Event Provenance Registry (EPR) project as an exemplary
+implementation of an event-driven microservice architecture. Break down the
+components of the EPR project, including the server responsible for handling
+events, the command-line interface (CLI) for user interaction, and the client
+component for external system integration.
 
 ## Workshop Format
 

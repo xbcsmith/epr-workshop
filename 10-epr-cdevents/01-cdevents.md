@@ -1,4 +1,4 @@
-## CDEvents
+# CDEvents
 
 ## Overview
 
@@ -96,7 +96,7 @@ jq -r '.data.context.links.pipelineRun // empty' build-event.json
 
 ---
 
-### Compare time fields to reconstruct ordering.
+### Compare time fields to reconstruct ordering
 
 Outcome: You can trace how a task-level event maps back to its pipeline and
 reconstruct a simple timeline.

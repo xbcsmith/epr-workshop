@@ -383,7 +383,7 @@ def main() -> None:
     if not args.dry_run:
         for evr_type, result in evr_results.items():
             status = result.get("status")
-            status_str = str(status) if status is not None else "ERROR" 
+            status_str = str(status) if status is not None else "ERROR"
             print(f"{evr_type}: {status_str}")
     events = generate_events(evrs=evr_results)
     if args.write_to_disk:

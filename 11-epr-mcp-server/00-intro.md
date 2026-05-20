@@ -34,18 +34,18 @@ for accessing your internal tools or data.
 
 ## MCP Concepts
 
-- **Tools:**  
+- **Tools:**
   Tools are standardized operations or actions exposed by the MCP server. Each
   tool represents a specific capability, such as fetching data, searching, or
   creating a new record. Tools are described with metadata (name, description,
   parameters) so AI models can understand and use them.
 
-- **Resources:**  
+- **Resources:**
   Resources are the external systems, APIs, databases, or data objects that the
   MCP server provides access to via tools. For example, an event database, a
   file system, or a web API can be resources.
 
-- **Prompts:**  
+- **Prompts:**
   Prompts are structured requests or instructions sent from the AI model
   (client) to the MCP server, specifying which tool to use and what parameters
   to provide. The server interprets the prompt, executes the tool, and returns
@@ -53,7 +53,7 @@ for accessing your internal tools or data.
 
 ---
 
-**Analogy:**  
+**Analogy:**
 Think of an MCP server as a universal adapter for AI—allowing models to connect
 to and use a wide variety of external resources with minimal effort.
 

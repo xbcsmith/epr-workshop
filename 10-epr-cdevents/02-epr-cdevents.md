@@ -88,7 +88,72 @@ Create an event:
 ```bash
 curl --location --request POST 'http://localhost:8042/api/v1/events' \
 --header 'Content-Type: application/json' \
---data-raw 'cd
+--data-raw '{
+    "name": "foo",
+    "version": "1.0.1",
+    "release": "2023.11.16",
+    "platform_id": "aarch64-gnu-linux-7",
+    "package": "oci",
+    "description": "packaged oci image foo",
+    "payload": {
+  "context": {
+    "version": "0.4.1",
+    "id": "271069a8-fc18-44f1-b38f-9d70a1695819",
+    "chainId": "4c8cb7dd-3448-41de-8768-eec704e2829b",
+    "source": "/event/source/123",
+    "type": "dev.cdevents.artifact.packaged.0.2.0",
+    "timestamp": "2023-03-20T14:27:05.315384Z",
+    "schemaUri": "https://myorg.com/schema/custom",
+    "links": [
+      {
+        "linkType": "RELATION",
+        "linkKind": "TRIGGER",
+        "target": {
+          "contextId": "5328c37f-bb7e-4bb7-84ea-9f5f85e4a7ce"
+        },
+        "tags": {
+          "foo1": "bar",
+          "foo2": "bar"
+        }
+      }, {
+        "linkType": "PATH",
+        "from": {
+          "contextId": "5328c37f-bb7e-4bb7-84ea-9f5f85e4a7ce"
+        },
+        "tags": {
+          "foo1": "bar",
+          "foo2": "bar"
+        }
+      }, {
+        "linkType": "END",
+        "from": {
+          "contextId": "5328c37f-bb7e-4bb7-84ea-9f5f85e4a7ce"
+        },
+        "tags": {
+          "foo1": "bar",
+          "foo2": "bar"
+        }
+      }
+    ]
+  },
+  "subject": {
+    "id": "pkg:golang/mygit.com/myorg/myapp@234fd47e07d1004f0aed9c",
+    "source": "/event/source/123",
+    "type": "artifact",
+    "content": {
+      "change": {
+        "id": "myChange123",
+        "source": "my-git.example/an-org/a-repo"
+      },
+      "sbom": {
+        "uri": "https://sbom.repo/myorg/234fd47e07d1004f0aed9c.sbom"
+      }
+    }
+  }
+},
+    "success": true,
+    "event_receiver_id": "01K6BGVBHZSZN43C5GVZWJPFTB"
+}'
 ```
 
 The results of the command should look like this:
@@ -114,7 +179,7 @@ curl --location --request POST 'http://localhost:8042/api/v1/events' \
     "description": "packaged oci image foo",
     "payload": { "name" : "foo" },
     "success": true,
-    "event_receiver_id": "01K63HRQPJ4VTJES34PX2AT810"
+    "event_receiver_id": "01K6BGVBHZSZN43C5GVZWJPFTB"
 }'
 ```
 

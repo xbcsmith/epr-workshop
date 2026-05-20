@@ -45,8 +45,8 @@ Follow the linked pages in this folder for step-by-step commands and examples.
 
 ## Ports & URLs used in the exercises
 
-- EPR REST API (service): http://localhost:8042
-- Redpanda admin console: http://localhost:8080/overview
+- EPR REST API (service): <http://localhost:8042>
+- Redpanda admin console: <http://localhost:8080/overview>
 - Redpanda broker (default in examples): localhost:19092
 - Default topic used in workshop examples: `epr.dev.events`
 

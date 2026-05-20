@@ -10,4 +10,4 @@ cat $FILES > slides.md
 
 echo "Slides generated in slides.md"
 
-echo "Display using 'slides slides.md'" 
+echo "Display using 'slides slides.md'"
