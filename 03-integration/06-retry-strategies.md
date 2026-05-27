@@ -1,36 +1,39 @@
 # Retry Strategies
 
-**Duration:** ~50 minutes
-**Prerequisites:** Redpanda running via Docker Compose; Python 3.10+ with `kafka-python` installed.
-
----
-
 ## Overview
 
-When a consumer fails to process a message, you have three options: skip it, block on it forever, or retry it intelligently. Skipping loses data. Blocking stalls the pipeline. Intelligent retry is the only production-viable path.
+When a consumer fails to process a message, you have three options: skip it,
+block on it forever, or retry it intelligently. Skipping loses data. Blocking
+stalls the pipeline. Intelligent retry is the only production-viable path.
 
-This lab covers the three retry strategies you will use in practice, when each is appropriate, and how they compose with the DLQ pattern from Lab 05.
+This lab covers the three retry strategies you will use in practice, when each
+is appropriate, and how they compose with the DLQ pattern from Lab 05.
 
 - **Immediate retry** — retry on the spot, N times, with no delay
 - **Exponential backoff retry** — retry with increasing delays between attempts
 - **Retry topic** — publish to a dedicated retry topic and re-consume later
 
-Each strategy suits a different class of failure. By the end of the lab you will be able to look at an exception and know which strategy belongs.
+Each strategy suits a different class of failure. By the end of the lab you will
+be able to look at an exception and know which strategy belongs.
 
 ---
 
 ## Background: Classifying Failures
 
-Before choosing a retry strategy, classify the failure. The wrong strategy for the failure class wastes time at best and makes things worse at worst.
+Before choosing a retry strategy, classify the failure. The wrong strategy for
+the failure class wastes time at best and makes things worse at worst.
 
-| Failure class | Examples | Right strategy |
-|---|---|---|
-| Transient / infrastructure | Network blip, broker briefly unavailable, connection timeout | Immediate retry with small limit |
-| Recoverable with time | Downstream service overloaded, rate limit hit, DB connection pool exhausted | Exponential backoff |
-| Requires external change | Dependent service deploying new version, data migration in progress | Retry topic with long delay |
-| Permanent / logic error | Schema validation failure, unknown message type, corrupt payload | No retry — DLQ immediately |
+| Failure class              | Examples                                                                    | Right strategy                   |
+| -------------------------- | --------------------------------------------------------------------------- | -------------------------------- |
+| Transient / infrastructure | Network blip, broker briefly unavailable, connection timeout                | Immediate retry with small limit |
+| Recoverable with time      | Downstream service overloaded, rate limit hit, DB connection pool exhausted | Exponential backoff              |
+| Requires external change   | Dependent service deploying new version, data migration in progress         | Retry topic with long delay      |
+| Permanent / logic error    | Schema validation failure, unknown message type, corrupt payload            | No retry — DLQ immediately       |
 
-Retrying a permanent failure is pure waste. Every retry attempt consumes resources, burns through your retry budget, and delays the message reaching the DLQ where it can actually be investigated. The first thing your error handler should do is classify the exception.
+Retrying a permanent failure is pure waste. Every retry attempt consumes
+resources, burns through your retry budget, and delays the message reaching the
+DLQ where it can actually be investigated. The first thing your error handler
+should do is classify the exception.
 
 ---
 
@@ -53,7 +56,8 @@ rpk topic create pipeline.events.dlq \
 
 ### 1.2 Create a shared producer
 
-Create `producer.py` — produces a controlled mix of events that will succeed, fail transiently, fail with backoff, and fail permanently:
+Create `producer.py` — produces a controlled mix of events that will succeed,
+fail transiently, fail with backoff, and fail permanently:
 
 ```python
 #!/usr/bin/env python3
@@ -114,14 +118,20 @@ if __name__ == "__main__":
 
 ## Part 2 — Immediate Retry
 
-Immediate retry is the simplest strategy. On failure, retry the operation up to N times in a tight loop with no sleep. Use it when the failure is almost certainly a transient network blip that resolves in milliseconds.
+Immediate retry is the simplest strategy. On failure, retry the operation up to
+N times in a tight loop with no sleep. Use it when the failure is almost
+certainly a transient network blip that resolves in milliseconds.
 
 Do not use it when:
-- The failure is a downstream service under load — hammering it makes things worse
+
+- The failure is a downstream service under load — hammering it makes things
+  worse
 - N is large — it blocks the consumer thread and stalls partition processing
 - You need to maintain message order across partitions
 
-A good rule of thumb: immediate retry with N ≤ 3 for infrastructure-level errors (connection reset, timeout). Anything that needs more than 3 immediate retries is not a transient blip — use backoff instead.
+A good rule of thumb: immediate retry with N ≤ 3 for infrastructure-level errors
+(connection reset, timeout). Anything that needs more than 3 immediate retries
+is not a transient blip — use backoff instead.
 
 Create `consumer_immediate_retry.py`:
 
@@ -266,21 +276,30 @@ python producer.py
 python consumer_immediate_retry.py
 ```
 
-Observe: transient failures retry immediately and succeed. Permanent failures go straight to the DLQ without burning retry attempts. The `service-b` and `service-f` events succeed after 2 and 1 retries respectively. `service-d` and `service-h` land in the DLQ after a single attempt.
+Observe: transient failures retry immediately and succeed. Permanent failures go
+straight to the DLQ without burning retry attempts. The `service-b` and
+`service-f` events succeed after 2 and 1 retries respectively. `service-d` and
+`service-h` land in the DLQ after a single attempt.
 
 ---
 
 ## Part 3 — Exponential Backoff
 
-Exponential backoff introduces a delay between retry attempts that grows with each failure. The formula is:
+Exponential backoff introduces a delay between retry attempts that grows with
+each failure. The formula is:
 
 ```
 delay = base_delay * (2 ^ attempt) + jitter
 ```
 
-The jitter term — a small random value — is important. Without it, multiple consumers that all failed at the same moment will all retry at the same moment, creating a thundering herd that re-fails the downstream service they were trying to reach.
+The jitter term — a small random value — is important. Without it, multiple
+consumers that all failed at the same moment will all retry at the same moment,
+creating a thundering herd that re-fails the downstream service they were trying
+to reach.
 
-Backoff is appropriate when the failure is caused by a service under load or a resource constraint that needs time to recover. You are giving the system breathing room rather than hammering it harder.
+Backoff is appropriate when the failure is caused by a service under load or a
+resource constraint that needs time to recover. You are giving the system
+breathing room rather than hammering it harder.
 
 Create `consumer_backoff.py`:
 
@@ -419,7 +438,9 @@ if __name__ == "__main__":
 python consumer_backoff.py
 ```
 
-Watch the delay grow between retries for `service-c`. Each attempt takes roughly twice as long as the previous one, plus a small random jitter. Measure the timing:
+Watch the delay grow between retries for `service-c`. Each attempt takes roughly
+twice as long as the previous one, plus a small random jitter. Measure the
+timing:
 
 ```bash
 python consumer_backoff.py 2>&1 | grep -E "MSG|sleeping|Processed|DLQ" | \
@@ -430,9 +451,15 @@ python consumer_backoff.py 2>&1 | grep -E "MSG|sleeping|Processed|DLQ" | \
 
 ## Part 4 — Retry Topic
 
-Immediate retry and backoff both block the consumer thread while retrying. For failures that need a long wait — minutes or hours, not seconds — blocking is unacceptable. The consumer falls behind, consumer lag climbs, and the pipeline stalls.
+Immediate retry and backoff both block the consumer thread while retrying. For
+failures that need a long wait — minutes or hours, not seconds — blocking is
+unacceptable. The consumer falls behind, consumer lag climbs, and the pipeline
+stalls.
 
-The retry topic pattern solves this by publishing the failed message to a separate topic with a delay baked in. The original consumer is unblocked immediately. A dedicated retry consumer reads the retry topic and re-attempts processing after the delay has elapsed.
+The retry topic pattern solves this by publishing the failed message to a
+separate topic with a delay baked in. The original consumer is unblocked
+immediately. A dedicated retry consumer reads the retry topic and re-attempts
+processing after the delay has elapsed.
 
 ```
 pipeline.events ──► consumer ──► (failure) ──► pipeline.events.retry
@@ -446,9 +473,13 @@ pipeline.events ──► consumer ──► (failure) ──► pipeline.events
 ```
 
 The retry topic approach is right when:
-- The delay needed is longer than you are willing to block a consumer thread (> ~30 seconds)
-- The downstream dependency is known to be recovering and you want to try again in several minutes
-- You want retry processing to be independently scalable and observable from the primary consumer
+
+- The delay needed is longer than you are willing to block a consumer thread (>
+  ~30 seconds)
+- The downstream dependency is known to be recovering and you want to try again
+  in several minutes
+- You want retry processing to be independently scalable and observable from the
+  primary consumer
 
 Create `consumer_retry_topic.py`:
 
@@ -707,23 +738,37 @@ python producer.py
 
 ## Part 5 — Choosing the Right Strategy
 
-Run this decision exercise. For each scenario, decide which strategy belongs before reading the answer.
+Run this decision exercise. For each scenario, decide which strategy belongs
+before reading the answer.
 
-**Scenario 1:** Your watcher consumer calls a PostgreSQL query that occasionally times out under load. Failures are rare, usually resolve in under a second, and timeout errors make up less than 1% of traffic.
+**Scenario 1:** Your watcher consumer calls a PostgreSQL query that occasionally
+times out under load. Failures are rare, usually resolve in under a second, and
+timeout errors make up less than 1% of traffic.
 
-Answer: Immediate retry (N=2 or 3). The failure resolves in milliseconds. Backoff is overkill. The retry topic adds unnecessary infrastructure for a sub-second transient.
+Answer: Immediate retry (N=2 or 3). The failure resolves in milliseconds.
+Backoff is overkill. The retry topic adds unnecessary infrastructure for a
+sub-second transient.
 
-**Scenario 2:** Your watcher consumer calls an external vulnerability scanning API. The API enforces rate limits — 100 requests per minute. When the limit is hit it returns HTTP 429.
+**Scenario 2:** Your watcher consumer calls an external vulnerability scanning
+API. The API enforces rate limits — 100 requests per minute. When the limit is
+hit it returns HTTP 429.
 
-Answer: Exponential backoff. A 429 tells you exactly why it failed and that waiting will fix it. The delay needs to be long enough for the rate limit window to reset, so backoff to a maximum of 60-90 seconds is appropriate.
+Answer: Exponential backoff. A 429 tells you exactly why it failed and that
+waiting will fix it. The delay needs to be long enough for the rate limit window
+to reset, so backoff to a maximum of 60-90 seconds is appropriate.
 
-**Scenario 3:** Your consumer triggers a deployment pipeline in an external system. That system is undergoing a maintenance window for the next 30 minutes.
+**Scenario 3:** Your consumer triggers a deployment pipeline in an external
+system. That system is undergoing a maintenance window for the next 30 minutes.
 
-Answer: Retry topic with a long delay (e.g. RETRY_DELAY = 600 seconds). Blocking a consumer thread for 30 minutes is unacceptable. The retry topic lets the primary consumer continue processing other messages while the deployment messages wait.
+Answer: Retry topic with a long delay (e.g. RETRY_DELAY = 600 seconds). Blocking
+a consumer thread for 30 minutes is unacceptable. The retry topic lets the
+primary consumer continue processing other messages while the deployment
+messages wait.
 
 **Scenario 4:** Your consumer receives a message with `artifact_sha: null`.
 
-Answer: No retry — DLQ immediately. This is a permanent error. The message will never become valid through retrying. Every retry attempt is wasted work.
+Answer: No retry — DLQ immediately. This is a permanent error. The message will
+never become valid through retrying. Every retry attempt is wasted work.
 
 ---
 
@@ -732,20 +777,29 @@ Answer: No retry — DLQ immediately. This is a permanent error. The message wil
 ### Challenge A: Retry budget across strategies
 
 Combine all three strategies in a single consumer. The consumer should:
+
 - Try immediate retry (x2) for `TransientError`
 - Escalate to backoff (x3) if immediate retries are exhausted
 - Escalate to the retry topic if backoff is also exhausted
 - DLQ on permanent errors without any retry
 
-This is the production pattern: a cascade of increasingly expensive strategies, each triggered only when the cheaper one is exhausted.
+This is the production pattern: a cascade of increasingly expensive strategies,
+each triggered only when the cheaper one is exhausted.
 
 ### Challenge B: Retry topic with delay enforcement
 
-The retry consumer currently sleeps for a fixed `RETRY_DELAY`. A more robust implementation uses the `retry.queued_at` header to calculate how much time has actually elapsed and only sleeps the remaining duration. Implement this so the retry consumer is correct even if it restarts partway through the delay period.
+The retry consumer currently sleeps for a fixed `RETRY_DELAY`. A more robust
+implementation uses the `retry.queued_at` header to calculate how much time has
+actually elapsed and only sleeps the remaining duration. Implement this so the
+retry consumer is correct even if it restarts partway through the delay period.
 
 ### Challenge C: Classify your own errors
 
-Look at the EPR watcher from the main workshop. Identify three real exceptions the watcher could throw and classify each as transient, backoff-appropriate, retry-topic-appropriate, or permanent. Write the classification as a Python function `classify_error(exc: Exception) -> RetryStrategy` that returns an enum value.
+Look at the EPR watcher from the main workshop. Identify three real exceptions
+the watcher could throw and classify each as transient, backoff-appropriate,
+retry-topic-appropriate, or permanent. Write the classification as a Python
+function `classify_error(exc: Exception) -> RetryStrategy` that returns an enum
+value.
 
 ---
 
@@ -757,11 +811,20 @@ rpk topic delete pipeline.events pipeline.events.retry pipeline.events.dlq
 
 ---
 
+**Duration:** ~50 minutes **Prerequisites:** Redpanda running via Docker
+Compose; Python 3.10+ with `kafka-python` installed.
+
+---
+
 ## Key Takeaways
 
-- Classify the failure before choosing a strategy. Retrying a permanent error is never useful.
+- Classify the failure before choosing a strategy. Retrying a permanent error is
+  never useful.
 - Immediate retry is for sub-second transient failures. Keep N small (≤ 3).
 - Exponential backoff is for overloaded downstream systems. Always add jitter.
-- Retry topics are for failures that need minutes or more to resolve. They decouple retry timing from consumer throughput.
-- All three strategies feed the same DLQ on exhaustion — the DLQ is the safety net underneath all of them, not a competing approach.
-- The retry topic pattern pairs directly with the DLQ lab (Lab 05). The two together form a complete error-handling system.
+- Retry topics are for failures that need minutes or more to resolve. They
+  decouple retry timing from consumer throughput.
+- All three strategies feed the same DLQ on exhaustion — the DLQ is the safety
+  net underneath all of them, not a competing approach.
+- The retry topic pattern pairs directly with the DLQ lab (Lab 05). The two
+  together form a complete error-handling system.

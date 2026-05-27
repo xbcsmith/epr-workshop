@@ -1,24 +1,32 @@
 # Schema Registry with JSON Schema
 
-**Duration:** ~45 minutes
-**Prerequisites:** Labs 01–05 complete; Redpanda running with Schema Registry enabled; Python 3.10+ with `kafka-python`, `jsonschema`, and `requests` installed.
-
----
-
 ## Overview
 
-In previous labs you validated EPR event payloads manually inside consumer logic — a hand-rolled `validate_event()` function that knew about required fields. That works for a single team, but it breaks down the moment you have multiple producers and consumers written by different people or deployed independently. When the build service adds a field and the validator service doesn't know about it, you get DLQ storms. When the validator service tightens a constraint and the build service hasn't been updated, you get silent drops.
+In previous labs you validated EPR event payloads manually inside consumer logic
+— a hand-rolled `validate_event()` function that knew about required fields.
+That works for a single team, but it breaks down the moment you have multiple
+producers and consumers written by different people or deployed independently.
+When the build service adds a field and the validator service doesn't know about
+it, you get DLQ storms. When the validator service tightens a constraint and the
+build service hasn't been updated, you get silent drops.
 
-A **Schema Registry** solves this by making schemas a first-class artifact in your pipeline — versioned, centrally stored, and enforced at both produce and consume time. Producers register their schema before publishing. Consumers fetch the schema before processing. Compatibility rules prevent breaking changes from being registered at all.
+A **Schema Registry** solves this by making schemas a first-class artifact in
+your pipeline — versioned, centrally stored, and enforced at both produce and
+consume time. Producers register their schema before publishing. Consumers fetch
+the schema before processing. Compatibility rules prevent breaking changes from
+being registered at all.
 
-Redpanda ships a built-in Schema Registry that is fully compatible with the Confluent Schema Registry API. It runs alongside the broker with no additional infrastructure.
+Redpanda ships a built-in Schema Registry that is fully compatible with the
+Confluent Schema Registry API. It runs alongside the broker with no additional
+infrastructure.
 
 ### What you will learn
 
 - How the Redpanda Schema Registry API works
 - How to register, retrieve, and version JSON Schemas for EPR events
 - How to enforce schema validation at produce time using the registry
-- How to configure and test compatibility modes: `BACKWARD`, `FORWARD`, `FULL`, `NONE`
+- How to configure and test compatibility modes: `BACKWARD`, `FORWARD`, `FULL`,
+  `NONE`
 - How schema violations connect to the DLQ pattern from Lab 05
 
 ---
@@ -27,20 +35,25 @@ Redpanda ships a built-in Schema Registry that is fully compatible with the Conf
 
 ### The problem with inline validation
 
-When schema knowledge lives in consumer code, every schema change requires a coordinated deployment of all consumers before the producer can ship. In a CI/CD pipeline with dozens of microservices this is operationally painful and error-prone.
+When schema knowledge lives in consumer code, every schema change requires a
+coordinated deployment of all consumers before the producer can ship. In a CI/CD
+pipeline with dozens of microservices this is operationally painful and
+error-prone.
 
 ### The registry model
 
 The Schema Registry stores schemas indexed by **subject**. The convention is:
 
-```
+```text
 <topic-name>-value   →  schema for the message value
 <topic-name>-key     →  schema for the message key (less common)
 ```
 
-Each new schema registered under a subject gets an incremented **version number**. Each schema also gets a globally unique **schema ID** across all subjects.
+Each new schema registered under a subject gets an incremented **version
+number**. Each schema also gets a globally unique **schema ID** across all
+subjects.
 
-```
+```text
 Subject: epr.events-value
   version 1  →  schema_id 1  →  { initial EPR event schema }
   version 2  →  schema_id 4  →  { added optional 'build_duration_ms' field }
@@ -50,17 +63,20 @@ Subject: epr.events-value
 
 ### Compatibility modes
 
-The registry enforces a **compatibility mode** per subject that controls what schema changes are allowed:
+The registry enforces a **compatibility mode** per subject that controls what
+schema changes are allowed:
 
-| Mode | What it allows | Use when |
-|---|---|---|
-| `BACKWARD` | New schema can read data written by the previous schema | Consumers deploy before producers |
-| `FORWARD` | Previous schema can read data written by the new schema | Producers deploy before consumers |
-| `FULL` | Both backward and forward compatible | Zero-coordination deploys |
+| Mode                  | What it allows                                           | Use when                                                  |
+| --------------------- | -------------------------------------------------------- | --------------------------------------------------------- |
+| `BACKWARD`            | New schema can read data written by the previous schema  | Consumers deploy before producers                         |
+| `FORWARD`             | Previous schema can read data written by the new schema  | Producers deploy before consumers                         |
+| `FULL`                | Both backward and forward compatible                     | Zero-coordination deploys                                 |
 | `BACKWARD_TRANSITIVE` | Compatible with all previous versions, not just the last | Long-lived consumers that may be multiple versions behind |
-| `NONE` | No compatibility checks | Development / experimental topics |
+| `NONE`                | No compatibility checks                                  | Development / experimental topics                         |
 
-For EPR's CI/CD pipeline, `BACKWARD` is the right default: consumers (watchers, validators, storage services) are updated and deployed first, then the producer (build service, CI runner) ships the new event fields.
+For EPR's CI/CD pipeline, `BACKWARD` is the right default: consumers (watchers,
+validators, storage services) are updated and deployed first, then the producer
+(build service, CI runner) ships the new event fields.
 
 ---
 
@@ -78,7 +94,9 @@ You should see a response like:
 {}
 ```
 
-A 200 with an empty body is healthy. If you get a connection refused, check your Docker Compose setup — the Schema Registry port is `8081` by default in Redpanda's Docker configuration.
+A 200 with an empty body is healthy. If you get a connection refused, check your
+Docker Compose setup — the Schema Registry port is `8081` by default in
+Redpanda's Docker configuration.
 
 ### 1.2 List existing subjects
 
@@ -94,7 +112,8 @@ At this point you should see an empty array `[]`.
 curl -s http://localhost:8081/config | jq .
 ```
 
-The default global compatibility is `BACKWARD`. You can override this per subject.
+The default global compatibility is `BACKWARD`. You can override this per
+subject.
 
 ### 1.4 Create the lab topic
 
@@ -207,7 +226,11 @@ Create `schemas/epr_event_v1.json`:
 }
 ```
 
-> **Note on `additionalProperties: false`:** This is strict mode — any field not in the schema is rejected. During development you may want `true` to be permissive, but for a production provenance system where every field is auditable, strict mode is correct. Schema evolution (adding new fields) is the designed mechanism for growth.
+> **Note on `additionalProperties: false`:** This is strict mode — any field not
+> in the schema is rejected. During development you may want `true` to be
+> permissive, but for a production provenance system where every field is
+> auditable, strict mode is correct. Schema evolution (adding new fields) is the
+> designed mechanism for growth.
 
 ### 2.3 Register the schema
 
@@ -228,7 +251,8 @@ You should receive:
 }
 ```
 
-That `id` is the globally unique schema ID. It never changes for this exact schema, even if you re-register it.
+That `id` is the globally unique schema ID. It never changes for this exact
+schema, even if you re-register it.
 
 ### 2.4 Verify registration
 
@@ -246,7 +270,8 @@ curl -s http://localhost:8081/subjects/epr.events-value/versions/latest \
 
 ### 2.5 Create a schema registry client module
 
-Create `schema_registry.py` — a thin client you will reuse across the remaining labs:
+Create `schema_registry.py` — a thin client you will reuse across the remaining
+labs:
 
 ```python
 """
@@ -354,7 +379,10 @@ class SchemaRegistryClient:
 
 ## Part 3 — Schema-Validated Producer
 
-Now build a producer that fetches the schema from the registry before publishing and validates each message locally before sending. Local validation catches mistakes fast — you don't want to discover a malformed payload by watching DLQ numbers climb.
+Now build a producer that fetches the schema from the registry before publishing
+and validates each message locally before sending. Local validation catches
+mistakes fast — you don't want to discover a malformed payload by watching DLQ
+numbers climb.
 
 Create `producer_validated.py`:
 
@@ -464,13 +492,17 @@ Run it:
 python producer_validated.py
 ```
 
-Notice that the two broken events are rejected *before they touch the network*. The DLQ never sees them. This is the first line of defence — catching schema violations at the source.
+Notice that the two broken events are rejected _before they touch the network_.
+The DLQ never sees them. This is the first line of defence — catching schema
+violations at the source.
 
 ---
 
 ## Part 4 — Schema-Aware Consumer
 
-Build a consumer that fetches the schema from the registry at startup and validates incoming messages. This provides defense-in-depth: even if a producer skips local validation, the consumer catches it.
+Build a consumer that fetches the schema from the registry at startup and
+validates incoming messages. This provides defense-in-depth: even if a producer
+skips local validation, the consumer catches it.
 
 Create `consumer_schema_aware.py`:
 
@@ -558,7 +590,9 @@ python consumer_schema_aware.py
 
 ## Part 5 — Compatibility Modes in Practice
 
-This is where schema registry becomes genuinely powerful. You will register three new versions of the EPR event schema and observe how compatibility mode controls what is and is not allowed.
+This is where schema registry becomes genuinely powerful. You will register
+three new versions of the EPR event schema and observe how compatibility mode
+controls what is and is not allowed.
 
 ### 5.1 Set compatibility mode for the subject
 
@@ -573,7 +607,9 @@ curl -s -X PUT \
 
 ### 5.2 Create a BACKWARD-compatible schema (adding an optional field)
 
-A `BACKWARD`-compatible change means the new schema can still read data written by the old schema. Adding an **optional** field is always backward compatible — old messages simply won't have it, and the new schema accepts that.
+A `BACKWARD`-compatible change means the new schema can still read data written
+by the old schema. Adding an **optional** field is always backward compatible —
+old messages simply won't have it, and the new schema accepts that.
 
 Create `schemas/epr_event_v2.json` — adds an optional `build_duration_ms` field:
 
@@ -584,21 +620,43 @@ Create `schemas/epr_event_v2.json` — adds an optional `build_duration_ms` fiel
   "title": "EPR Event",
   "type": "object",
   "required": [
-    "id", "type", "artifact_sha", "repo", "status",
-    "name", "version", "release", "platform_id", "package"
+    "id",
+    "type",
+    "artifact_sha",
+    "repo",
+    "status",
+    "name",
+    "version",
+    "release",
+    "platform_id",
+    "package"
   ],
   "properties": {
-    "id":                 { "type": "string", "format": "uuid" },
-    "type":               { "type": "string", "enum": ["build.finished","test.passed","test.failed","deploy.started","deploy.finished","sbom.created"] },
-    "artifact_sha":       { "type": "string", "pattern": "^sha256:[a-f0-9]{12,64}$" },
-    "repo":               { "type": "string" },
-    "status":             { "type": "string", "enum": ["success","failure","pending"] },
-    "name":               { "type": "string" },
-    "version":            { "type": "string" },
-    "release":            { "type": "string" },
-    "platform_id":        { "type": "string" },
-    "package":            { "type": "string" },
-    "build_duration_ms":  { "type": "integer", "minimum": 0, "description": "Build wall-clock time in milliseconds" }
+    "id": { "type": "string", "format": "uuid" },
+    "type": {
+      "type": "string",
+      "enum": [
+        "build.finished",
+        "test.passed",
+        "test.failed",
+        "deploy.started",
+        "deploy.finished",
+        "sbom.created"
+      ]
+    },
+    "artifact_sha": { "type": "string", "pattern": "^sha256:[a-f0-9]{12,64}$" },
+    "repo": { "type": "string" },
+    "status": { "type": "string", "enum": ["success", "failure", "pending"] },
+    "name": { "type": "string" },
+    "version": { "type": "string" },
+    "release": { "type": "string" },
+    "platform_id": { "type": "string" },
+    "package": { "type": "string" },
+    "build_duration_ms": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Build wall-clock time in milliseconds"
+    }
   },
   "additionalProperties": false
 }
@@ -628,9 +686,11 @@ curl -s -X POST \
 
 ### 5.3 Attempt a BACKWARD-incompatible change (adding a required field)
 
-Adding a **required** field breaks backward compatibility. Consumers using the new schema cannot read old messages that lack the new required field.
+Adding a **required** field breaks backward compatibility. Consumers using the
+new schema cannot read old messages that lack the new required field.
 
-Create `schemas/epr_event_v3_breaking.json` — adds a **required** `pipeline_id` field:
+Create `schemas/epr_event_v3_breaking.json` — adds a **required** `pipeline_id`
+field:
 
 ```json
 {
@@ -639,23 +699,44 @@ Create `schemas/epr_event_v3_breaking.json` — adds a **required** `pipeline_id
   "title": "EPR Event",
   "type": "object",
   "required": [
-    "id", "type", "artifact_sha", "repo", "status",
-    "name", "version", "release", "platform_id", "package",
+    "id",
+    "type",
+    "artifact_sha",
+    "repo",
+    "status",
+    "name",
+    "version",
+    "release",
+    "platform_id",
+    "package",
     "pipeline_id"
   ],
   "properties": {
-    "id":          { "type": "string", "format": "uuid" },
-    "type":        { "type": "string", "enum": ["build.finished","test.passed","test.failed","deploy.started","deploy.finished","sbom.created"] },
-    "artifact_sha":{ "type": "string", "pattern": "^sha256:[a-f0-9]{12,64}$" },
-    "repo":        { "type": "string" },
-    "status":      { "type": "string", "enum": ["success","failure","pending"] },
-    "name":        { "type": "string" },
-    "version":     { "type": "string" },
-    "release":     { "type": "string" },
+    "id": { "type": "string", "format": "uuid" },
+    "type": {
+      "type": "string",
+      "enum": [
+        "build.finished",
+        "test.passed",
+        "test.failed",
+        "deploy.started",
+        "deploy.finished",
+        "sbom.created"
+      ]
+    },
+    "artifact_sha": { "type": "string", "pattern": "^sha256:[a-f0-9]{12,64}$" },
+    "repo": { "type": "string" },
+    "status": { "type": "string", "enum": ["success", "failure", "pending"] },
+    "name": { "type": "string" },
+    "version": { "type": "string" },
+    "release": { "type": "string" },
     "platform_id": { "type": "string" },
-    "package":     { "type": "string" },
+    "package": { "type": "string" },
     "build_duration_ms": { "type": "integer", "minimum": 0 },
-    "pipeline_id": { "type": "string", "description": "CI pipeline identifier — REQUIRED, breaking change" }
+    "pipeline_id": {
+      "type": "string",
+      "description": "CI pipeline identifier — REQUIRED, breaking change"
+    }
   },
   "additionalProperties": false
 }
@@ -683,11 +764,14 @@ curl -s -X POST \
   | jq .
 ```
 
-Expected: a `409 Conflict` error. The registry refuses the registration. Your pipeline is protected.
+Expected: a `409 Conflict` error. The registry refuses the registration. Your
+pipeline is protected.
 
 ### 5.4 The correct way to add `pipeline_id`
 
-Make it optional in v3. Producers can start populating it immediately; consumers can start depending on it once all producers have been updated and old messages have aged out of retention.
+Make it optional in v3. Producers can start populating it immediately; consumers
+can start depending on it once all producers have been updated and old messages
+have aged out of retention.
 
 Create `schemas/epr_event_v3.json`:
 
@@ -698,22 +782,43 @@ Create `schemas/epr_event_v3.json`:
   "title": "EPR Event",
   "type": "object",
   "required": [
-    "id", "type", "artifact_sha", "repo", "status",
-    "name", "version", "release", "platform_id", "package"
+    "id",
+    "type",
+    "artifact_sha",
+    "repo",
+    "status",
+    "name",
+    "version",
+    "release",
+    "platform_id",
+    "package"
   ],
   "properties": {
-    "id":                 { "type": "string", "format": "uuid" },
-    "type":               { "type": "string", "enum": ["build.finished","test.passed","test.failed","deploy.started","deploy.finished","sbom.created"] },
-    "artifact_sha":       { "type": "string", "pattern": "^sha256:[a-f0-9]{12,64}$" },
-    "repo":               { "type": "string" },
-    "status":             { "type": "string", "enum": ["success","failure","pending"] },
-    "name":               { "type": "string" },
-    "version":            { "type": "string" },
-    "release":            { "type": "string" },
-    "platform_id":        { "type": "string" },
-    "package":            { "type": "string" },
-    "build_duration_ms":  { "type": "integer", "minimum": 0 },
-    "pipeline_id":        { "type": "string", "description": "CI pipeline identifier — optional in v3, required in v4+" }
+    "id": { "type": "string", "format": "uuid" },
+    "type": {
+      "type": "string",
+      "enum": [
+        "build.finished",
+        "test.passed",
+        "test.failed",
+        "deploy.started",
+        "deploy.finished",
+        "sbom.created"
+      ]
+    },
+    "artifact_sha": { "type": "string", "pattern": "^sha256:[a-f0-9]{12,64}$" },
+    "repo": { "type": "string" },
+    "status": { "type": "string", "enum": ["success", "failure", "pending"] },
+    "name": { "type": "string" },
+    "version": { "type": "string" },
+    "release": { "type": "string" },
+    "platform_id": { "type": "string" },
+    "package": { "type": "string" },
+    "build_duration_ms": { "type": "integer", "minimum": 0 },
+    "pipeline_id": {
+      "type": "string",
+      "description": "CI pipeline identifier — optional in v3, required in v4+"
+    }
   },
   "additionalProperties": false
 }
@@ -757,7 +862,9 @@ curl -s http://localhost:8081/subjects/epr.events-value/versions/3 \
 
 ## Part 6 — Schema Evolution in Python
 
-Build a small script that demonstrates the full producer + consumer lifecycle across schema versions. Run the v1 producer, upgrade the consumer to use v3 schema, and confirm it can still read old messages.
+Build a small script that demonstrates the full producer + consumer lifecycle
+across schema versions. Run the v1 producer, upgrade the consumer to use v3
+schema, and confirm it can still read old messages.
 
 Create `evolution_demo.py`:
 
@@ -918,7 +1025,10 @@ Run it:
 python evolution_demo.py
 ```
 
-The consumer reads all six messages — three v1 and three v3 — and validates them all successfully against the v3 schema. This is backward compatibility working as designed: adding optional fields lets consumers upgrade at their own pace without breaking anything.
+The consumer reads all six messages — three v1 and three v3 — and validates them
+all successfully against the v3 schema. This is backward compatibility working
+as designed: adding optional fields lets consumers upgrade at their own pace
+without breaking anything.
 
 ---
 
@@ -926,7 +1036,11 @@ The consumer reads all six messages — three v1 and three v3 — and validates 
 
 ### Challenge A: FULL compatibility
 
-Switch the subject's compatibility mode to `FULL` and try to register a schema that removes a property. Observe the rejection. Then figure out the correct way to deprecate a field under `FULL` compatibility (hint: it involves keeping the field in the schema but documenting it as deprecated via a `description` change, then removing it only after a full rotation).
+Switch the subject's compatibility mode to `FULL` and try to register a schema
+that removes a property. Observe the rejection. Then figure out the correct way
+to deprecate a field under `FULL` compatibility (hint: it involves keeping the
+field in the schema but documenting it as deprecated via a `description` change,
+then removing it only after a full rotation).
 
 ```bash
 curl -s -X PUT \
@@ -937,15 +1051,26 @@ curl -s -X PUT \
 
 ### Challenge B: Schema ID in message headers
 
-Modify `producer_validated.py` to embed the schema ID in a Kafka message header (`schema.id`). Modify `consumer_schema_aware.py` to read that header and fetch the exact schema used at produce time instead of always using the latest version. This lets the consumer validate each message against the schema it was actually produced with — which matters when you're replaying historical messages from a topic with long retention.
+Modify `producer_validated.py` to embed the schema ID in a Kafka message header
+(`schema.id`). Modify `consumer_schema_aware.py` to read that header and fetch
+the exact schema used at produce time instead of always using the latest
+version. This lets the consumer validate each message against the schema it was
+actually produced with — which matters when you're replaying historical messages
+from a topic with long retention.
 
 ### Challenge C: New event type via enum evolution
 
-The `type` field in the EPR schema uses `enum`. You need to add a new event type: `"scan.completed"` for security scanning results. Try to add it under `BACKWARD` mode. Does it work? Why or why not? (Hint: think about what happens when an old consumer that only knows about the original enum values receives a message with `"scan.completed"`.) Document your findings and propose the correct migration strategy.
+The `type` field in the EPR schema uses `enum`. You need to add a new event
+type: `"scan.completed"` for security scanning results. Try to add it under
+`BACKWARD` mode. Does it work? Why or why not? (Hint: think about what happens
+when an old consumer that only knows about the original enum values receives a
+message with `"scan.completed"`.) Document your findings and propose the correct
+migration strategy.
 
 ### Challenge D: Write a schema linter
 
-Write a Python script `schema_lint.py` that takes a JSON Schema file as input and checks it for common EPR-schema anti-patterns before registration:
+Write a Python script `schema_lint.py` that takes a JSON Schema file as input
+and checks it for common EPR-schema anti-patterns before registration:
 
 - Fields without a `description`
 - `additionalProperties` not explicitly set
@@ -968,11 +1093,27 @@ curl -s -X DELETE "http://localhost:8081/subjects/epr.events-value?permanent=tru
 
 ---
 
+**Duration:** ~45 minutes **Prerequisites:** Labs 01–05 complete; Redpanda
+running with Schema Registry enabled; Python 3.10+ with `kafka-python`,
+`jsonschema`, and `requests` installed.
+
+---
+
 ## Key Takeaways
 
-- The Schema Registry makes schemas a **versioned, centrally enforced contract** — not something buried in consumer code.
-- **Compatibility mode is a deployment strategy**, not just a technical setting. `BACKWARD` means consumers deploy first; `FORWARD` means producers deploy first; `FULL` means either order works.
-- **Test compatibility before registering**, not after. The `check_compatibility` endpoint is your schema CI gate.
-- **Adding optional fields is always safe.** Adding required fields is always a breaking change unless you can guarantee all messages in retention already have that field.
-- **Validate at the producer, validate at the consumer.** Defense in depth. Producer validation prevents bad data entering the pipeline; consumer validation protects against producers that skip local validation.
-- The DLQ from Lab 05 and the schema registry form a complete error-handling system: the registry prevents most bad messages at source, and the DLQ catches the ones that slip through.
+- The Schema Registry makes schemas a **versioned, centrally enforced contract**
+  — not something buried in consumer code.
+- **Compatibility mode is a deployment strategy**, not just a technical setting.
+  `BACKWARD` means consumers deploy first; `FORWARD` means producers deploy
+  first; `FULL` means either order works.
+- **Test compatibility before registering**, not after. The
+  `check_compatibility` endpoint is your schema CI gate.
+- **Adding optional fields is always safe.** Adding required fields is always a
+  breaking change unless you can guarantee all messages in retention already
+  have that field.
+- **Validate at the producer, validate at the consumer.** Defense in depth.
+  Producer validation prevents bad data entering the pipeline; consumer
+  validation protects against producers that skip local validation.
+- The DLQ from Lab 05 and the schema registry form a complete error-handling
+  system: the registry prevents most bad messages at source, and the DLQ catches
+  the ones that slip through.

@@ -1,33 +1,36 @@
 # Exactly-Once Semantics and Idempotent Producers
 
-**Duration:** ~55 minutes
-**Prerequisites:** Redpanda running via Docker Compose; Python 3.10+ with `kafka-python` installed.
-
----
-
 ## Overview
 
-Every Kafka/Redpanda producer has a delivery guarantee. Understanding which guarantee you have — and what it costs to upgrade it — is one of the most important configuration decisions in an event-driven pipeline.
+Every Kafka/Redpanda producer has a delivery guarantee. Understanding which
+guarantee you have — and what it costs to upgrade it — is one of the most
+important configuration decisions in an event-driven pipeline.
 
 There are three levels:
 
-| Guarantee | What it means | Config |
-|---|---|---|
-| At-most-once | Messages may be lost, never duplicated | `acks=0` or `acks=1`, no retries |
-| At-least-once | Messages are never lost, may be duplicated | `acks=all`, retries > 0 |
-| Exactly-once | Messages are never lost, never duplicated | `enable_idempotence=True` + `acks=all` |
+| Guarantee     | What it means                              | Config                                 |
+| ------------- | ------------------------------------------ | -------------------------------------- |
+| At-most-once  | Messages may be lost, never duplicated     | `acks=0` or `acks=1`, no retries       |
+| At-least-once | Messages are never lost, may be duplicated | `acks=all`, retries > 0                |
+| Exactly-once  | Messages are never lost, never duplicated  | `enable_idempotence=True` + `acks=all` |
 
-Most pipelines that think they have at-least-once actually have at-most-once because they haven't set `acks=all`. Most pipelines that think they have exactly-once actually have at-least-once because they haven't enabled idempotence.
+Most pipelines that think they have at-least-once actually have at-most-once
+because they haven't set `acks=all`. Most pipelines that think they have
+exactly-once actually have at-least-once because they haven't enabled
+idempotence.
 
-This lab demonstrates each guarantee experimentally — you will see duplicates appear without idempotence and disappear with it — then covers the transactional producer for the cases where idempotence alone isn't sufficient.
+This lab demonstrates each guarantee experimentally — you will see duplicates
+appear without idempotence and disappear with it — then covers the transactional
+producer for the cases where idempotence alone isn't sufficient.
 
 ---
 
 ## Background: How Duplicates Happen
 
-Consider a producer that sends a message, waits for an acknowledgement, and the network drops the response:
+Consider a producer that sends a message, waits for an acknowledgement, and the
+network drops the response:
 
-```
+```text
 Producer                    Redpanda broker
    │                              │
    │──── ProduceRequest ─────────►│
@@ -41,9 +44,17 @@ Producer                    Redpanda broker
    │◄─── ProduceResponse ─────────│
 ```
 
-The broker wrote the message successfully both times. The producer had no way to know the first write succeeded because the response was lost. Without idempotence, this retry produces a duplicate that is indistinguishable from the original.
+The broker wrote the message successfully both times. The producer had no way to
+know the first write succeeded because the response was lost. Without
+idempotence, this retry produces a duplicate that is indistinguishable from the
+original.
 
-Idempotent producers solve this by assigning every message a producer ID (PID) and a monotonically increasing sequence number. The broker tracks the last sequence number it accepted from each PID. If it sees a sequence number it has already processed, it discards the duplicate and sends back a success response — from the producer's perspective the send succeeded, but no duplicate was written.
+Idempotent producers solve this by assigning every message a producer ID (PID)
+and a monotonically increasing sequence number. The broker tracks the last
+sequence number it accepted from each PID. If it sees a sequence number it has
+already processed, it discards the duplicate and sends back a success response —
+from the producer's perspective the send succeeded, but no duplicate was
+written.
 
 ---
 
@@ -60,13 +71,15 @@ rpk topic create delivery.transactions \
   --topic-config min.insync.replicas=1
 ```
 
-A single partition is intentional for this lab — it makes sequence numbers easier to reason about.
+A single partition is intentional for this lab — it makes sequence numbers
+easier to reason about.
 
 ---
 
 ## Part 2 — Demonstrate At-Least-Once Duplicates
 
-First, reproduce the duplicate problem. This producer simulates a network drop by catching the response, then retrying as if it never arrived.
+First, reproduce the duplicate problem. This producer simulates a network drop
+by catching the response, then retrying as if it never arrived.
 
 Create `producer_at_least_once.py`:
 
@@ -137,7 +150,9 @@ rpk topic consume delivery.demo \
   | jq .seq
 ```
 
-You will see: `0, 1, 2, 3, 4, 2` — the duplicate at the end. In a real pipeline this would cause double-processing: the downstream watcher fires twice for the same event, the SBOM scanner runs twice, deployment gates trigger twice.
+You will see: `0, 1, 2, 3, 4, 2` — the duplicate at the end. In a real pipeline
+this would cause double-processing: the downstream watcher fires twice for the
+same event, the SBOM scanner runs twice, deployment gates trigger twice.
 
 ---
 
@@ -236,13 +251,19 @@ rpk topic consume delivery.demo \
   | jq .seq
 ```
 
-Result: `0, 1, 2, 3, 4` — no duplicate. The broker received the retry with the same PID and sequence number and discarded it silently.
+Result: `0, 1, 2, 3, 4` — no duplicate. The broker received the retry with the
+same PID and sequence number and discarded it silently.
 
 ---
 
 ## Part 4 — The Session Boundary: What Idempotence Does Not Cover
 
-This is the most important concept in the lab. Idempotence is **within a single producer session**. When a producer process restarts, it gets a new producer ID (PID). The broker has no way to connect the new PID to the old one. If the old producer sent a message and died before confirming it, and the new producer re-sends it, the broker sees it as a new message from a new producer and accepts it.
+This is the most important concept in the lab. Idempotence is **within a single
+producer session**. When a producer process restarts, it gets a new producer ID
+(PID). The broker has no way to connect the new PID to the old one. If the old
+producer sent a message and died before confirming it, and the new producer
+re-sends it, the broker sees it as a new message from a new producer and accepts
+it.
 
 Demonstrate this:
 
@@ -311,15 +332,21 @@ rpk topic consume delivery.demo \
   | jq 'select(.seq == 99) | .seq'
 ```
 
-You will see `99` appear twice. Two producer sessions, two PIDs, no deduplication.
+You will see `99` appear twice. Two producer sessions, two PIDs, no
+deduplication.
 
 ---
 
 ## Part 5 — Transactional Producer
 
-The transactional producer extends idempotence across sessions using a `transactional_id` — a stable string you assign. When a producer starts with the same `transactional_id` as a previous session, the broker fences the old session and takes over. Any incomplete transaction from the old session is aborted. The new session begins cleanly.
+The transactional producer extends idempotence across sessions using a
+`transactional_id` — a stable string you assign. When a producer starts with the
+same `transactional_id` as a previous session, the broker fences the old session
+and takes over. Any incomplete transaction from the old session is aborted. The
+new session begins cleanly.
 
-Transactions also add atomicity: you can send to multiple partitions or topics and guarantee that either all messages commit or none do.
+Transactions also add atomicity: you can send to multiple partitions or topics
+and guarantee that either all messages commit or none do.
 
 Create `producer_transactional.py`:
 
@@ -434,7 +461,9 @@ python producer_transactional.py
 
 ### 5.1 Read with `read_committed` isolation
 
-Without isolation level configuration, a consumer may read messages from aborted transactions before they are marked as aborted. Always use `read_committed` when consuming from topics written by transactional producers:
+Without isolation level configuration, a consumer may read messages from aborted
+transactions before they are marked as aborted. Always use `read_committed` when
+consuming from topics written by transactional producers:
 
 ```python
 #!/usr/bin/env python3
@@ -467,7 +496,9 @@ consumer.close()
 python consumer_read_committed.py
 ```
 
-You should see offsets for seq 0, 1, 2, and 20 — the two committed transactions. The aborted seq=10 is not present. Without `isolation_level="read_committed"`, you might briefly see it.
+You should see offsets for seq 0, 1, 2, and 20 — the two committed transactions.
+The aborted seq=10 is not present. Without `isolation_level="read_committed"`,
+you might briefly see it.
 
 ---
 
@@ -475,32 +506,40 @@ You should see offsets for seq 0, 1, 2, and 20 — the two committed transaction
 
 ### What `enable_idempotence=True` sets automatically
 
-| Setting | Value | Why |
-|---|---|---|
-| `acks` | `all` | All in-sync replicas must acknowledge — no data loss |
-| `retries` | `float('inf')` | Retry forever within `delivery_timeout_ms` |
-| `max_in_flight_requests_per_connection` | `1` | Prevents reordering when retrying in-flight batches |
+| Setting                                 | Value          | Why                                                  |
+| --------------------------------------- | -------------- | ---------------------------------------------------- |
+| `acks`                                  | `all`          | All in-sync replicas must acknowledge — no data loss |
+| `retries`                               | `float('inf')` | Retry forever within `delivery_timeout_ms`           |
+| `max_in_flight_requests_per_connection` | `1`            | Prevents reordering when retrying in-flight batches  |
 
-Do not override these manually when idempotence is enabled. Setting `retries=0` with `enable_idempotence=True` raises a `KafkaConfigurationError`.
+Do not override these manually when idempotence is enabled. Setting `retries=0`
+with `enable_idempotence=True` raises a `KafkaConfigurationError`.
 
 ### When to use each level
 
-| You need | Use |
-|---|---|
-| Maximum throughput, can tolerate rare loss | `acks=0` (fire and forget) |
-| No loss, can tolerate rare duplicate | `acks=all`, `retries>0`, no idempotence |
-| No loss, no duplicate within a session | `enable_idempotence=True` |
-| No loss, no duplicate across process restarts | `transactional_id=<stable-id>` |
-| Atomic write to multiple topics | `transactional_id=<stable-id>` + transactions |
+| You need                                      | Use                                           |
+| --------------------------------------------- | --------------------------------------------- |
+| Maximum throughput, can tolerate rare loss    | `acks=0` (fire and forget)                    |
+| No loss, can tolerate rare duplicate          | `acks=all`, `retries>0`, no idempotence       |
+| No loss, no duplicate within a session        | `enable_idempotence=True`                     |
+| No loss, no duplicate across process restarts | `transactional_id=<stable-id>`                |
+| Atomic write to multiple topics               | `transactional_id=<stable-id>` + transactions |
 
 ### The consumer-side requirement
 
-Idempotence at the producer level does not protect against application-level re-sends (calling `producer.send()` twice with the same payload from your code). That is always a duplicate from the broker's perspective because it is a new message with a new sequence number.
+Idempotence at the producer level does not protect against application-level
+re-sends (calling `producer.send()` twice with the same payload from your code).
+That is always a duplicate from the broker's perspective because it is a new
+message with a new sequence number.
 
 The full exactly-once story requires:
-1. `enable_idempotence=True` on the producer — prevents duplicate broker writes on retry
-2. `isolation_level=read_committed` on the consumer — prevents reading aborted transactions
-3. Idempotent consumer logic — handles the residual duplicates that cross session boundaries
+
+1. `enable_idempotence=True` on the producer — prevents duplicate broker writes
+   on retry
+2. `isolation_level=read_committed` on the consumer — prevents reading aborted
+   transactions
+3. Idempotent consumer logic — handles the residual duplicates that cross
+   session boundaries
 
 ---
 
@@ -508,20 +547,33 @@ The full exactly-once story requires:
 
 ### Challenge A: Multi-topic atomic write
 
-Modify `producer_transactional.py` to write to both `delivery.demo` and `delivery.transactions` in a single transaction. Abort halfway through. Verify that neither topic has the aborted messages by consuming both with `read_committed` isolation.
+Modify `producer_transactional.py` to write to both `delivery.demo` and
+`delivery.transactions` in a single transaction. Abort halfway through. Verify
+that neither topic has the aborted messages by consuming both with
+`read_committed` isolation.
 
 ### Challenge B: Producer epoch fencing
 
-Run `producer_transactional.py` once to completion. Then modify it to simulate a "zombie" scenario: start the producer, begin a transaction, then start a second producer instance with the same `transactional_id` before the first commits. Observe the `ProducerFencedException` that the first instance receives — this is the broker fencing the old session to prevent the zombie from committing stale data.
+Run `producer_transactional.py` once to completion. Then modify it to simulate a
+"zombie" scenario: start the producer, begin a transaction, then start a second
+producer instance with the same `transactional_id` before the first commits.
+Observe the `ProducerFencedException` that the first instance receives — this is
+the broker fencing the old session to prevent the zombie from committing stale
+data.
 
 ### Challenge C: Measure the cost of idempotence
 
-Write a benchmark that produces 10,000 messages to a single-partition topic three times:
+Write a benchmark that produces 10,000 messages to a single-partition topic
+three times:
+
 - Without idempotence (`acks=1`)
 - With idempotence (`enable_idempotence=True`)
 - With transactions (`transactional_id=...`, one transaction per message)
 
-Record throughput (messages/second) for each. The results should demonstrate that idempotence is nearly free compared to no-idempotence `acks=all`, and that per-message transactions are significantly more expensive than batched transactions.
+Record throughput (messages/second) for each. The results should demonstrate
+that idempotence is nearly free compared to no-idempotence `acks=all`, and that
+per-message transactions are significantly more expensive than batched
+transactions.
 
 ---
 
@@ -533,11 +585,25 @@ rpk topic delete delivery.demo delivery.transactions
 
 ---
 
+**Duration:** ~55 minutes **Prerequisites:** Redpanda running via Docker
+Compose; Python 3.10+ with `kafka-python` installed.
+
+---
+
 ## Key Takeaways
 
-- Most pipelines claiming at-least-once actually have at-most-once because they lack `acks=all`. Verify your configuration.
-- `enable_idempotence=True` is a single configuration change that upgrades at-least-once to exactly-once within a producer session. There is almost no throughput cost.
-- Idempotence is per-session. A restarted producer gets a new PID. Cross-session deduplication requires `transactional_id`.
-- Never override `acks`, `retries`, or `max_in_flight_requests_per_connection` manually when idempotence is enabled — let the client set them.
-- Consumers reading from transactional topics must set `isolation_level=read_committed` or they may read messages from aborted transactions.
-- Application-level re-sends (calling `producer.send()` twice from your own code) are never deduplicated — they are new messages to the broker regardless of idempotence settings.
+- Most pipelines claiming at-least-once actually have at-most-once because they
+  lack `acks=all`. Verify your configuration.
+- `enable_idempotence=True` is a single configuration change that upgrades
+  at-least-once to exactly-once within a producer session. There is almost no
+  throughput cost.
+- Idempotence is per-session. A restarted producer gets a new PID. Cross-session
+  deduplication requires `transactional_id`.
+- Never override `acks`, `retries`, or `max_in_flight_requests_per_connection`
+  manually when idempotence is enabled — let the client set them.
+- Consumers reading from transactional topics must set
+  `isolation_level=read_committed` or they may read messages from aborted
+  transactions.
+- Application-level re-sends (calling `producer.send()` twice from your own
+  code) are never deduplicated — they are new messages to the broker regardless
+  of idempotence settings.

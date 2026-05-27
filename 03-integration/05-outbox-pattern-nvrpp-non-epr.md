@@ -1,19 +1,26 @@
 # The Outbox Pattern and Provenance Tracing with NVRPP
 
-**Duration:** ~75 minutes
-**Prerequisites:** Labs 01–07 complete; PostgreSQL and Redpanda running via Docker Compose; Python 3.10+ with `kafka-python`, `psycopg2-binary`, and `requests` installed.
-
----
-
 ## Overview
 
 This lab covers two ideas that belong together.
 
-The first is the **outbox pattern** — a solution to a fundamental reliability problem that every event-driven system eventually hits. When a service writes to a database and publishes to a message bus, those are two separate I/O operations. A crash between them creates a silent gap in your event stream. No error. No DLQ entry. No alert. Just a missing event, and a provenance chain with a hole in it.
+The first is the **outbox pattern** — a solution to a fundamental reliability
+problem that every event-driven system eventually hits. When a service writes to
+a database and publishes to a message bus, those are two separate I/O
+operations. A crash between them creates a silent gap in your event stream. No
+error. No DLQ entry. No alert. Just a missing event, and a provenance chain with
+a hole in it.
 
-The second is **NVRPP** — Name, Version, Release, Platform ID, Package — the five fields in every EPR event that together uniquely identify an artifact in your pipeline. This lab makes the case that NVRPP is a better tracing primitive for a provenance system than injecting UUID correlation IDs into Kafka headers, and shows you how to query it.
+The second is **NVRPP** — Name, Version, Release, Platform ID, Package — the
+five fields in every EPR event that together uniquely identify an artifact in
+your pipeline. This lab makes the case that NVRPP is a better tracing primitive
+for a provenance system than injecting UUID correlation IDs into Kafka headers,
+and shows you how to query it.
 
-These two ideas connect: the outbox pattern guarantees that every database-committed build record eventually produces an EPR event, and NVRPP is what makes those events queryable as a coherent provenance chain once they arrive.
+These two ideas connect: the outbox pattern guarantees that every
+database-committed build record eventually produces an EPR event, and NVRPP is
+what makes those events queryable as a coherent provenance chain once they
+arrive.
 
 ---
 
@@ -55,7 +62,9 @@ def record_build_naive(conn, producer, build: dict) -> None:
     producer.flush()
 ```
 
-The comment in the middle is where your pipeline breaks. There is no way to make a database `COMMIT` and a Kafka `producer.send()` atomic. They are fundamentally different systems. Any approach that calls them sequentially has this gap.
+The comment in the middle is where your pipeline breaks. There is no way to make
+a database `COMMIT` and a Kafka `producer.send()` atomic. They are fundamentally
+different systems. Any approach that calls them sequentially has this gap.
 
 ### 1.2 Reproduce the failure
 
@@ -184,7 +193,9 @@ rpk topic consume epr.events \
   | jq '.name + " " + .version'
 ```
 
-`service-c 0.9.0` committed to the database. Never appeared in Kafka. Every downstream system — your watcher, your SBOM scanner, your deployment gate — will never know this build happened. The provenance chain has a silent gap.
+`service-c 0.9.0` committed to the database. Never appeared in Kafka. Every
+downstream system — your watcher, your SBOM scanner, your deployment gate — will
+never know this build happened. The provenance chain has a silent gap.
 
 ---
 
@@ -192,22 +203,29 @@ rpk topic consume epr.events \
 
 ### 2.1 The core idea
 
-The outbox pattern eliminates the gap by making the Kafka event a side-effect of the database transaction, not a separate operation after it.
+The outbox pattern eliminates the gap by making the Kafka event a side-effect of
+the database transaction, not a separate operation after it.
 
 Instead of:
+
 ```
 1. INSERT into build_records  ← commit
 2. producer.send() to Kafka   ← separate, can fail
 ```
 
 You do:
+
 ```
 1. INSERT into build_records  ┐
    INSERT into outbox         ┘ ← single commit, both or neither
 2. Relay process reads outbox → publishes to Kafka → marks published
 ```
 
-The database becomes the authoritative queue. If the service crashes before the relay runs, the relay will publish on its next pass. If the relay crashes after publishing but before marking the row as published, it re-publishes on restart — which means consumers must handle duplicate events, but no events are ever silently lost.
+The database becomes the authoritative queue. If the service crashes before the
+relay runs, the relay will publish on its next pass. If the relay crashes after
+publishing but before marking the row as published, it re-publishes on restart —
+which means consumers must handle duplicate events, but no events are ever
+silently lost.
 
 ### 2.2 Create the outbox table
 
@@ -228,7 +246,9 @@ CREATE INDEX idx_outbox_unpublished ON outbox (created_at)
     WHERE published = FALSE;
 ```
 
-The index on `published = FALSE` with `created_at` ordering is important — the relay will run this query frequently, and you only want it scanning the unpublished rows.
+The index on `published = FALSE` with `created_at` ordering is important — the
+relay will run this query frequently, and you only want it scanning the
+unpublished rows.
 
 ### 2.3 Build service with outbox write
 
@@ -337,11 +357,14 @@ FROM outbox
 ORDER BY created_at;
 ```
 
-All four rows present. None yet published. The crash happened after the commit — the data is safe.
+All four rows present. None yet published. The crash happened after the commit —
+the data is safe.
 
 ### 2.4 Build the relay
 
-The relay is a separate process. It polls the outbox for unpublished rows, publishes each one to Kafka, then marks the row as published. It runs continuously in the background.
+The relay is a separate process. It polls the outbox for unpublished rows,
+publishes each one to Kafka, then marks the row as published. It runs
+continuously in the background.
 
 Create `outbox_relay.py`:
 
@@ -515,9 +538,13 @@ ORDER BY created_at;
 
 ### 2.5 Understand what "at-least-once" means here
 
-The outbox pattern guarantees every committed database row will eventually produce a Kafka event. It does not guarantee exactly one event per row. If the relay publishes to Kafka successfully but crashes before calling `mark_published()`, it will re-publish the same row on its next run.
+The outbox pattern guarantees every committed database row will eventually
+produce a Kafka event. It does not guarantee exactly one event per row. If the
+relay publishes to Kafka successfully but crashes before calling
+`mark_published()`, it will re-publish the same row on its next run.
 
-This means your consumers must handle duplicates. The correct tool is idempotency keyed on NVRPP — which the next part of this lab addresses directly.
+This means your consumers must handle duplicates. The correct tool is
+idempotency keyed on NVRPP — which the next part of this lab addresses directly.
 
 ---
 
@@ -525,33 +552,58 @@ This means your consumers must handle duplicates. The correct tool is idempotenc
 
 ### 3.1 What a UUID in a Kafka header actually tells you
 
-Many event-driven systems propagate a `correlation-id` or `trace-id` UUID through message headers. The theory is: you can follow a UUID from service A through service B through service C and reconstruct the full journey.
+Many event-driven systems propagate a `correlation-id` or `trace-id` UUID
+through message headers. The theory is: you can follow a UUID from service A
+through service B through service C and reconstruct the full journey.
 
 In practice, for a CI/CD provenance system, this breaks down in four ways.
 
-First, **a UUID identifies a message instance, not an artifact.** If you replay a topic — for recovery, for a new consumer catching up, for a schema migration — every replayed message has the same UUID as the original. The UUID says nothing about what artifact it refers to. NVRPP says exactly what artifact it refers to.
+First, **a UUID identifies a message instance, not an artifact.** If you replay
+a topic — for recovery, for a new consumer catching up, for a schema migration —
+every replayed message has the same UUID as the original. The UUID says nothing
+about what artifact it refers to. NVRPP says exactly what artifact it refers to.
 
-Second, **the UUID trace requires an external index.** To answer "what happened to service-a 1.2.3?" using UUID tracing, you need some mapping from that build's UUID to its downstream events. That mapping either lives in a separate service (another thing to keep consistent) or you search Kafka for UUID matches (slow, doesn't scale). With NVRPP, you query EPR directly: `WHERE name='service-a' AND version='1.2.3'`.
+Second, **the UUID trace requires an external index.** To answer "what happened
+to service-a 1.2.3?" using UUID tracing, you need some mapping from that build's
+UUID to its downstream events. That mapping either lives in a separate service
+(another thing to keep consistent) or you search Kafka for UUID matches (slow,
+doesn't scale). With NVRPP, you query EPR directly:
+`WHERE name='service-a' AND version='1.2.3'`.
 
-Third, **UUIDs don't survive process boundaries cleanly.** If a build produces ten artifacts — RPM, DEB, OCI image, source tarball — each is a separate EPR event with its own NVRPP identity. A single UUID header cannot correlate across those unless you build a separate fan-out correlation table. NVRPP correlates them naturally: same name, same version, same release, different platform_id/package.
+Third, **UUIDs don't survive process boundaries cleanly.** If a build produces
+ten artifacts — RPM, DEB, OCI image, source tarball — each is a separate EPR
+event with its own NVRPP identity. A single UUID header cannot correlate across
+those unless you build a separate fan-out correlation table. NVRPP correlates
+them naturally: same name, same version, same release, different
+platform_id/package.
 
-Fourth, **UUIDs break on rebuild.** If service-a 1.2.3 is rebuilt from the same source because the first build had an infrastructure failure, it gets a new UUID. But NVRPP is the same — it is the same artifact at the same version. A UUID-based trace now shows two disconnected traces for what is logically the same thing. NVRPP shows both builds as entries in the same artifact's provenance history, which is exactly what you want for audit purposes.
+Fourth, **UUIDs break on rebuild.** If service-a 1.2.3 is rebuilt from the same
+source because the first build had an infrastructure failure, it gets a new
+UUID. But NVRPP is the same — it is the same artifact at the same version. A
+UUID-based trace now shows two disconnected traces for what is logically the
+same thing. NVRPP shows both builds as entries in the same artifact's provenance
+history, which is exactly what you want for audit purposes.
 
 ### 3.2 NVRPP as a natural compound key
 
-The five NVRPP fields together answer the question: "what exactly is this thing?"
+The five NVRPP fields together answer the question: "what exactly is this
+thing?"
 
-| Field | What it pins down |
-|---|---|
-| `name` | Which component |
-| `version` | Which semantic release of the component |
-| `release` | Which specific build attempt (date + build number) |
-| `platform_id` | Which OS/architecture target |
-| `package` | Which packaging format |
+| Field         | What it pins down                                  |
+| ------------- | -------------------------------------------------- |
+| `name`        | Which component                                    |
+| `version`     | Which semantic release of the component            |
+| `release`     | Which specific build attempt (date + build number) |
+| `platform_id` | Which OS/architecture target                       |
+| `package`     | Which packaging format                             |
 
-`service-a / 1.2.3 / 20250901.1 / linux/amd64 / rpm` is unambiguous. It describes exactly one artifact. Every EPR event for that artifact carries all five fields. You can reconstruct the entire pipeline history for that artifact by querying EPR with those five fields, in order by `created_at`.
+`service-a / 1.2.3 / 20250901.1 / linux/amd64 / rpm` is unambiguous. It
+describes exactly one artifact. Every EPR event for that artifact carries all
+five fields. You can reconstruct the entire pipeline history for that artifact
+by querying EPR with those five fields, in order by `created_at`.
 
-No headers. No external index. No UUID mapping table. The provenance chain is implicit in the data itself.
+No headers. No external index. No UUID mapping table. The provenance chain is
+implicit in the data itself.
 
 ### 3.3 Query the provenance chain
 
@@ -698,12 +750,19 @@ python provenance_query.py
 ```
 
 Notice:
-- `service-a 1.0.1` and `service-c 0.9.1` (from the outbox run) have complete entries.
-- `service-c 0.9.0` (from the naive run that crashed) exists in the database but its event was never published — visible as a database record but missing from the event stream. This is the gap the outbox pattern prevents.
+
+- `service-a 1.0.1` and `service-c 0.9.1` (from the outbox run) have complete
+  entries.
+- `service-c 0.9.0` (from the naive run that crashed) exists in the database but
+  its event was never published — visible as a database record but missing from
+  the event stream. This is the gap the outbox pattern prevents.
 
 ### 3.4 The idempotent consumer
 
-Because the outbox relay delivers at-least-once, consumers must deduplicate. The correct deduplication key is NVRPP + event type. If you see `build.finished` for `service-a / 1.2.3 / 20250901.1 / linux/amd64 / rpm` twice, the second one is a duplicate and should be skipped.
+Because the outbox relay delivers at-least-once, consumers must deduplicate. The
+correct deduplication key is NVRPP + event type. If you see `build.finished` for
+`service-a / 1.2.3 / 20250901.1 / linux/amd64 / rpm` twice, the second one is a
+duplicate and should be skipped.
 
 Add this to your EPR consumer pattern:
 
@@ -746,7 +805,9 @@ def mark_processed(conn, event: dict) -> None:
     conn.commit()
 ```
 
-The `ON CONFLICT DO NOTHING` handles the race condition where two consumer instances try to mark the same event simultaneously. Create the table to support this:
+The `ON CONFLICT DO NOTHING` handles the race condition where two consumer
+instances try to mark the same event simultaneously. Create the table to support
+this:
 
 ```sql
 CREATE TABLE processed_events (
@@ -761,13 +822,18 @@ CREATE TABLE processed_events (
 );
 ```
 
-The primary key is NVRPP + event type. That composite key IS the deduplication mechanism. No UUID column. No correlation ID column. Just the five fields that uniquely describe an artifact, plus the event type that describes what happened to it.
+The primary key is NVRPP + event type. That composite key IS the deduplication
+mechanism. No UUID column. No correlation ID column. Just the five fields that
+uniquely describe an artifact, plus the event type that describes what happened
+to it.
 
 ---
 
 ## Part 4 — Putting It Together: Full Pipeline Simulation
 
-Simulate a complete EPR pipeline for two services going through build → test → SBOM → deploy, all using the outbox pattern, then query the complete provenance chain for each.
+Simulate a complete EPR pipeline for two services going through build → test →
+SBOM → deploy, all using the outbox pattern, then query the complete provenance
+chain for each.
 
 Create `full_pipeline.py`:
 
@@ -933,21 +999,36 @@ python full_pipeline.py
 
 ### Challenge A: Polling vs CDC
 
-The relay in this lab uses polling — it runs a `SELECT` every few seconds. A more production-grade approach is Change Data Capture (CDC): using PostgreSQL's logical replication to stream outbox row insertions as a change stream, eliminating the polling interval entirely. Research how `pg_logical` or Debezium works and write a one-page design doc describing how you would replace the polling relay with a CDC-based relay in the EPR pipeline.
+The relay in this lab uses polling — it runs a `SELECT` every few seconds. A
+more production-grade approach is Change Data Capture (CDC): using PostgreSQL's
+logical replication to stream outbox row insertions as a change stream,
+eliminating the polling interval entirely. Research how `pg_logical` or Debezium
+works and write a one-page design doc describing how you would replace the
+polling relay with a CDC-based relay in the EPR pipeline.
 
 ### Challenge B: Multiple relay instances
 
-The relay uses `SELECT FOR UPDATE SKIP LOCKED`, which means you can run multiple relay instances safely — each one grabs a different set of rows. Start two instances of `outbox_relay.py` simultaneously and produce a burst of 100 outbox rows via `build_service.py`. Verify that all 100 rows are published exactly once (no row published by both instances).
+The relay uses `SELECT FOR UPDATE SKIP LOCKED`, which means you can run multiple
+relay instances safely — each one grabs a different set of rows. Start two
+instances of `outbox_relay.py` simultaneously and produce a burst of 100 outbox
+rows via `build_service.py`. Verify that all 100 rows are published exactly once
+(no row published by both instances).
 
-Hint: check `published_at` timestamps — two relays publishing the same row would show a conflict error from the `UPDATE`.
+Hint: check `published_at` timestamps — two relays publishing the same row would
+show a conflict error from the `UPDATE`.
 
 ### Challenge C: NVRPP cross-platform query
 
-Modify `provenance_query.py` to query across all platforms for a given name + version + release. Some components are built for `linux/amd64`, `linux/arm64`, and `darwin/arm64`. Write a query that shows all platform variants of a release side-by-side, including which platforms have completed deploy.finished and which are still pending.
+Modify `provenance_query.py` to query across all platforms for a given name +
+version + release. Some components are built for `linux/amd64`, `linux/arm64`,
+and `darwin/arm64`. Write a query that shows all platform variants of a release
+side-by-side, including which platforms have completed deploy.finished and which
+are still pending.
 
 ### Challenge D: Outbox TTL and archiving
 
-Outbox rows for published events accumulate forever. Write a cleanup job `outbox_cleanup.py` that:
+Outbox rows for published events accumulate forever. Write a cleanup job
+`outbox_cleanup.py` that:
 
 1. Moves published outbox rows older than 7 days to an `outbox_archive` table
 2. Deletes rows from `outbox_archive` older than 90 days
@@ -971,23 +1052,44 @@ rpk topic delete epr.events
 
 ---
 
+**Duration:** ~75 minutes **Prerequisites:** Labs 01–07 complete; PostgreSQL and
+Redpanda running via Docker Compose; Python 3.10+ with `kafka-python`,
+`psycopg2-binary`, and `requests` installed.
+
+---
+
 ## Key Takeaways
 
 ### On the outbox pattern
 
-- A database `COMMIT` and a Kafka `producer.send()` can never be made atomic. Any code that calls them sequentially has a crash window.
-- The outbox pattern closes that window by making the event a row in the same database transaction as the business data. The relay publishes it asynchronously.
-- The outbox guarantees **at-least-once** delivery, not exactly-once. Consumers must be idempotent.
-- `SELECT FOR UPDATE SKIP LOCKED` is the PostgreSQL primitive that makes multi-instance relays safe.
-- The polling relay is simple and correct. CDC (Debezium, pg_logical) is faster and removes the polling interval but adds operational complexity. Start with polling.
+- A database `COMMIT` and a Kafka `producer.send()` can never be made atomic.
+  Any code that calls them sequentially has a crash window.
+- The outbox pattern closes that window by making the event a row in the same
+  database transaction as the business data. The relay publishes it
+  asynchronously.
+- The outbox guarantees **at-least-once** delivery, not exactly-once. Consumers
+  must be idempotent.
+- `SELECT FOR UPDATE SKIP LOCKED` is the PostgreSQL primitive that makes
+  multi-instance relays safe.
+- The polling relay is simple and correct. CDC (Debezium, pg_logical) is faster
+  and removes the polling interval but adds operational complexity. Start with
+  polling.
 
 ### On NVRPP vs UUID headers
 
-- A UUID traces a **message instance** through a message bus. NVRPP traces an **artifact** through a supply chain. These are different questions.
-- To answer "what happened to service-a 1.2.3?" with UUID tracing, you need an external index from that UUID to the artifact's identity. With NVRPP, you query EPR directly.
-- NVRPP is replay-proof. A replayed Kafka message has the same NVRPP it always had. A replayed message with a UUID header refers to the same artifact as the original.
-- NVRPP is the natural deduplication key for idempotent consumers in an at-least-once system.
-- The provenance chain is implicit in the EPR data model. You do not need to inject correlation infrastructure — the five NVRPP fields are the correlation infrastructure.
+- A UUID traces a **message instance** through a message bus. NVRPP traces an
+  **artifact** through a supply chain. These are different questions.
+- To answer "what happened to service-a 1.2.3?" with UUID tracing, you need an
+  external index from that UUID to the artifact's identity. With NVRPP, you
+  query EPR directly.
+- NVRPP is replay-proof. A replayed Kafka message has the same NVRPP it always
+  had. A replayed message with a UUID header refers to the same artifact as the
+  original.
+- NVRPP is the natural deduplication key for idempotent consumers in an
+  at-least-once system.
+- The provenance chain is implicit in the EPR data model. You do not need to
+  inject correlation infrastructure — the five NVRPP fields are the correlation
+  infrastructure.
 
 ---
 

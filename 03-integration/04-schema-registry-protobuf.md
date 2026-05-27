@@ -1,22 +1,27 @@
 # Schema Registry with Protobuf
 
-**Duration:** ~60 minutes
-**Prerequisites:** Lab 06 complete; `protoc` installed; Python 3.10+ with `kafka-python`, `requests`, `grpcio-tools`, and `protobuf` installed.
-
----
-
 ## Overview
 
-The previous session used JSON Schema — human-readable, easy to write, no compilation step. That's the right choice for getting started and for teams primarily working in dynamic languages. Protobuf is the right choice when you care about performance, strict typing across multiple languages, or generating client code automatically from your schema.
+The previous session used JSON Schema — human-readable, easy to write, no
+compilation step. That's the right choice for getting started and for teams
+primarily working in dynamic languages. Protobuf is the right choice when you
+care about performance, strict typing across multiple languages, or generating
+client code automatically from your schema.
 
 In a CI/CD pipeline context, Protobuf makes sense when:
 
-- Events are high-volume (thousands per second) and JSON parsing overhead is measurable
-- You have consumers written in Go, Python, and Java that all need to agree on the exact same message structure
-- You want generated, type-safe client libraries rather than hand-written validation logic
-- Your EPR events are going to be forwarded to a gRPC service or stored in a columnar format
+- Events are high-volume (thousands per second) and JSON parsing overhead is
+  measurable
+- You have consumers written in Go, Python, and Java that all need to agree on
+  the exact same message structure
+- You want generated, type-safe client libraries rather than hand-written
+  validation logic
+- Your EPR events are going to be forwarded to a gRPC service or stored in a
+  columnar format
 
-This lab walks through defining EPR events in `.proto` files, registering the compiled schema with Redpanda's Schema Registry, and building producers and consumers that use generated Python classes.
+This lab walks through defining EPR events in `.proto` files, registering the
+compiled schema with Redpanda's Schema Registry, and building producers and
+consumers that use generated Python classes.
 
 ### What you will learn
 
@@ -33,26 +38,37 @@ This lab walks through defining EPR events in `.proto` files, registering the co
 
 ### Wire format
 
-JSON Schema validates structure but the wire format is still plain JSON — human-readable, self-describing, verbose. Protobuf serializes to a compact binary format: field numbers instead of field names, variable-length integers, no quotes or braces. A typical EPR event in JSON is ~300 bytes; the same event in Protobuf binary is ~80–100 bytes.
+JSON Schema validates structure but the wire format is still plain JSON —
+human-readable, self-describing, verbose. Protobuf serializes to a compact
+binary format: field numbers instead of field names, variable-length integers,
+no quotes or braces. A typical EPR event in JSON is ~300 bytes; the same event
+in Protobuf binary is ~80–100 bytes.
 
 ### Schema as code
 
-A JSON Schema is a document. A `.proto` file is a program — you compile it and get generated classes in your target language. Your Go service gets a Go struct, your Python service gets a Python class, your Java service gets a Java class, and they all agree on field numbers and types because they were compiled from the same source.
+A JSON Schema is a document. A `.proto` file is a program — you compile it and
+get generated classes in your target language. Your Go service gets a Go struct,
+your Python service gets a Python class, your Java service gets a Java class,
+and they all agree on field numbers and types because they were compiled from
+the same source.
 
 ### Evolution rules
 
-Protobuf has its own backward compatibility rules that are enforced at the field-number level, not the field-name level:
+Protobuf has its own backward compatibility rules that are enforced at the
+field-number level, not the field-name level:
 
-| Change | Backward compatible? |
-|---|---|
-| Add a new optional field (new field number) | Yes |
-| Remove a field | Yes, but **reserve** the field number |
-| Rename a field | Yes (wire format uses numbers, not names) |
-| Change a field's type | Only for compatible types (e.g. int32→int64) |
-| Add a required field | **No** — proto3 has no required fields, this is by design |
-| Reuse a deleted field number | **Never** — silent data corruption |
+| Change                                      | Backward compatible?                                      |
+| ------------------------------------------- | --------------------------------------------------------- |
+| Add a new optional field (new field number) | Yes                                                       |
+| Remove a field                              | Yes, but **reserve** the field number                     |
+| Rename a field                              | Yes (wire format uses numbers, not names)                 |
+| Change a field's type                       | Only for compatible types (e.g. int32→int64)              |
+| Add a required field                        | **No** — proto3 has no required fields, this is by design |
+| Reuse a deleted field number                | **Never** — silent data corruption                        |
 
-Note that proto3 deliberately removed `required` fields. Everything is optional. This is not a limitation — it is the mechanism that makes Protobuf inherently more evolution-friendly than proto2 or JSON Schema with `required` arrays.
+Note that proto3 deliberately removed `required` fields. Everything is optional.
+This is not a limitation — it is the mechanism that makes Protobuf inherently
+more evolution-friendly than proto2 or JSON Schema with `required` arrays.
 
 ---
 
@@ -157,7 +173,11 @@ message EPREvent {
 }
 ```
 
-> **Field number discipline:** Field numbers 1–15 use single-byte encoding on the wire (more efficient). Reserve them for the fields that will be present in every message. Fields 16–2047 use two-byte encoding. The gap at 11–19 is intentional — it gives you room to add core fields later without jumping into the less-efficient range.
+> **Field number discipline:** Field numbers 1–15 use single-byte encoding on
+> the wire (more efficient). Reserve them for the fields that will be present in
+> every message. Fields 16–2047 use two-byte encoding. The gap at 11–19 is
+> intentional — it gives you room to add core fields later without jumping into
+> the less-efficient range.
 
 ### 2.2 Compile the .proto file
 
@@ -207,7 +227,8 @@ print(f"Round-trip name: {recovered.name}")
 
 ## Part 3 — Register the Protobuf Schema
 
-Redpanda's Schema Registry accepts Protobuf schemas with `schemaType` set to `PROTOBUF` and the schema body as the raw `.proto` file text.
+Redpanda's Schema Registry accepts Protobuf schemas with `schemaType` set to
+`PROTOBUF` and the schema body as the raw `.proto` file text.
 
 ### 3.1 Register via curl
 
@@ -389,7 +410,8 @@ if __name__ == "__main__":
     main()
 ```
 
-Run it and note the byte sizes next to each message — compare them mentally to the JSON payloads from Lab 06.
+Run it and note the byte sizes next to each message — compare them mentally to
+the JSON payloads from Lab 06.
 
 ```bash
 python producer_proto.py
@@ -496,7 +518,8 @@ python consumer_proto.py
 
 ### 6.1 Add a new message type and field
 
-Create `proto/epr_event_v2.proto` — adds a `ScanResult` embedded message and a new `EVENT_TYPE_SCAN_COMPLETED` enum value:
+Create `proto/epr_event_v2.proto` — adds a `ScanResult` embedded message and a
+new `EVENT_TYPE_SCAN_COMPLETED` enum value:
 
 ```protobuf
 syntax = "proto3";
@@ -571,7 +594,9 @@ curl -s -X POST \
 
 ### 6.2 Cross-version compatibility test
 
-Create `cross_version_test.py` to prove the core Protobuf property: v1 consumers can read v2 messages (unknown fields silently ignored), and v2 consumers can read v1 messages (absent fields zero-valued).
+Create `cross_version_test.py` to prove the core Protobuf property: v1 consumers
+can read v2 messages (unknown fields silently ignored), and v2 consumers can
+read v1 messages (absent fields zero-valued).
 
 ```python
 #!/usr/bin/env python3
@@ -663,7 +688,9 @@ python cross_version_test.py
 
 ### 6.3 The one rule you must never break: field number reuse
 
-Run this in a Python REPL to see what happens when you try to parse string bytes as an integer — the result of silently reusing a field number with a different type:
+Run this in a Python REPL to see what happens when you try to parse string bytes
+as an integer — the result of silently reusing a field number with a different
+type:
 
 ```python
 import sys
@@ -753,7 +780,8 @@ python size_comparison.py
 
 ### Challenge A: Go code generation
 
-Generate Go structs from the same `.proto` file and prove binary interoperability between a Go producer and the Python consumer.
+Generate Go structs from the same `.proto` file and prove binary
+interoperability between a Go producer and the Python consumer.
 
 ```bash
 go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
@@ -764,11 +792,15 @@ protoc \
   proto/epr_event.proto
 ```
 
-Write a Go program that produces a `EPREvent` to Redpanda and verify `consumer_proto.py` reads it correctly without modification.
+Write a Go program that produces a `EPREvent` to Redpanda and verify
+`consumer_proto.py` reads it correctly without modification.
 
 ### Challenge B: Confluent wire format envelope
 
-The Confluent wire format embeds the schema ID in the first 5 bytes of every message value (`\x00` magic byte + 4-byte big-endian schema ID). Implement this in both producer and consumer so the schema ID travels in the value rather than a header.
+The Confluent wire format embeds the schema ID in the first 5 bytes of every
+message value (`\x00` magic byte + 4-byte big-endian schema ID). Implement this
+in both producer and consumer so the schema ID travels in the value rather than
+a header.
 
 ```python
 import struct
@@ -784,11 +816,18 @@ def decode_with_schema_id(data: bytes) -> tuple[int, bytes]:
 
 ### Challenge C: Protobuf + DLQ
 
-Modify `consumer_proto.py` to route `DecodeError` failures to `epr.events.proto.dlq`. Add a `dlq.schema.id` header from the message header. Write a DLQ inspector that tries to deserialize DLQ messages with both v1 and v2 schemas, reporting which version (if either) can successfully parse the payload.
+Modify `consumer_proto.py` to route `DecodeError` failures to
+`epr.events.proto.dlq`. Add a `dlq.schema.id` header from the message header.
+Write a DLQ inspector that tries to deserialize DLQ messages with both v1 and v2
+schemas, reporting which version (if either) can successfully parse the payload.
 
 ### Challenge D: Enum exhaustion and graceful handling
 
-Add 10 new plausible CI/CD event types to `epr_event_v2.proto` (e.g. `EVENT_TYPE_CONTAINER_PUSHED`, `EVENT_TYPE_POLICY_EVALUATED`). Register the new schema. Write a consumer using Python 3.10+ `match`/`case` that handles each known type explicitly and logs unknown enum values rather than crashing — demonstrating graceful handling of values added by a newer producer schema.
+Add 10 new plausible CI/CD event types to `epr_event_v2.proto` (e.g.
+`EVENT_TYPE_CONTAINER_PUSHED`, `EVENT_TYPE_POLICY_EVALUATED`). Register the new
+schema. Write a consumer using Python 3.10+ `match`/`case` that handles each
+known type explicitly and logs unknown enum values rather than crashing —
+demonstrating graceful handling of values added by a newer producer schema.
 
 ---
 
@@ -805,15 +844,34 @@ rm -rf generated_go/
 
 ---
 
+**Duration:** ~60 minutes **Prerequisites:** Lab 06 complete; `protoc`
+installed; Python 3.10+ with `kafka-python`, `requests`, `grpcio-tools`, and
+`protobuf` installed.
+
+---
+
 ## Key Takeaways
 
-- **Protobuf schema evolution is governed by field numbers**, not field names. Field numbers are permanent — add, never reassign.
-- **proto3 has no required fields by design.** This makes every Protobuf schema inherently evolution-friendly. The tradeoff is that consumers must handle zero values for absent fields.
-- **Renaming fields is free** — the wire format uses numbers, consumers never see field names.
-- **`reserved` is the deletion mechanism.** Never delete a field without reserving its number and name. Silent data corruption from field number reuse is one of the hardest bugs to diagnose.
-- **Binary size matters at scale.** For a CI/CD system generating thousands of build events per hour, Protobuf's 3–5x size reduction translates directly to broker storage and network throughput.
-- **JSON Schema and Protobuf are not competitors** — they solve different problems. JSON Schema is great for validation-heavy workflows where human readability matters. Protobuf is great when you need generated, type-safe clients across multiple languages and care about wire efficiency.
-- **The schema registry treats them the same way** — both get versioned, both get compatibility checks, both participate in the same subject/version/ID model.
+- **Protobuf schema evolution is governed by field numbers**, not field names.
+  Field numbers are permanent — add, never reassign.
+- **proto3 has no required fields by design.** This makes every Protobuf schema
+  inherently evolution-friendly. The tradeoff is that consumers must handle zero
+  values for absent fields.
+- **Renaming fields is free** — the wire format uses numbers, consumers never
+  see field names.
+- **`reserved` is the deletion mechanism.** Never delete a field without
+  reserving its number and name. Silent data corruption from field number reuse
+  is one of the hardest bugs to diagnose.
+- **Binary size matters at scale.** For a CI/CD system generating thousands of
+  build events per hour, Protobuf's 3–5x size reduction translates directly to
+  broker storage and network throughput.
+- **JSON Schema and Protobuf are not competitors** — they solve different
+  problems. JSON Schema is great for validation-heavy workflows where human
+  readability matters. Protobuf is great when you need generated, type-safe
+  clients across multiple languages and care about wire efficiency.
+- **The schema registry treats them the same way** — both get versioned, both
+  get compatibility checks, both participate in the same subject/version/ID
+  model.
 
 ---
 

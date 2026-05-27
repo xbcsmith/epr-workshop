@@ -1,5 +1,7 @@
 # Install Go
 
+## Overview
+
 The Go programming language is used in the Event-Driven CI/CD workshop. To
 install it, follow the steps on the Go website:
 [https://go.dev/doc/install](https://go.dev/doc/install).

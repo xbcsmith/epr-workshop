@@ -1,15 +1,13 @@
 # Circuit Breaker
 
-**Duration:** ~55 minutes
-**Prerequisites:** Redpanda running via Docker Compose; Python 3.10+ with `kafka-python` and `pybreaker` installed.
-
----
-
 ## Overview
 
-The retry strategies in Lab 09 protect individual messages. The circuit breaker protects your entire consumer process — and everything downstream of it — from being destroyed by a dependency that has gone completely dark.
+The retry strategies in Lab 09 protect individual messages. The circuit breaker
+protects your entire consumer process — and everything downstream of it — from
+being destroyed by a dependency that has gone completely dark.
 
-Imagine your Kafka consumer processes each message by calling a downstream REST API. The API goes down. Without a circuit breaker, your consumer:
+Imagine your Kafka consumer processes each message by calling a downstream REST
+API. The API goes down. Without a circuit breaker, your consumer:
 
 1. Receives a message
 2. Calls the API — connection timeout after 30 seconds
@@ -18,11 +16,18 @@ Imagine your Kafka consumer processes each message by calling a downstream REST 
 5. Routes to DLQ
 6. Receives the next message and starts over
 
-With 1,000 messages in the queue and a 30-second timeout, your consumer is effectively frozen for 8+ hours burning retries that will all fail. The queue fills up. Consumer lag climbs. Every service watching this pipeline stops seeing events.
+With 1,000 messages in the queue and a 30-second timeout, your consumer is
+effectively frozen for 8+ hours burning retries that will all fail. The queue
+fills up. Consumer lag climbs. Every service watching this pipeline stops seeing
+events.
 
-A circuit breaker short-circuits that loop. After N consecutive failures it opens — subsequent calls fail immediately without hitting the broken dependency. After a recovery timeout it enters half-open state, allowing one test call. If that succeeds, it closes and normal processing resumes. If it fails, it opens again.
+A circuit breaker short-circuits that loop. After N consecutive failures it
+opens — subsequent calls fail immediately without hitting the broken dependency.
+After a recovery timeout it enters half-open state, allowing one test call. If
+that succeeds, it closes and normal processing resumes. If it fails, it opens
+again.
 
-```
+```text
        failures ≥ threshold          test call fails
 CLOSED ─────────────────────► OPEN ──────────────────► OPEN
   ▲                             │                        │
@@ -31,7 +36,9 @@ CLOSED ─────────────────────► OPEN �
                HALF-OPEN ◄──────────────────────────────┘
 ```
 
-This lab builds a circuit breaker from scratch to understand the mechanism, then uses `pybreaker` — the production-grade Python library — integrated into a Kafka consumer.
+This lab builds a circuit breaker from scratch to understand the mechanism, then
+uses `pybreaker` — the production-grade Python library — integrated into a Kafka
+consumer.
 
 ---
 
@@ -52,7 +59,8 @@ rpk topic create events.inbound.dlq \
 
 ## Part 2 — Build a Circuit Breaker from Scratch
 
-Before using a library, implement the state machine yourself. This makes the behavior concrete and removes any mystery from what `pybreaker` does internally.
+Before using a library, implement the state machine yourself. This makes the
+behavior concrete and removes any mystery from what `pybreaker` does internally.
 
 Create `circuit_breaker.py`:
 
@@ -229,21 +237,31 @@ for i in range(3):
 python cb_demo.py
 ```
 
-Watch the state transitions: `CLOSED → OPEN → HALF_OPEN → CLOSED`. The key behavior to observe is Phase 3: once the circuit opens, calls are rejected instantaneously — no waiting for timeouts, no burning retries.
+Watch the state transitions: `CLOSED → OPEN → HALF_OPEN → CLOSED`. The key
+behavior to observe is Phase 3: once the circuit opens, calls are rejected
+instantaneously — no waiting for timeouts, no burning retries.
 
 ---
 
 ## Part 3 — Circuit Breaker in a Kafka Consumer
 
-Now integrate the circuit breaker into a Kafka consumer. The integration has two parts: wrapping the downstream call, and deciding what to do with messages when the circuit is open.
+Now integrate the circuit breaker into a Kafka consumer. The integration has two
+parts: wrapping the downstream call, and deciding what to do with messages when
+the circuit is open.
 
 When the circuit opens, you have two options:
 
-1. **Pause and wait** — stop consuming, sleep until the circuit closes or half-opens, then resume. Simple. Causes consumer lag to grow but ensures no messages are processed against a broken dependency.
+1. **Pause and wait** — stop consuming, sleep until the circuit closes or
+   half-opens, then resume. Simple. Causes consumer lag to grow but ensures no
+   messages are processed against a broken dependency.
 
-2. **Route to retry topic** — send messages to a retry topic to be re-processed later. Consumer lag stays low but requires the retry infrastructure from Lab 09.
+2. **Route to retry topic** — send messages to a retry topic to be re-processed
+   later. Consumer lag stays low but requires the retry infrastructure from
+   Lab 09.
 
-This lab implements option 1 (pause-and-wait) because it is simpler and correct for most CI/CD pipeline workloads, where it is better to queue up and wait than to route events in a non-standard order.
+This lab implements option 1 (pause-and-wait) because it is simpler and correct
+for most CI/CD pipeline workloads, where it is better to queue up and wait than
+to route events in a non-standard order.
 
 Create `consumer_circuit_breaker.py`:
 
@@ -492,9 +510,11 @@ python consumer_circuit_breaker.py
 ```
 
 Watch the sequence of events:
+
 1. Consumer processes messages normally for ~3 seconds
 2. Downstream goes down — `ConnectionError` starts appearing
-3. After 3 consecutive failures, the circuit opens — messages are blocked immediately
+3. After 3 consecutive failures, the circuit opens — messages are blocked
+   immediately
 4. Consumer pauses, polling for circuit state
 5. After 10 seconds, circuit transitions to HALF_OPEN
 6. Probe call succeeds — circuit closes
@@ -504,7 +524,9 @@ Watch the sequence of events:
 
 ## Part 4 — Using `pybreaker` in Production
 
-The handbuilt circuit breaker teaches the mechanism. `pybreaker` is what you use in production — it handles thread safety, listeners, and optional Redis-backed state correctly.
+The handbuilt circuit breaker teaches the mechanism. `pybreaker` is what you use
+in production — it handles thread safety, listeners, and optional Redis-backed
+state correctly.
 
 Create `consumer_pybreaker.py`:
 
@@ -689,19 +711,26 @@ if __name__ == "__main__":
 python consumer_pybreaker.py
 ```
 
-The `pybreaker` version has the same behavior as the handbuilt version, but the listener hook gives you a clean integration point for metrics and alerting — the `state_change` method is the right place to fire a PagerDuty alert when a circuit opens in production.
+The `pybreaker` version has the same behavior as the handbuilt version, but the
+listener hook gives you a clean integration point for metrics and alerting — the
+`state_change` method is the right place to fire a PagerDuty alert when a
+circuit opens in production.
 
 ---
 
 ## Part 5 — Where Circuit Breakers Go in the EPR Pipeline
 
-In the EPR workshop context, circuit breakers belong at every integration point that sits between a Kafka consumer and an external dependency. Specifically:
+In the EPR workshop context, circuit breakers belong at every integration point
+that sits between a Kafka consumer and an external dependency. Specifically:
 
 - The **watcher** calls the EPR server API — wrap that call in a circuit breaker
 - Any consumer that writes to **PostgreSQL** — wrap the DB call
-- Any consumer that calls an **external scanning service** or **deployment API** — wrap each independently
+- Any consumer that calls an **external scanning service** or **deployment API**
+  — wrap each independently
 
-Each integration point gets its own breaker with its own threshold. A database breaker and an API breaker should not share state — the database going down should not prevent API calls from continuing.
+Each integration point gets its own breaker with its own threshold. A database
+breaker and an API breaker should not share state — the database going down
+should not prevent API calls from continuing.
 
 ---
 
@@ -709,26 +738,40 @@ Each integration point gets its own breaker with its own threshold. A database b
 
 ### Challenge A: Half-open with success threshold
 
-Modify the handbuilt `CircuitBreaker` to require `success_threshold=3` instead of 1 before closing from half-open. This means three consecutive successful probe calls are required before the circuit fully closes. Demonstrate the behavior — the circuit should re-open if any of those three probe calls fail.
+Modify the handbuilt `CircuitBreaker` to require `success_threshold=3` instead
+of 1 before closing from half-open. This means three consecutive successful
+probe calls are required before the circuit fully closes. Demonstrate the
+behavior — the circuit should re-open if any of those three probe calls fail.
 
 ### Challenge B: Circuit breaker metrics
 
 Extend `PipelineCircuitListener` to track:
+
 - Total number of times each circuit has opened
-- Total calls blocked while open (approximate, using a counter in `state_change`)
+- Total calls blocked while open (approximate, using a counter in
+  `state_change`)
 - Time spent in OPEN state per occurrence
 
-Print a summary when the consumer shuts down. This is the data you would push to Prometheus in production.
+Print a summary when the consumer shuts down. This is the data you would push to
+Prometheus in production.
 
 ### Challenge C: Per-partition circuit breaker
 
-The consumers in this lab use a single circuit breaker for all partitions. In a multi-partition topic, a broken partition (e.g. due to a corrupt message on partition 2) should not open the circuit for partitions 0 and 1. Implement a per-partition circuit breaker map and demonstrate that an error isolated to one partition does not affect processing on others.
+The consumers in this lab use a single circuit breaker for all partitions. In a
+multi-partition topic, a broken partition (e.g. due to a corrupt message on
+partition 2) should not open the circuit for partitions 0 and 1. Implement a
+per-partition circuit breaker map and demonstrate that an error isolated to one
+partition does not affect processing on others.
 
 ### Challenge D: Redis-backed state for multi-instance consumers
 
-In a horizontally scaled consumer group, each instance has its own in-memory circuit breaker. If instance A opens its circuit, instance B keeps processing — it has not seen the failures yet. This is usually fine but creates a brief window of asymmetric behavior.
+In a horizontally scaled consumer group, each instance has its own in-memory
+circuit breaker. If instance A opens its circuit, instance B keeps processing —
+it has not seen the failures yet. This is usually fine but creates a brief
+window of asymmetric behavior.
 
-Use `pybreaker.CircuitRedisStorage` to share circuit breaker state across two consumer instances:
+Use `pybreaker.CircuitRedisStorage` to share circuit breaker state across two
+consumer instances:
 
 ```python
 import redis
@@ -746,7 +789,8 @@ shared_breaker = pybreaker.CircuitBreaker(
 )
 ```
 
-Run two consumer instances simultaneously, trigger failures from one, and verify both instances open their circuits.
+Run two consumer instances simultaneously, trigger failures from one, and verify
+both instances open their circuits.
 
 ---
 
@@ -758,11 +802,24 @@ rpk topic delete events.inbound events.inbound.dlq
 
 ---
 
+**Duration:** ~55 minutes **Prerequisites:** Redpanda running via Docker
+Compose; Python 3.10+ with `kafka-python` and `pybreaker` installed.
+
+---
+
 ## Key Takeaways
 
-- Without a circuit breaker, a broken downstream dependency can freeze your entire consumer for hours burning timeouts and retries.
-- The three states — CLOSED, OPEN, HALF_OPEN — implement a self-healing loop: open fast on failure, wait for recovery, probe cautiously, close when healthy.
-- When the circuit opens, pause Kafka partition polling (not just sleep) so the broker does not trigger a consumer group rebalance during the recovery window.
-- The listener pattern (`pybreaker.CircuitBreakerListener`) is the integration point for metrics and alerting. The `state_change` hook is where production monitoring hooks should live.
-- Each external integration point gets its own circuit breaker. Shared breakers create false dependencies between unrelated systems.
-- Circuit breakers and retry strategies are complementary. Retries handle individual message failures. Circuit breakers handle systemic dependency failures. Use both.
+- Without a circuit breaker, a broken downstream dependency can freeze your
+  entire consumer for hours burning timeouts and retries.
+- The three states — CLOSED, OPEN, HALF_OPEN — implement a self-healing loop:
+  open fast on failure, wait for recovery, probe cautiously, close when healthy.
+- When the circuit opens, pause Kafka partition polling (not just sleep) so the
+  broker does not trigger a consumer group rebalance during the recovery window.
+- The listener pattern (`pybreaker.CircuitBreakerListener`) is the integration
+  point for metrics and alerting. The `state_change` hook is where production
+  monitoring hooks should live.
+- Each external integration point gets its own circuit breaker. Shared breakers
+  create false dependencies between unrelated systems.
+- Circuit breakers and retry strategies are complementary. Retries handle
+  individual message failures. Circuit breakers handle systemic dependency
+  failures. Use both.

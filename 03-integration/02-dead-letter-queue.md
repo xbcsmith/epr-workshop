@@ -1,15 +1,17 @@
 # Dead Letter Queues with Redpanda
 
-**Duration:** ~60 minutes  
-**Prerequisites:** Labs 01–04 complete; Redpanda running locally via Docker Compose; `rpk` CLI available; Python 3.10+ with `kafka-python` installed.
-
----
-
 ## Overview
 
-In production event-driven pipelines, not every message can be processed successfully. Schema mismatches, malformed payloads, transient downstream failures, and unhandled business-logic exceptions all cause consumers to fail on specific messages. Without a safety net, you face a hard choice: skip the message and lose data, or block the pipeline indefinitely retrying it.
+In production event-driven pipelines, not every message can be processed
+successfully. Schema mismatches, malformed payloads, transient downstream
+failures, and unhandled business-logic exceptions all cause consumers to fail on
+specific messages. Without a safety net, you face a hard choice: skip the
+message and lose data, or block the pipeline indefinitely retrying it.
 
-A **Dead Letter Queue (DLQ)** is a dedicated Kafka/Redpanda topic that receives messages a consumer cannot process after exhausting its retry budget. The main pipeline keeps moving; bad messages land in the DLQ where they can be inspected, fixed, and replayed — or discarded intentionally.
+A **Dead Letter Queue (DLQ)** is a dedicated Kafka/Redpanda topic that receives
+messages a consumer cannot process after exhausting its retry budget. The main
+pipeline keeps moving; bad messages land in the DLQ where they can be inspected,
+fixed, and replayed — or discarded intentionally.
 
 ### What you will learn
 
@@ -26,18 +28,27 @@ A **Dead Letter Queue (DLQ)** is a dedicated Kafka/Redpanda topic that receives 
 
 ### The problem DLQs solve
 
-Consider the EPR (Event Provenance Registry) pipeline from previous labs. Events flow from producers through topic partitions to consumers that validate, transform, and persist them. What happens when a consumer receives a `build.finished` event whose payload has an unexpected field added by a schema migration — or one whose `artifact_sha` field is `null` because a upstream service had a bug?
+Consider the EPR (Event Provenance Registry) pipeline from previous labs. Events
+flow from producers through topic partitions to consumers that validate,
+transform, and persist them. What happens when a consumer receives a
+`build.finished` event whose payload has an unexpected field added by a schema
+migration — or one whose `artifact_sha` field is `null` because a upstream
+service had a bug?
 
 Without a DLQ:
+
 - The consumer throws an exception and retries forever → **pipeline stalled**
 - The consumer skips the record and commits the offset → **silent data loss**
 
 With a DLQ:
-- The consumer retries N times, then publishes the bad message to `<topic>.dlq` with error metadata headers → **pipeline continues, no data lost, errors are visible and actionable**
+
+- The consumer retries N times, then publishes the bad message to `<topic>.dlq`
+  with error metadata headers → **pipeline continues, no data lost, errors are
+  visible and actionable**
 
 ### DLQ anatomy
 
-```
+```text
 Producer
    │
    ▼
@@ -56,18 +67,19 @@ Producer
 
 ### DLQ message headers (convention)
 
-When routing a message to the DLQ, always preserve the original payload and add structured headers:
+When routing a message to the DLQ, always preserve the original payload and add
+structured headers:
 
-| Header key | Example value | Purpose |
-|---|---|---|
-| `dlq.original.topic` | `epr.events` | Where the message came from |
-| `dlq.original.partition` | `0` | Original partition |
-| `dlq.original.offset` | `1042` | Original offset for tracing |
-| `dlq.error.type` | `SchemaValidationError` | Exception class name |
-| `dlq.error.message` | `field 'artifact_sha' is null` | Human-readable reason |
-| `dlq.retry.count` | `3` | How many retries were attempted |
-| `dlq.timestamp` | `2025-09-01T14:32:00Z` | When it was DLQ'd |
-| `dlq.consumer.group` | `epr-validator-v1` | Which consumer group failed |
+| Header key               | Example value                  | Purpose                         |
+| ------------------------ | ------------------------------ | ------------------------------- |
+| `dlq.original.topic`     | `epr.events`                   | Where the message came from     |
+| `dlq.original.partition` | `0`                            | Original partition              |
+| `dlq.original.offset`    | `1042`                         | Original offset for tracing     |
+| `dlq.error.type`         | `SchemaValidationError`        | Exception class name            |
+| `dlq.error.message`      | `field 'artifact_sha' is null` | Human-readable reason           |
+| `dlq.retry.count`        | `3`                            | How many retries were attempted |
+| `dlq.timestamp`          | `2025-09-01T14:32:00Z`         | When it was DLQ'd               |
+| `dlq.consumer.group`     | `epr-validator-v1`             | Which consumer group failed     |
 
 ---
 
@@ -101,7 +113,10 @@ rpk topic create epr.events.dlq \
 rpk topic list
 ```
 
-> **Design note:** DLQ topics should have *longer* retention than their source topics. The whole point is to give operators time to investigate and reprocess. Seven days is a reasonable minimum; 30 days is common for compliance-sensitive pipelines.
+> **Design note:** DLQ topics should have _longer_ retention than their source
+> topics. The whole point is to give operators time to investigate and
+> reprocess. Seven days is a reasonable minimum; 30 days is common for
+> compliance-sensitive pipelines.
 
 ### 1.3 Install Python dependencies
 
@@ -113,7 +128,8 @@ pip install kafka-python jsonschema
 
 ## Part 2 — Producing Mixed Good/Bad Events
 
-Create a producer that intentionally emits a mix of valid and invalid events to simulate real-world conditions.
+Create a producer that intentionally emits a mix of valid and invalid events to
+simulate real-world conditions.
 
 ### 2.1 Create `producer.py`
 
@@ -425,7 +441,8 @@ Then in your first terminal, run the producer again if needed:
 python producer.py
 ```
 
-Watch the consumer output. You should see valid events processed with `✓` and broken events routed to the DLQ with `✗ → DLQ`.
+Watch the consumer output. You should see valid events processed with `✓` and
+broken events routed to the DLQ with `✗ → DLQ`.
 
 **Expected output:**
 
@@ -457,7 +474,8 @@ rpk topic consume epr.events.dlq \
   --num 10
 ```
 
-You will see the original message bytes alongside Kafka metadata. The error details are in the headers.
+You will see the original message bytes alongside Kafka metadata. The error
+details are in the headers.
 
 ### 4.2 Decode headers with `rpk`
 
@@ -555,7 +573,8 @@ python dlq_inspector.py
 
 ## Part 5 — Replaying Fixed Messages
 
-A DLQ is only useful if you can act on its contents. In this section you will fix broken messages and replay them into the source topic.
+A DLQ is only useful if you can act on its contents. In this section you will
+fix broken messages and replay them into the source topic.
 
 ### 5.1 Create `dlq_reprocessor.py`
 
@@ -674,7 +693,8 @@ if __name__ == "__main__":
 python dlq_reprocessor.py
 ```
 
-Then restart the main consumer (reset its offset or use a new group) to verify the replayed messages are now processed successfully:
+Then restart the main consumer (reset its offset or use a new group) to verify
+the replayed messages are now processed successfully:
 
 ```bash
 # Consume from start with a fresh group to verify replayed messages
@@ -685,13 +705,15 @@ rpk topic consume epr.events \
   --num 20
 ```
 
-Look for messages with `"_dlq_repaired": true` — these are your fixed events flowing through the pipeline cleanly.
+Look for messages with `"_dlq_repaired": true` — these are your fixed events
+flowing through the pipeline cleanly.
 
 ---
 
 ## Part 6 — Challenge Exercises
 
-Work through these on your own. Solutions are not provided — use what you've built as a starting point.
+Work through these on your own. Solutions are not provided — use what you've
+built as a starting point.
 
 ### Challenge A: Retry topic (tiered DLQ)
 
@@ -701,25 +723,33 @@ Implement a two-tier error handling chain:
 epr.events  →  epr.events.retry  →  epr.events.dlq
 ```
 
-Messages that fail with a *transient* error go to `epr.events.retry` first. A retry consumer re-attempts them with exponential back-off. Only after `MAX_RETRY_ATTEMPTS` from the retry topic do they graduate to the DLQ.
+Messages that fail with a _transient_ error go to `epr.events.retry` first. A
+retry consumer re-attempts them with exponential back-off. Only after
+`MAX_RETRY_ATTEMPTS` from the retry topic do they graduate to the DLQ.
 
-Hint: use the `dlq.retry.count` header to track cumulative attempts across both tiers.
+Hint: use the `dlq.retry.count` header to track cumulative attempts across both
+tiers.
 
 ### Challenge B: DLQ monitoring with rpk and alerting
 
 Write a shell script `dlq_monitor.sh` that:
 
-1. Queries the `epr.events.dlq` high watermark every 30 seconds using `rpk topic describe`
+1. Queries the `epr.events.dlq` high watermark every 30 seconds using
+   `rpk topic describe`
 2. Compares it to the previous reading to calculate messages-per-minute
-3. Prints a `⚠ ALERT` line when the rate exceeds a threshold (e.g., 5 messages/minute)
+3. Prints a `⚠ ALERT` line when the rate exceeds a threshold (e.g., 5
+   messages/minute)
 
 ### Challenge C: Schema Registry integration
 
-Modify the consumer to use Redpanda's Schema Registry (available at `http://localhost:8081` in the default Docker Compose setup):
+Modify the consumer to use Redpanda's Schema Registry (available at
+`http://localhost:8081` in the default Docker Compose setup):
 
 1. Register a JSON Schema for EPR events
-2. Replace the manual `validate_event()` function with schema registry validation
-3. Ensure schema violations land in the DLQ with `dlq.error.type=SchemaRegistryValidationError`
+2. Replace the manual `validate_event()` function with schema registry
+   validation
+3. Ensure schema violations land in the DLQ with
+   `dlq.error.type=SchemaRegistryValidationError`
 
 Useful endpoint:
 
@@ -730,7 +760,10 @@ curl -s http://localhost:8081/subjects/epr.events-value/versions/latest
 
 ### Challenge D: DLQ quarantine for poison pills
 
-Some messages cannot be fixed and should never re-enter the main pipeline. Add a **quarantine topic** (`epr.events.quarantine`) to `dlq_reprocessor.py`. Messages that the reprocessor cannot fix after a configurable number of attempts are moved to quarantine rather than remaining in the DLQ indefinitely.
+Some messages cannot be fixed and should never re-enter the main pipeline. Add a
+**quarantine topic** (`epr.events.quarantine`) to `dlq_reprocessor.py`. Messages
+that the reprocessor cannot fix after a configurable number of attempts are
+moved to quarantine rather than remaining in the DLQ indefinitely.
 
 ---
 
@@ -746,14 +779,29 @@ rpk topic delete epr.events.retry epr.events.quarantine
 
 ---
 
+**Duration:** ~60 minutes **Prerequisites:** Labs 01–04 complete; Redpanda
+running locally via Docker Compose; `rpk` CLI available; Python 3.10+ with
+`kafka-python` installed.
+
+---
+
 ## Key Takeaways
 
-- **DLQs prevent pipeline stalls** without silently dropping data. They are the difference between a resilient system and a fragile one.
-- **Always enrich DLQ messages with headers.** The original payload alone is not enough — you need the error context, retry count, timestamp, and consumer group to diagnose and fix problems efficiently.
-- **Commit offsets only after a message is either processed or DLQ'd.** Committing before routing to the DLQ risks losing the error record if the DLQ write fails.
-- **Distinguish retryable from non-retryable errors.** Schema validation failures will never succeed on retry; network timeouts might. Model this explicitly in your error handler.
-- **DLQ retention should be longer than the source topic's retention.** Operators need time to investigate — treat the DLQ as a forensic store.
-- **Build the reprocessor before you need it.** A DLQ with no reprocessing path is just a slightly-nicer way to lose messages.
+- **DLQs prevent pipeline stalls** without silently dropping data. They are the
+  difference between a resilient system and a fragile one.
+- **Always enrich DLQ messages with headers.** The original payload alone is not
+  enough — you need the error context, retry count, timestamp, and consumer
+  group to diagnose and fix problems efficiently.
+- **Commit offsets only after a message is either processed or DLQ'd.**
+  Committing before routing to the DLQ risks losing the error record if the DLQ
+  write fails.
+- **Distinguish retryable from non-retryable errors.** Schema validation
+  failures will never succeed on retry; network timeouts might. Model this
+  explicitly in your error handler.
+- **DLQ retention should be longer than the source topic's retention.**
+  Operators need time to investigate — treat the DLQ as a forensic store.
+- **Build the reprocessor before you need it.** A DLQ with no reprocessing path
+  is just a slightly-nicer way to lose messages.
 
 ---
 
