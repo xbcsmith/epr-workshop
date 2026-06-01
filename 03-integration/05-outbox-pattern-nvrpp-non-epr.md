@@ -66,6 +66,8 @@ The comment in the middle is where your pipeline breaks. There is no way to make
 a database `COMMIT` and a Kafka `producer.send()` atomic. They are fundamentally
 different systems. Any approach that calls them sequentially has this gap.
 
+---
+
 ### 1.2 Reproduce the failure
 
 Set up the database:
@@ -174,6 +176,8 @@ if __name__ == "__main__":
     main()
 ```
 
+---
+
 ```bash
 python naive_producer.py
 ```
@@ -208,14 +212,14 @@ the database transaction, not a separate operation after it.
 
 Instead of:
 
-```
+```text
 1. INSERT into build_records  ← commit
 2. producer.send() to Kafka   ← separate, can fail
 ```
 
 You do:
 
-```
+```text
 1. INSERT into build_records  ┐
    INSERT into outbox         ┘ ← single commit, both or neither
 2. Relay process reads outbox → publishes to Kafka → marks published
@@ -226,6 +230,8 @@ relay runs, the relay will publish on its next pass. If the relay crashes after
 publishing but before marking the row as published, it re-publishes on restart —
 which means consumers must handle duplicate events, but no events are ever
 silently lost.
+
+---
 
 ### 2.2 Create the outbox table
 
@@ -249,6 +255,8 @@ CREATE INDEX idx_outbox_unpublished ON outbox (created_at)
 The index on `published = FALSE` with `created_at` ordering is important — the
 relay will run this query frequently, and you only want it scanning the
 unpublished rows.
+
+---
 
 ### 2.3 Build service with outbox write
 
@@ -345,6 +353,8 @@ if __name__ == "__main__":
     main()
 ```
 
+---
+
 ```bash
 python build_service.py
 ```
@@ -359,6 +369,8 @@ ORDER BY created_at;
 
 All four rows present. None yet published. The crash happened after the commit —
 the data is safe.
+
+---
 
 ### 2.4 Build the relay
 
@@ -502,6 +514,8 @@ if __name__ == "__main__":
     main()
 ```
 
+---
+
 Run the relay in a second terminal:
 
 ```bash
@@ -510,13 +524,15 @@ python outbox_relay.py
 
 Watch it publish all four rows — including service-c that "crashed" earlier:
 
-```
+```text
 09:14:01  INFO     Processing 4 unpublished row(s)
 09:14:01  INFO       PUBLISHED  service-a  →  epr.events
 09:14:01  INFO       PUBLISHED  service-b  →  epr.events
 09:14:01  INFO       PUBLISHED  service-c  →  epr.events
 09:14:01  INFO       PUBLISHED  service-d  →  epr.events
 ```
+
+---
 
 Verify in Kafka — all four now present:
 
@@ -535,6 +551,8 @@ SELECT event_key, published, published_at, retry_count
 FROM outbox
 ORDER BY created_at;
 ```
+
+---
 
 ### 2.5 Understand what "at-least-once" means here
 
@@ -563,12 +581,16 @@ a topic — for recovery, for a new consumer catching up, for a schema migration
 every replayed message has the same UUID as the original. The UUID says nothing
 about what artifact it refers to. NVRPP says exactly what artifact it refers to.
 
+---
+
 Second, **the UUID trace requires an external index.** To answer "what happened
 to service-a 1.2.3?" using UUID tracing, you need some mapping from that build's
 UUID to its downstream events. That mapping either lives in a separate service
 (another thing to keep consistent) or you search Kafka for UUID matches (slow,
 doesn't scale). With NVRPP, you query EPR directly:
 `WHERE name='service-a' AND version='1.2.3'`.
+
+---
 
 Third, **UUIDs don't survive process boundaries cleanly.** If a build produces
 ten artifacts — RPM, DEB, OCI image, source tarball — each is a separate EPR
@@ -577,12 +599,16 @@ those unless you build a separate fan-out correlation table. NVRPP correlates
 them naturally: same name, same version, same release, different
 platform_id/package.
 
+---
+
 Fourth, **UUIDs break on rebuild.** If service-a 1.2.3 is rebuilt from the same
 source because the first build had an infrastructure failure, it gets a new
 UUID. But NVRPP is the same — it is the same artifact at the same version. A
 UUID-based trace now shows two disconnected traces for what is logically the
 same thing. NVRPP shows both builds as entries in the same artifact's provenance
 history, which is exactly what you want for audit purposes.
+
+---
 
 ### 3.2 NVRPP as a natural compound key
 
@@ -604,6 +630,8 @@ by querying EPR with those five fields, in order by `created_at`.
 
 No headers. No external index. No UUID mapping table. The provenance chain is
 implicit in the data itself.
+
+---
 
 ### 3.3 Query the provenance chain
 
@@ -745,6 +773,8 @@ if __name__ == "__main__":
     main()
 ```
 
+---
+
 ```bash
 python provenance_query.py
 ```
@@ -756,6 +786,8 @@ Notice:
 - `service-c 0.9.0` (from the naive run that crashed) exists in the database but
   its event was never published — visible as a database record but missing from
   the event stream. This is the gap the outbox pattern prevents.
+
+---
 
 ### 3.4 The idempotent consumer
 
@@ -1006,6 +1038,8 @@ eliminating the polling interval entirely. Research how `pg_logical` or Debezium
 works and write a one-page design doc describing how you would replace the
 polling relay with a CDC-based relay in the EPR pipeline.
 
+---
+
 ### Challenge B: Multiple relay instances
 
 The relay uses `SELECT FOR UPDATE SKIP LOCKED`, which means you can run multiple
@@ -1017,6 +1051,8 @@ rows via `build_service.py`. Verify that all 100 rows are published exactly once
 Hint: check `published_at` timestamps — two relays publishing the same row would
 show a conflict error from the `UPDATE`.
 
+---
+
 ### Challenge C: NVRPP cross-platform query
 
 Modify `provenance_query.py` to query across all platforms for a given name +
@@ -1024,6 +1060,8 @@ version + release. Some components are built for `linux/amd64`, `linux/arm64`,
 and `darwin/arm64`. Write a query that shows all platform variants of a release
 side-by-side, including which platforms have completed deploy.finished and which
 are still pending.
+
+---
 
 ### Challenge D: Outbox TTL and archiving
 
@@ -1075,6 +1113,8 @@ Redpanda running via Docker Compose; Python 3.10+ with `kafka-python`,
   and removes the polling interval but adds operational complexity. Start with
   polling.
 
+---
+
 ### On NVRPP vs UUID headers
 
 - A UUID traces a **message instance** through a message bus. NVRPP traces an
@@ -1099,3 +1139,5 @@ Redpanda running via Docker Compose; Python 3.10+ with `kafka-python`,
 - [PostgreSQL SELECT FOR UPDATE SKIP LOCKED](https://www.postgresql.org/docs/current/sql-select.html#SQL-FOR-UPDATE-SHARE)
 - [Debezium — CDC for PostgreSQL](https://debezium.io/documentation/reference/connectors/postgresql.html)
 - [Idempotent consumers in Kafka](https://docs.redpanda.com/current/develop/consume-data/consumer-offsets/)
+
+---

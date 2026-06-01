@@ -1,24 +1,38 @@
 # EPR Reliability Guarantees: Write-First, Replay, and NVRPP Provenance
 
-**Duration:** ~60 minutes
-**Prerequisites:** EPR server, PostgreSQL, and Redpanda running via Docker Compose; Python 3.10+ with `kafka-python`, `psycopg2-binary`, and `requests` installed.
+**Duration:** ~60 minutes **Prerequisites:** EPR server, PostgreSQL, and
+Redpanda running via Docker Compose; Python 3.10+ with `kafka-python`,
+`psycopg2-binary`, and `requests` installed.
 
 ---
 
 ## Overview
 
-Most event-driven systems have a reliability problem they don't know about until something goes wrong in production. A service writes to a database and publishes to a message bus. Those are two separate I/O operations. A crash between them creates a silent gap in the event stream — no error, no DLQ entry, no alert. Just a missing event.
+Most event-driven systems have a reliability problem they don't know about until
+something goes wrong in production. A service writes to a database and publishes
+to a message bus. Those are two separate I/O operations. A crash between them
+creates a silent gap in the event stream — no error, no DLQ entry, no alert.
+Just a missing event.
 
-EPR's architecture makes this problem go away. The EPR server writes every event to PostgreSQL *first*, returns a success response, and *then* publishes to Redpanda. The database is always the source of truth. Redpanda is a projection of that truth onto a message bus.
+---
+
+EPR's architecture makes this problem go away. The EPR server writes every event
+to PostgreSQL _first_, returns a success response, and _then_ publishes to
+Redpanda. The database is always the source of truth. Redpanda is a projection
+of that truth onto a message bus.
+
+---
 
 This lab examines what that architecture buys you:
 
 - Why write-first matters and what it protects against
-- How to use EPR's PostgreSQL store as a recovery mechanism when Redpanda needs it
+- How to use EPR's PostgreSQL store as a recovery mechanism when Redpanda needs
+  it
 - How to replay events to new consumers without replaying an entire topic
 - Why NVRPP makes all of the above queryable and targeted rather than blunt
 
-This is not a lab about implementing a pattern. It is a lab about understanding the guarantee EPR already gives you, and knowing how to use it.
+This is not a lab about implementing a pattern. It is a lab about understanding
+the guarantee EPR already gives you, and knowing how to use it.
 
 ---
 
@@ -26,25 +40,38 @@ This is not a lab about implementing a pattern. It is a lab about understanding 
 
 Consider the naive approach most services start with:
 
-```
+```text
 1. INSERT into database    ← committed
 2. producer.send() Kafka   ← separate operation, can fail silently
 ```
 
-There is no way to make a database `COMMIT` and a Kafka `producer.send()` atomic. They are different systems. Any code that calls them sequentially has a crash window between step 1 and step 2. If the process dies there, the database has a record that Kafka never heard about. No retry. No error. No recovery path.
+There is no way to make a database `COMMIT` and a Kafka `producer.send()`
+atomic. They are different systems. Any code that calls them sequentially has a
+crash window between step 1 and step 2. If the process dies there, the database
+has a record that Kafka never heard about. No retry. No error. No recovery path.
+
+---
 
 EPR closes this window by inverting the responsibility:
 
-```
+```text
 1. POST /events to EPR server
 2. EPR: INSERT into PostgreSQL  ← committed
 3. EPR: producer.send() Kafka   ← best-effort publish
 4. EPR: return 200 to caller
 ```
 
-From the caller's perspective, a 200 means the event is durably recorded. It is in PostgreSQL. Whether or not the Redpanda publish succeeded in that moment is secondary — EPR's database is the record of truth, and anything that needs to be on the bus can be put there from the database.
+---
 
-The pattern that implements this formally — writing to an outbox table in the same transaction as business data, then relaying to Kafka separately — is called the Outbox Pattern. EPR *is* that pattern, built into the server. You get it for free.
+From the caller's perspective, a 200 means the event is durably recorded. It is
+in PostgreSQL. Whether or not the Redpanda publish succeeded in that moment is
+secondary — EPR's database is the record of truth, and anything that needs to be
+on the bus can be put there from the database.
+
+The pattern that implements this formally — writing to an outbox table in the
+same transaction as business data, then relaying to Kafka separately — is called
+the Outbox Pattern. EPR _is_ that pattern, built into the server. You get it for
+free.
 
 ---
 
@@ -52,7 +79,8 @@ The pattern that implements this formally — writing to an outbox table in the 
 
 ### 1.1 Examine the EPR event write path
 
-Look at how EPR handles a `POST /events` request. The key sequence in the EPR server code is:
+Look at how EPR handles a `POST /events` request. The key sequence in the EPR
+server code is:
 
 ```go
 // Simplified from the EPR server handler
@@ -75,7 +103,10 @@ func (s *Server) CreateEvent(ctx context.Context, req *CreateEventRequest) (*Eve
 }
 ```
 
-The ordering is the guarantee. A caller who gets a 200 knows their event is in PostgreSQL. The Redpanda publish is an optimistic best-effort on top of that.
+The ordering is the guarantee. A caller who gets a 200 knows their event is in
+PostgreSQL. The Redpanda publish is an optimistic best-effort on top of that.
+
+---
 
 ### 1.2 Produce a set of pipeline events via EPR
 
@@ -135,6 +166,8 @@ curl -s -X POST $EPR_URL/api/v1/events \
   }' | jq .
 ```
 
+---
+
 ### 1.3 Verify both stores have the data
 
 EPR's API (backed by PostgreSQL):
@@ -143,6 +176,8 @@ EPR's API (backed by PostgreSQL):
 curl -s "$EPR_URL/api/v1/events?name=service-alpha&version=2.0.0" \
   | jq '[.[] | {type: .payload.type, created_at: .created_at}]'
 ```
+
+---
 
 Redpanda directly:
 
@@ -154,7 +189,8 @@ rpk topic consume epr.events \
   | jq 'select(.name == "service-alpha" and .version == "2.0.0") | .payload.type'
 ```
 
-Both should show three events. The PostgreSQL record came first. The Redpanda message is derived from it.
+Both should show three events. The PostgreSQL record came first. The Redpanda
+message is derived from it.
 
 ---
 
@@ -169,6 +205,8 @@ Stop Redpanda while EPR is still running:
 ```bash
 docker compose stop redpanda
 ```
+
+---
 
 ### 2.2 Write events during the outage
 
@@ -206,7 +244,10 @@ curl -s -X POST $EPR_URL/api/v1/events \
   }' | jq '{id: .id, created_at: .created_at}'
 ```
 
-Both should return 200 with event IDs. The events are in PostgreSQL. Redpanda has no idea they exist yet.
+Both should return 200 with event IDs. The events are in PostgreSQL. Redpanda
+has no idea they exist yet.
+
+---
 
 ### 2.3 Verify the gap
 
@@ -215,6 +256,8 @@ Bring Redpanda back:
 ```bash
 docker compose start redpanda
 ```
+
+---
 
 Check Redpanda — it will be missing `deploy.started` and `deploy.finished`:
 
@@ -226,6 +269,8 @@ rpk topic consume epr.events \
   | jq 'select(.name == "service-alpha") | .payload.type'
 ```
 
+---
+
 Check EPR — all five events present:
 
 ```bash
@@ -233,7 +278,10 @@ curl -s "$EPR_URL/api/v1/events?name=service-alpha&version=2.0.0" \
   | jq '[.[] | .payload.type]'
 ```
 
-This is the gap the write-first architecture protects you from losing. The events exist. They are not gone. They need to be replayed onto the bus.
+This is the gap the write-first architecture protects you from losing. The
+events exist. They are not gone. They need to be replayed onto the bus.
+
+---
 
 ### 2.4 Replay missing events from EPR to Redpanda
 
@@ -398,6 +446,8 @@ if __name__ == "__main__":
     main()
 ```
 
+---
+
 ```bash
 python epr_replay.py
 ```
@@ -412,7 +462,13 @@ rpk topic consume epr.events \
   | jq 'select(.name == "service-alpha") | {type: .payload.type, replayed: .replayed}'
 ```
 
-The `"replayed": true` field lets consumers know these messages came from a replay rather than live production. Idempotent consumers can use this as a signal to skip side-effects they already performed (sending a Slack notification, triggering a deployment) while still updating any local state that needs the event.
+---
+
+The `"replayed": true` field lets consumers know these messages came from a
+replay rather than live production. Idempotent consumers can use this as a
+signal to skip side-effects they already performed (sending a Slack
+notification, triggering a deployment) while still updating any local state that
+needs the event.
 
 ---
 
@@ -420,15 +476,49 @@ The `"replayed": true` field lets consumers know these messages came from a repl
 
 ### 3.1 Why not inject a UUID correlation ID into headers?
 
-The standard distributed tracing approach is to propagate a `correlation-id` or `trace-id` UUID through message headers. This works well for tracing a request through a web service call graph. For a CI/CD provenance system it is the wrong tool, for four concrete reasons.
+The standard distributed tracing approach is to propagate a `correlation-id` or
+`trace-id` UUID through message headers. This works well for tracing a request
+through a web service call graph. For a CI/CD provenance system it is the wrong
+tool, for four concrete reasons.
 
-**A UUID identifies a message instance, not an artifact.** When you replay events from EPR's database to Redpanda — as you just did — every replayed message is a new Kafka message with a new offset. If you were using UUID headers to link events to a build, those links are now broken. The replayed messages have different Kafka offsets, different headers if you re-generated them, and a UUID correlation from "before the outage" means nothing to "after the replay." NVRPP is unchanged. `service-alpha / 2.0.0 / 20250901.1 / linux/amd64 / rpm` is the same before and after replay, before and after any broker failure, before and after any migration.
+---
 
-**UUID tracing requires an external index.** To answer "what happened to service-alpha 2.0.0?" using UUID correlation, you need some mapping from that build's UUID to its downstream events. Either you build a separate correlation service, or you scan Kafka for matching UUIDs. Both are fragile. With NVRPP you query EPR directly — five WHERE clauses, no secondary index, no UUID lookup.
+**A UUID identifies a message instance, not an artifact.** When you replay
+events from EPR's database to Redpanda — as you just did — every replayed
+message is a new Kafka message with a new offset. If you were using UUID headers
+to link events to a build, those links are now broken. The replayed messages
+have different Kafka offsets, different headers if you re-generated them, and a
+UUID correlation from "before the outage" means nothing to "after the replay."
+NVRPP is unchanged. `service-alpha / 2.0.0 / 20250901.1 / linux/amd64 / rpm` is
+the same before and after replay, before and after any broker failure, before
+and after any migration.
 
-**UUID links break across rebuilds.** If service-alpha 2.0.0 is rebuilt because the first build had an infrastructure failure (not a code change), it gets a new UUID. You now have two disconnected UUID traces for the same logical artifact. NVRPP records both build attempts under the same identity — same name, version, platform, package, but different release timestamps — which is exactly the right representation for an audit trail.
+---
 
-**UUIDs require explicit propagation discipline.** Every service in the pipeline must correctly read the UUID from the incoming message and write it to the outgoing message. One service that forgets breaks the chain silently. NVRPP requires no propagation — every EPR event carries the five fields independently because they describe the artifact, not the message.
+**UUID tracing requires an external index.** To answer "what happened to
+service-alpha 2.0.0?" using UUID correlation, you need some mapping from that
+build's UUID to its downstream events. Either you build a separate correlation
+service, or you scan Kafka for matching UUIDs. Both are fragile. With NVRPP you
+query EPR directly — five WHERE clauses, no secondary index, no UUID lookup.
+
+---
+
+**UUID links break across rebuilds.** If service-alpha 2.0.0 is rebuilt because
+the first build had an infrastructure failure (not a code change), it gets a new
+UUID. You now have two disconnected UUID traces for the same logical artifact.
+NVRPP records both build attempts under the same identity — same name, version,
+platform, package, but different release timestamps — which is exactly the right
+representation for an audit trail.
+
+---
+
+**UUIDs require explicit propagation discipline.** Every service in the pipeline
+must correctly read the UUID from the incoming message and write it to the
+outgoing message. One service that forgets breaks the chain silently. NVRPP
+requires no propagation — every EPR event carries the five fields independently
+because they describe the artifact, not the message.
+
+---
 
 ### 3.2 The provenance chain as a query
 
@@ -583,13 +673,19 @@ if __name__ == "__main__":
     main()
 ```
 
+---
+
 ```bash
 python provenance_query.py
 ```
 
+---
+
 ### 3.3 The question NVRPP answers that UUID cannot
 
-Read through these queries and notice what they have in common — none of them mention Kafka, none of them require header inspection, and none of them need a UUID:
+Read through these queries and notice what they have in common — none of them
+mention Kafka, none of them require header inspection, and none of them need a
+UUID:
 
 ```sql
 -- What is the complete pipeline history for this artifact?
@@ -629,13 +725,21 @@ WHERE name='service-alpha' AND version='2.0.0'
 AND   release='20250901.1' AND platform_id='linux/amd64' AND package='rpm';
 ```
 
-Run these against your EPR database. Each one is answerable because every event carries NVRPP. The provenance chain is not constructed by following UUID links — it is implicit in the data model. Every event for an artifact shares the same five fields. A GROUP BY or WHERE clause on those fields assembles the chain.
+---
+
+Run these against your EPR database. Each one is answerable because every event
+carries NVRPP. The provenance chain is not constructed by following UUID links —
+it is implicit in the data model. Every event for an artifact shares the same
+five fields. A GROUP BY or WHERE clause on those fields assembles the chain.
 
 ---
 
 ## Part 4 — Consumer Idempotency Using NVRPP
 
-Because EPR publishes to Redpanda on a best-effort basis and replay is possible, consumers must handle seeing the same event more than once. The correct deduplication key is NVRPP + event type — not the Kafka message offset, not a UUID.
+Because EPR publishes to Redpanda on a best-effort basis and replay is possible,
+consumers must handle seeing the same event more than once. The correct
+deduplication key is NVRPP + event type — not the Kafka message offset, not a
+UUID.
 
 Create `idempotent_consumer.py`:
 
@@ -777,13 +881,19 @@ if __name__ == "__main__":
     main()
 ```
 
-Run it against the topic that now contains both the original three events and the two replayed events:
+---
+
+Run it against the topic that now contains both the original three events and
+the two replayed events:
 
 ```bash
 python idempotent_consumer.py
 ```
 
-The consumer processes each unique NVRPP + event type exactly once, regardless of how many times that combination appears on the topic. The `was_replay` flag lets you audit which processings came from replay vs live production — useful for debugging and compliance reporting.
+The consumer processes each unique NVRPP + event type exactly once, regardless
+of how many times that combination appears on the topic. The `was_replay` flag
+lets you audit which processings came from replay vs live production — useful
+for debugging and compliance reporting.
 
 ---
 
@@ -791,31 +901,53 @@ The consumer processes each unique NVRPP + event type exactly once, regardless o
 
 ### Challenge A: Targeted replay by pipeline stage
 
-Modify `epr_replay.py` to accept a `since_event_type` argument. Instead of replaying all events for an artifact, replay only the events that came after a specific stage. For example: replay everything after `test.passed` for service-alpha 2.0.0. This is useful when a downstream consumer was unavailable for the tail of a pipeline run and you need to replay only what it missed.
+Modify `epr_replay.py` to accept a `since_event_type` argument. Instead of
+replaying all events for an artifact, replay only the events that came after a
+specific stage. For example: replay everything after `test.passed` for
+service-alpha 2.0.0. This is useful when a downstream consumer was unavailable
+for the tail of a pipeline run and you need to replay only what it missed.
+
+---
 
 ### Challenge B: Gap detection
 
-Write `gap_detector.py` that compares EPR's database to Redpanda and reports any events that are in the database but not on the bus. Do this by:
+Write `gap_detector.py` that compares EPR's database to Redpanda and reports any
+events that are in the database but not on the bus. Do this by:
 
 1. Fetching all events from EPR for the last 24 hours grouped by NVRPP
 2. Consuming the Redpanda topic and building the same grouping
-3. Reporting any NVRPP + event type combinations present in EPR but absent from Redpanda
+3. Reporting any NVRPP + event type combinations present in EPR but absent from
+   Redpanda
 
-This is the operational tool you would run after a Redpanda outage to identify what needs replaying.
+This is the operational tool you would run after a Redpanda outage to identify
+what needs replaying.
+
+---
 
 ### Challenge C: Multi-release pipeline coverage report
 
-Write a query that answers: "for the last 10 releases of any service, what percentage reached `deploy.finished`?" Group by service name and show a coverage rate per service. This demonstrates NVRPP as a reporting primitive, not just a tracing primitive.
+Write a query that answers: "for the last 10 releases of any service, what
+percentage reached `deploy.finished`?" Group by service name and show a coverage
+rate per service. This demonstrates NVRPP as a reporting primitive, not just a
+tracing primitive.
+
+---
 
 ### Challenge D: Replay with consumer group reset
 
-When you replay events to Redpanda, existing consumer groups that have already committed offsets past the original messages will not re-consume the replayed messages — they are appended to the end of the topic, so all consumer groups will see them regardless of committed offset. Verify this is true by:
+When you replay events to Redpanda, existing consumer groups that have already
+committed offsets past the original messages will not re-consume the replayed
+messages — they are appended to the end of the topic, so all consumer groups
+will see them regardless of committed offset. Verify this is true by:
 
-1. Running `idempotent_consumer.py` to process the original events (offsets committed)
+1. Running `idempotent_consumer.py` to process the original events (offsets
+   committed)
 2. Running `epr_replay.py` to append the replay
 3. Running `idempotent_consumer.py` again
 
-Confirm that the consumer sees the replayed messages (they are at new, unconsumed offsets) but skips them as duplicates via the NVRPP deduplication table. This is exactly the correct behavior.
+Confirm that the consumer sees the replayed messages (they are at new,
+unconsumed offsets) but skips them as duplicates via the NVRPP deduplication
+table. This is exactly the correct behavior.
 
 ---
 
@@ -835,20 +967,40 @@ rpk topic delete epr.events
 
 ### On EPR's write-first architecture
 
-- EPR writes to PostgreSQL first, publishes to Redpanda second. A 200 response means the event is durably stored in the database — Redpanda is a projection of that truth, not the truth itself.
-- This is the Outbox Pattern implemented inside the EPR server. You get it for free. You do not need to implement it yourself.
-- If Redpanda is unavailable, events still accumulate in EPR's database. When Redpanda recovers, you replay from EPR — targeted, by NVRPP, only what is missing.
+- EPR writes to PostgreSQL first, publishes to Redpanda second. A 200 response
+  means the event is durably stored in the database — Redpanda is a projection
+  of that truth, not the truth itself.
+- This is the Outbox Pattern implemented inside the EPR server. You get it for
+  free. You do not need to implement it yourself.
+- If Redpanda is unavailable, events still accumulate in EPR's database. When
+  Redpanda recovers, you replay from EPR — targeted, by NVRPP, only what is
+  missing.
+
+---
 
 ### On NVRPP as a provenance key
 
-- NVRPP (Name, Version, Release, Platform ID, Package) identifies an artifact. A UUID identifies a message. These answer different questions.
-- The provenance chain is implicit in EPR's data model. Every event for an artifact shares the same five NVRPP fields. No UUID correlation, no header propagation discipline, no secondary index required.
-- NVRPP is replay-proof. A replayed message has the same NVRPP as the original. UUID-based correlation breaks on replay because the Kafka message is new even though the artifact is not.
-- NVRPP is the correct deduplication key for idempotent consumers in an at-least-once system. The composite key `(name, version, release, platform_id, package, event_type)` is all you need.
+- NVRPP (Name, Version, Release, Platform ID, Package) identifies an artifact. A
+  UUID identifies a message. These answer different questions.
+- The provenance chain is implicit in EPR's data model. Every event for an
+  artifact shares the same five NVRPP fields. No UUID correlation, no header
+  propagation discipline, no secondary index required.
+- NVRPP is replay-proof. A replayed message has the same NVRPP as the original.
+  UUID-based correlation breaks on replay because the Kafka message is new even
+  though the artifact is not.
+- NVRPP is the correct deduplication key for idempotent consumers in an
+  at-least-once system. The composite key
+  `(name, version, release, platform_id, package, event_type)` is all you need.
+
+---
 
 ### On the relationship between the two
 
-- Write-first gives you the recovery mechanism. NVRPP gives you the targeting. Together they mean: after any failure, you can identify exactly which events are missing (by querying EPR with NVRPP) and replay exactly those events (by writing them back to Redpanda). No guessing. No full-topic replay. No UUID hunting.
+- Write-first gives you the recovery mechanism. NVRPP gives you the targeting.
+  Together they mean: after any failure, you can identify exactly which events
+  are missing (by querying EPR with NVRPP) and replay exactly those events (by
+  writing them back to Redpanda). No guessing. No full-topic replay. No UUID
+  hunting.
 
 ---
 
@@ -858,3 +1010,5 @@ rpk topic delete epr.events
 - [EPR project — github.com/xbcsmith/epr](https://github.com/xbcsmith/epr)
 - [Redpanda topic replay — rpk topic consume --offset](https://docs.redpanda.com/current/reference/rpk/rpk-topic/rpk-topic-consume/)
 - [PostgreSQL SELECT FOR UPDATE SKIP LOCKED](https://www.postgresql.org/docs/current/sql-select.html#SQL-FOR-UPDATE-SHARE)
+
+---

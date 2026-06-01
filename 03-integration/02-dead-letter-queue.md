@@ -446,7 +446,7 @@ broken events routed to the DLQ with `✗ → DLQ`.
 
 **Expected output:**
 
-```
+```text
 Consuming from: epr.events  →  DLQ: epr.events.dlq
 Consumer group: epr-validator-v1  |  Max retries: 3
 
@@ -719,7 +719,7 @@ built as a starting point.
 
 Implement a two-tier error handling chain:
 
-```
+```text
 epr.events  →  epr.events.retry  →  epr.events.dlq
 ```
 

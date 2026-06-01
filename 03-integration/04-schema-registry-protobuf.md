@@ -23,6 +23,8 @@ This lab walks through defining EPR events in `.proto` files, registering the
 compiled schema with Redpanda's Schema Registry, and building producers and
 consumers that use generated Python classes.
 
+---
+
 ### What you will learn
 
 - How to define EPR events in Protocol Buffers (proto3)
@@ -44,6 +46,8 @@ binary format: field numbers instead of field names, variable-length integers,
 no quotes or braces. A typical EPR event in JSON is ~300 bytes; the same event
 in Protobuf binary is ~80–100 bytes.
 
+---
+
 ### Schema as code
 
 A JSON Schema is a document. A `.proto` file is a program — you compile it and
@@ -51,6 +55,8 @@ get generated classes in your target language. Your Go service gets a Go struct,
 your Python service gets a Python class, your Java service gets a Java class,
 and they all agree on field numbers and types because they were compiled from
 the same source.
+
+---
 
 ### Evolution rules
 
@@ -97,11 +103,15 @@ sudo apt install -y protobuf-compiler
 brew install protobuf
 ```
 
+---
+
 ### 1.2 Create the project structure
 
 ```bash
 mkdir -p proto generated schemas
 ```
+
+---
 
 ### 1.3 Create the lab topic
 
@@ -179,6 +189,8 @@ message EPREvent {
 > intentional — it gives you room to add core fields later without jumping into
 > the less-efficient range.
 
+---
+
 ### 2.2 Compile the .proto file
 
 ```bash
@@ -191,6 +203,8 @@ python -m grpc_tools.protoc \
 ls generated/
 # epr_event_pb2.py
 ```
+
+---
 
 ### 2.3 Verify the generated code
 
@@ -244,6 +258,8 @@ curl -s -X POST \
 
 Expected: `{"id": 10}` (or whatever the next global ID is in your registry).
 
+---
+
 ### 3.2 Extend the schema registry client for Protobuf
 
 Add these methods to `schema_registry.py` from Lab 06:
@@ -270,6 +286,8 @@ def get_protobuf_schema(self, subject: str, version: str = "latest") -> tuple[in
     data = resp.json()
     return data["id"], data["schema"]
 ```
+
+---
 
 ### 3.3 Register and inspect via Python
 
@@ -409,6 +427,8 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+---
 
 Run it and note the byte sizes next to each message — compare them mentally to
 the JSON payloads from Lab 06.
@@ -576,6 +596,8 @@ message EPREvent {
 }
 ```
 
+---
+
 Compile and register:
 
 ```bash
@@ -591,6 +613,8 @@ curl -s -X POST \
   -d "{\"schemaType\": \"PROTOBUF\", \"schema\": $PROTO_V2}" \
   | jq .
 ```
+
+---
 
 ### 6.2 Cross-version compatibility test
 
@@ -686,6 +710,8 @@ if __name__ == "__main__":
 python cross_version_test.py
 ```
 
+---
+
 ### 6.3 The one rule you must never break: field number reuse
 
 Run this in a Python REPL to see what happens when you try to parse string bytes
@@ -717,6 +743,8 @@ print(f"\nCorrect deletion procedure:")
 print(f"  reserved 7;")
 print(f"  reserved \"package\";")
 ```
+
+---
 
 ### 6.4 Size comparison
 
@@ -795,6 +823,8 @@ protoc \
 Write a Go program that produces a `EPREvent` to Redpanda and verify
 `consumer_proto.py` reads it correctly without modification.
 
+---
+
 ### Challenge B: Confluent wire format envelope
 
 The Confluent wire format embeds the schema ID in the first 5 bytes of every
@@ -813,6 +843,8 @@ def decode_with_schema_id(data: bytes) -> tuple[int, bytes]:
     assert magic == 0
     return schema_id, data[5:]
 ```
+
+---
 
 ### Challenge C: Protobuf + DLQ
 
@@ -881,3 +913,5 @@ installed; Python 3.10+ with `kafka-python`, `requests`, `grpcio-tools`, and
 - [Protocol Buffers Language Guide (proto3)](https://protobuf.dev/programming-guides/proto3/)
 - [grpc_tools Python package](https://pypi.org/project/grpcio-tools/)
 - [Protobuf Style Guide](https://protobuf.dev/programming-guides/style/)
+
+---

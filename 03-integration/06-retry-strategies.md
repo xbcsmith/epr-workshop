@@ -54,6 +54,8 @@ rpk topic create pipeline.events.dlq \
   --topic-config retention.ms=604800000 # 7 days
 ```
 
+---
+
 ### 1.2 Create a shared producer
 
 Create `producer.py` — produces a controlled mix of events that will succeed,
@@ -132,6 +134,8 @@ Do not use it when:
 A good rule of thumb: immediate retry with N ≤ 3 for infrastructure-level errors
 (connection reset, timeout). Anything that needs more than 3 immediate retries
 is not a transient blip — use backoff instead.
+
+---
 
 Create `consumer_immediate_retry.py`:
 
@@ -269,6 +273,8 @@ if __name__ == "__main__":
     main()
 ```
 
+---
+
 Run the producer, then the consumer:
 
 ```bash
@@ -288,7 +294,7 @@ straight to the DLQ without burning retry attempts. The `service-b` and
 Exponential backoff introduces a delay between retry attempts that grows with
 each failure. The formula is:
 
-```
+```text
 delay = base_delay * (2 ^ attempt) + jitter
 ```
 
@@ -300,6 +306,8 @@ to reach.
 Backoff is appropriate when the failure is caused by a service under load or a
 resource constraint that needs time to recover. You are giving the system
 breathing room rather than hammering it harder.
+
+---
 
 Create `consumer_backoff.py`:
 
@@ -434,6 +442,8 @@ if __name__ == "__main__":
     main()
 ```
 
+---
+
 ```bash
 python consumer_backoff.py
 ```
@@ -461,7 +471,9 @@ separate topic with a delay baked in. The original consumer is unblocked
 immediately. A dedicated retry consumer reads the retry topic and re-attempts
 processing after the delay has elapsed.
 
-```
+---
+
+```text
 pipeline.events ──► consumer ──► (failure) ──► pipeline.events.retry
                                                         │
                                               (wait N seconds/minutes)
@@ -472,6 +484,8 @@ pipeline.events ──► consumer ──► (failure) ──► pipeline.events
                                             failure ──► pipeline.events.dlq
 ```
 
+---
+
 The retry topic approach is right when:
 
 - The delay needed is longer than you are willing to block a consumer thread (>
@@ -480,6 +494,8 @@ The retry topic approach is right when:
   in several minutes
 - You want retry processing to be independently scalable and observable from the
   primary consumer
+
+---
 
 Create `consumer_retry_topic.py`:
 
@@ -607,6 +623,8 @@ if __name__ == "__main__":
     main()
 ```
 
+---
+
 Now create the retry consumer that re-attempts with a delay:
 
 ```python
@@ -721,6 +739,8 @@ if __name__ == "__main__":
     main()
 ```
 
+---
+
 Run all three in separate terminals:
 
 ```bash
@@ -749,6 +769,8 @@ Answer: Immediate retry (N=2 or 3). The failure resolves in milliseconds.
 Backoff is overkill. The retry topic adds unnecessary infrastructure for a
 sub-second transient.
 
+---
+
 **Scenario 2:** Your watcher consumer calls an external vulnerability scanning
 API. The API enforces rate limits — 100 requests per minute. When the limit is
 hit it returns HTTP 429.
@@ -757,6 +779,8 @@ Answer: Exponential backoff. A 429 tells you exactly why it failed and that
 waiting will fix it. The delay needs to be long enough for the rate limit window
 to reset, so backoff to a maximum of 60-90 seconds is appropriate.
 
+---
+
 **Scenario 3:** Your consumer triggers a deployment pipeline in an external
 system. That system is undergoing a maintenance window for the next 30 minutes.
 
@@ -764,6 +788,8 @@ Answer: Retry topic with a long delay (e.g. RETRY_DELAY = 600 seconds). Blocking
 a consumer thread for 30 minutes is unacceptable. The retry topic lets the
 primary consumer continue processing other messages while the deployment
 messages wait.
+
+---
 
 **Scenario 4:** Your consumer receives a message with `artifact_sha: null`.
 
@@ -786,12 +812,16 @@ Combine all three strategies in a single consumer. The consumer should:
 This is the production pattern: a cascade of increasingly expensive strategies,
 each triggered only when the cheaper one is exhausted.
 
+---
+
 ### Challenge B: Retry topic with delay enforcement
 
 The retry consumer currently sleeps for a fixed `RETRY_DELAY`. A more robust
 implementation uses the `retry.queued_at` header to calculate how much time has
 actually elapsed and only sleeps the remaining duration. Implement this so the
 retry consumer is correct even if it restarts partway through the delay period.
+
+---
 
 ### Challenge C: Classify your own errors
 
@@ -828,3 +858,5 @@ Compose; Python 3.10+ with `kafka-python` installed.
   net underneath all of them, not a competing approach.
 - The retry topic pattern pairs directly with the DLQ lab (Lab 05). The two
   together form a complete error-handling system.
+
+---

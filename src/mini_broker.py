@@ -39,7 +39,12 @@ async def main():
         "type": "dev.cdevents.artifact.packaged.0.2.0",
         "subject": "registry.example.com/my-app:abc123",
         "time": datetime.utcnow().isoformat() + "Z",
-        "data": {"artifact": {"id": "registry.example.com/my-app:abc123", "digest": "sha256:aaaaaaaa..."}},
+        "data": {
+            "artifact": {
+                "id": "registry.example.com/my-app:abc123",
+                "digest": "sha256:aaaaaaaa...",
+            }
+        },
     }
 
     await broker.publish(event)

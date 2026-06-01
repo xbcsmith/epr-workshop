@@ -14,6 +14,8 @@ There are three levels:
 | At-least-once | Messages are never lost, may be duplicated | `acks=all`, retries > 0                |
 | Exactly-once  | Messages are never lost, never duplicated  | `enable_idempotence=True` + `acks=all` |
 
+---
+
 Most pipelines that think they have at-least-once actually have at-most-once
 because they haven't set `acks=all`. Most pipelines that think they have
 exactly-once actually have at-least-once because they haven't enabled
@@ -43,6 +45,8 @@ Producer                    Redpanda broker
    │                              │ (writes AGAIN — duplicate!)
    │◄─── ProduceResponse ─────────│
 ```
+
+---
 
 The broker wrote the message successfully both times. The producer had no way to
 know the first write succeeded because the response was lost. Without
@@ -140,9 +144,13 @@ if __name__ == "__main__":
     main()
 ```
 
+---
+
 ```bash
 python producer_at_least_once.py
+```
 
+```bash
 rpk topic consume delivery.demo \
   --brokers localhost:9092 \
   --offset start \
@@ -265,6 +273,8 @@ producer sent a message and died before confirming it, and the new producer
 re-sends it, the broker sees it as a new message from a new producer and accepts
 it.
 
+---
+
 Demonstrate this:
 
 ```python
@@ -322,9 +332,13 @@ if __name__ == "__main__":
     main()
 ```
 
+---
+
 ```bash
 python session_boundary.py
+```
 
+```bash
 rpk topic consume delivery.demo \
   --brokers localhost:9092 \
   --offset start \
@@ -347,6 +361,8 @@ new session begins cleanly.
 
 Transactions also add atomicity: you can send to multiple partitions or topics
 and guarantee that either all messages commit or none do.
+
+---
 
 Create `producer_transactional.py`:
 
@@ -452,12 +468,16 @@ if __name__ == "__main__":
     main()
 ```
 
+---
+
 ```bash
 rpk topic delete delivery.demo
 rpk topic create delivery.demo --partitions 1 --replicas 1
 
 python producer_transactional.py
 ```
+
+---
 
 ### 5.1 Read with `read_committed` isolation
 
@@ -492,6 +512,8 @@ for record in consumer:
 consumer.close()
 ```
 
+---
+
 ```bash
 python consumer_read_committed.py
 ```
@@ -515,6 +537,8 @@ you might briefly see it.
 Do not override these manually when idempotence is enabled. Setting `retries=0`
 with `enable_idempotence=True` raises a `KafkaConfigurationError`.
 
+---
+
 ### When to use each level
 
 | You need                                      | Use                                           |
@@ -524,6 +548,8 @@ with `enable_idempotence=True` raises a `KafkaConfigurationError`.
 | No loss, no duplicate within a session        | `enable_idempotence=True`                     |
 | No loss, no duplicate across process restarts | `transactional_id=<stable-id>`                |
 | Atomic write to multiple topics               | `transactional_id=<stable-id>` + transactions |
+
+---
 
 ### The consumer-side requirement
 
@@ -552,6 +578,8 @@ Modify `producer_transactional.py` to write to both `delivery.demo` and
 that neither topic has the aborted messages by consuming both with
 `read_committed` isolation.
 
+---
+
 ### Challenge B: Producer epoch fencing
 
 Run `producer_transactional.py` once to completion. Then modify it to simulate a
@@ -560,6 +588,8 @@ producer instance with the same `transactional_id` before the first commits.
 Observe the `ProducerFencedException` that the first instance receives — this is
 the broker fencing the old session to prevent the zombie from committing stale
 data.
+
+---
 
 ### Challenge C: Measure the cost of idempotence
 
@@ -607,3 +637,5 @@ Compose; Python 3.10+ with `kafka-python` installed.
 - Application-level re-sends (calling `producer.send()` twice from your own
   code) are never deduplicated — they are new messages to the broker regardless
   of idempotence settings.
+
+---

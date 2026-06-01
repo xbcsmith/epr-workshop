@@ -16,6 +16,8 @@ API. The API goes down. Without a circuit breaker, your consumer:
 5. Routes to DLQ
 6. Receives the next message and starts over
 
+---
+
 With 1,000 messages in the queue and a 30-second timeout, your consumer is
 effectively frozen for 8+ hours burning retries that will all fail. The queue
 fills up. Consumer lag climbs. Every service watching this pipeline stops seeing
@@ -26,6 +28,8 @@ opens — subsequent calls fail immediately without hitting the broken dependenc
 After a recovery timeout it enters half-open state, allowing one test call. If
 that succeeds, it closes and normal processing resumes. If it fails, it opens
 again.
+
+---
 
 ```text
        failures ≥ threshold          test call fails
@@ -171,6 +175,8 @@ class CircuitBreaker:
                 f"failures={self._failure_count})")
 ```
 
+---
+
 ### 2.1 Exercise the state machine
 
 Create `cb_demo.py`:
@@ -249,6 +255,8 @@ Now integrate the circuit breaker into a Kafka consumer. The integration has two
 parts: wrapping the downstream call, and deciding what to do with messages when
 the circuit is open.
 
+---
+
 When the circuit opens, you have two options:
 
 1. **Pause and wait** — stop consuming, sleep until the circuit closes or
@@ -259,9 +267,13 @@ When the circuit opens, you have two options:
    later. Consumer lag stays low but requires the retry infrastructure from
    Lab 09.
 
+---
+
 This lab implements option 1 (pause-and-wait) because it is simpler and correct
 for most CI/CD pipeline workloads, where it is better to queue up and wait than
 to route events in a non-standard order.
+
+---
 
 Create `consumer_circuit_breaker.py`:
 
@@ -458,6 +470,8 @@ if __name__ == "__main__":
     main()
 ```
 
+---
+
 ### 3.1 Produce test messages
 
 Create `producer.py` for this lab:
@@ -499,6 +513,8 @@ finally:
     producer.close()
 ```
 
+---
+
 Run in two terminals:
 
 ```bash
@@ -508,6 +524,8 @@ python producer.py
 # Terminal 2
 python consumer_circuit_breaker.py
 ```
+
+---
 
 Watch the sequence of events:
 
@@ -707,6 +725,8 @@ if __name__ == "__main__":
     main()
 ```
 
+---
+
 ```bash
 python consumer_pybreaker.py
 ```
@@ -743,6 +763,8 @@ of 1 before closing from half-open. This means three consecutive successful
 probe calls are required before the circuit fully closes. Demonstrate the
 behavior — the circuit should re-open if any of those three probe calls fail.
 
+---
+
 ### Challenge B: Circuit breaker metrics
 
 Extend `PipelineCircuitListener` to track:
@@ -755,6 +777,8 @@ Extend `PipelineCircuitListener` to track:
 Print a summary when the consumer shuts down. This is the data you would push to
 Prometheus in production.
 
+---
+
 ### Challenge C: Per-partition circuit breaker
 
 The consumers in this lab use a single circuit breaker for all partitions. In a
@@ -762,6 +786,8 @@ multi-partition topic, a broken partition (e.g. due to a corrupt message on
 partition 2) should not open the circuit for partitions 0 and 1. Implement a
 per-partition circuit breaker map and demonstrate that an error isolated to one
 partition does not affect processing on others.
+
+---
 
 ### Challenge D: Redis-backed state for multi-instance consumers
 
@@ -823,3 +849,5 @@ Compose; Python 3.10+ with `kafka-python` and `pybreaker` installed.
 - Circuit breakers and retry strategies are complementary. Retries handle
   individual message failures. Circuit breakers handle systemic dependency
   failures. Use both.
+
+---

@@ -20,6 +20,8 @@ Redpanda ships a built-in Schema Registry that is fully compatible with the
 Confluent Schema Registry API. It runs alongside the broker with no additional
 infrastructure.
 
+---
+
 ### What you will learn
 
 - How the Redpanda Schema Registry API works
@@ -39,6 +41,8 @@ When schema knowledge lives in consumer code, every schema change requires a
 coordinated deployment of all consumers before the producer can ship. In a CI/CD
 pipeline with dozens of microservices this is operationally painful and
 error-prone.
+
+---
 
 ### The registry model
 
@@ -60,6 +64,8 @@ Subject: epr.events-value
   version 3  →  schema_id 9  →  { added required 'pipeline_id' field }
                                   ↑ this might be REJECTED depending on compat mode
 ```
+
+---
 
 ### Compatibility modes
 
@@ -98,6 +104,8 @@ A 200 with an empty body is healthy. If you get a connection refused, check your
 Docker Compose setup — the Schema Registry port is `8081` by default in
 Redpanda's Docker configuration.
 
+---
+
 ### 1.2 List existing subjects
 
 ```bash
@@ -105,6 +113,8 @@ curl -s http://localhost:8081/subjects | jq .
 ```
 
 At this point you should see an empty array `[]`.
+
+---
 
 ### 1.3 Check global compatibility setting
 
@@ -114,6 +124,8 @@ curl -s http://localhost:8081/config | jq .
 
 The default global compatibility is `BACKWARD`. You can override this per
 subject.
+
+---
 
 ### 1.4 Create the lab topic
 
@@ -145,6 +157,8 @@ From previous labs, a valid EPR event looks like this:
   "package": "rpm"
 }
 ```
+
+---
 
 ### 2.2 Create the initial schema file
 
@@ -232,6 +246,8 @@ Create `schemas/epr_event_v1.json`:
 > auditable, strict mode is correct. Schema evolution (adding new fields) is the
 > designed mechanism for growth.
 
+---
+
 ### 2.3 Register the schema
 
 ```bash
@@ -254,6 +270,8 @@ You should receive:
 That `id` is the globally unique schema ID. It never changes for this exact
 schema, even if you re-register it.
 
+---
+
 ### 2.4 Verify registration
 
 ```bash
@@ -267,6 +285,8 @@ curl -s http://localhost:8081/subjects/epr.events-value/versions/latest | jq .
 curl -s http://localhost:8081/subjects/epr.events-value/versions/latest \
   | jq '.schema | fromjson'
 ```
+
+---
 
 ### 2.5 Create a schema registry client module
 
@@ -486,6 +506,8 @@ if __name__ == "__main__":
     main()
 ```
 
+---
+
 Run it:
 
 ```bash
@@ -580,6 +602,8 @@ if __name__ == "__main__":
     main()
 ```
 
+---
+
 Run it in a second terminal while the producer is running:
 
 ```bash
@@ -594,6 +618,8 @@ This is where schema registry becomes genuinely powerful. You will register
 three new versions of the EPR event schema and observe how compatibility mode
 controls what is and is not allowed.
 
+---
+
 ### 5.1 Set compatibility mode for the subject
 
 ```bash
@@ -604,6 +630,8 @@ curl -s -X PUT \
   -d '{"compatibility": "BACKWARD"}' \
   | jq .
 ```
+
+---
 
 ### 5.2 Create a BACKWARD-compatible schema (adding an optional field)
 
@@ -662,6 +690,8 @@ Create `schemas/epr_event_v2.json` — adds an optional `build_duration_ms` fiel
 }
 ```
 
+---
+
 Test compatibility before registering:
 
 ```bash
@@ -674,6 +704,8 @@ curl -s -X POST \
 
 Expected: `{"is_compatible": true}`
 
+---
+
 Register it:
 
 ```bash
@@ -683,6 +715,8 @@ curl -s -X POST \
   -d "{\"schemaType\": \"JSON\", \"schema\": $(cat schemas/epr_event_v2.json | jq -c .)}" \
   | jq .
 ```
+
+---
 
 ### 5.3 Attempt a BACKWARD-incompatible change (adding a required field)
 
@@ -742,6 +776,8 @@ field:
 }
 ```
 
+---
+
 Test compatibility — this should be rejected:
 
 ```bash
@@ -751,6 +787,8 @@ curl -s -X POST \
   -d "{\"schemaType\": \"JSON\", \"schema\": $(cat schemas/epr_event_v3_breaking.json | jq -c .)}" \
   | jq .
 ```
+
+---
 
 Expected: `{"is_compatible": false}`
 
@@ -766,6 +804,8 @@ curl -s -X POST \
 
 Expected: a `409 Conflict` error. The registry refuses the registration. Your
 pipeline is protected.
+
+---
 
 ### 5.4 The correct way to add `pipeline_id`
 
@@ -824,6 +864,8 @@ Create `schemas/epr_event_v3.json`:
 }
 ```
 
+---
+
 Verify and register:
 
 ```bash
@@ -841,6 +883,8 @@ curl -s -X POST \
   | jq .
 # Expected: {"id": 3}
 ```
+
+---
 
 ### 5.5 Inspect the version history
 
@@ -1019,6 +1063,8 @@ if __name__ == "__main__":
     main()
 ```
 
+---
+
 Run it:
 
 ```bash
@@ -1049,6 +1095,8 @@ curl -s -X PUT \
   -d '{"compatibility": "FULL"}' | jq .
 ```
 
+---
+
 ### Challenge B: Schema ID in message headers
 
 Modify `producer_validated.py` to embed the schema ID in a Kafka message header
@@ -1058,6 +1106,8 @@ version. This lets the consumer validate each message against the schema it was
 actually produced with — which matters when you're replaying historical messages
 from a topic with long retention.
 
+---
+
 ### Challenge C: New event type via enum evolution
 
 The `type` field in the EPR schema uses `enum`. You need to add a new event
@@ -1066,6 +1116,8 @@ type: `"scan.completed"` for security scanning results. Try to add it under
 when an old consumer that only knows about the original enum values receives a
 message with `"scan.completed"`.) Document your findings and propose the correct
 migration strategy.
+
+---
 
 ### Challenge D: Write a schema linter
 
@@ -1117,3 +1169,5 @@ running with Schema Registry enabled; Python 3.10+ with `kafka-python`,
 - The DLQ from Lab 05 and the schema registry form a complete error-handling
   system: the registry prevents most bad messages at source, and the DLQ catches
   the ones that slip through.
+
+---

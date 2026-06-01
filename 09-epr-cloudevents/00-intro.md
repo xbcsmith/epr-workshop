@@ -1,6 +1,6 @@
-## Intro to CloudEvents
+# Intro to CloudEvents
 
-# CloudEvents Technical Introduction
+## CloudEvents Technical Introduction
 
 ## Overview
 
