@@ -186,8 +186,7 @@ own service details.
 
 ---
 
-1. **Test Completed Event:**
-
+2. **Test Completed Event:**
    ```json
    {
      "context": {
