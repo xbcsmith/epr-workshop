@@ -105,7 +105,7 @@ cd ./src
 ```
 
 ```bash
-echo "{\"name\": \"epr\",\"version\": \"1.0.1\",\"release\": \"2023.11.16\",\"platform_id\": \"aarch64-gnu-linux-7\",\"package\": \"oci\",\"description\": \"scan source code for OCI image EPR\",\"payload\": $(cat sbom.json),\"success\": true,\"event_receiver_id\": \"01K61EV37TXW0FT1EC6ANC86K9\"}" | jq > sbom_event.json
+echo "{\"name\": \"epr\",\"version\": \"1.0.1\",\"release\": \"2023.11.16\",\"platform_id\": \"aarch64-gnu-linux-7\",\"package\": \"oci\",\"description\": \"scan source code for OCI image EPR\",\"payload\": $(cat sbom.json),\"success\": true,\"event_receiver_id\": \"01K6BCK88R99PBH8CA5SEDZFXX\"}" | jq > sbom_event.json
 ```
 
 ---

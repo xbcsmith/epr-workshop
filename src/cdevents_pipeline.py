@@ -30,7 +30,9 @@ class CDEventContext:
         if not self.chainId:
             self.chainId = str(uuid.uuid4())
         if not self.timestamp:
-            self.timestamp = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+            self.timestamp = (
+                datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+            )
 
 
 @dataclass
@@ -105,13 +107,20 @@ class RepositoryService:
 
     async def simulate_code_push(self, repo_url: str, commit_sha: str):
         """Simulate a code push event"""
-        context = CDEventContext(source="/event/source/git", type="dev.cdevents.repository.modified.0.2.0")
+        context = CDEventContext(
+            source="/event/source/git", type="dev.cdevents.repository.modified.0.2.0"
+        )
 
         subject = CDEventSubject(
             id=f"repo/{commit_sha}",
             source="/event/source/git",
             type="repository",
-            content={"name": "my-app", "owner": "my-org", "url": repo_url, "viewUrl": repo_url},
+            content={
+                "name": "my-app",
+                "owner": "my-org",
+                "url": repo_url,
+                "viewUrl": repo_url,
+            },
         )
 
         event = CDEvent(context, subject)
@@ -127,12 +136,16 @@ class BuildService:
 
     async def initialize(self):
         """Initialize subscriptions"""
-        await self.broker.subscribe(["dev.cdevents.repository.modified.0.2.0"], self.handle_repository_change)
+        await self.broker.subscribe(
+            ["dev.cdevents.repository.modified.0.2.0"], self.handle_repository_change
+        )
 
     async def handle_repository_change(self, event: CDEvent):
         """Handle repository change events"""
         logger.info(f"Build service handling repository change: {event.subject.id}")
-        await self.start_build(event.subject.content["url"], event.subject.id, event.context.chainId)
+        await self.start_build(
+            event.subject.content["url"], event.subject.id, event.context.chainId
+        )
 
     async def start_build(self, repo_url: str, repo_id: str, chain_id: str):
         """Start container build process"""
@@ -153,7 +166,10 @@ class BuildService:
         )
 
         subject = CDEventSubject(
-            id=f"build/{build_id}", source="/event/source/build", type="build", content={"artifactId": artifact_id}
+            id=f"build/{build_id}",
+            source="/event/source/build",
+            type="build",
+            content={"artifactId": artifact_id},
         )
 
         await self.broker.publish(CDEvent(context, subject))
@@ -168,7 +184,9 @@ class SecurityScanService:
 
     async def initialize(self):
         """Initialize subscriptions"""
-        await self.broker.subscribe(["dev.cdevents.build.finished.0.2.0"], self.handle_build_finished)
+        await self.broker.subscribe(
+            ["dev.cdevents.build.finished.0.2.0"], self.handle_build_finished
+        )
 
     async def handle_build_finished(self, event: CDEvent):
         """Handle build finished events"""
@@ -187,7 +205,9 @@ class SecurityScanService:
 
         # Emit test finished event
         context = CDEventContext(
-            source="/event/source/security", type="dev.cdevents.testsuiterun.finished.0.2.0", chainId=chain_id
+            source="/event/source/security",
+            type="dev.cdevents.testsuiterun.finished.0.2.0",
+            chainId=chain_id,
         )
 
         subject = CDEventSubject(
@@ -213,7 +233,9 @@ class DeploymentService:
 
     async def initialize(self):
         """Initialize subscriptions"""
-        await self.broker.subscribe(["dev.cdevents.testsuiterun.finished.0.2.0"], self.handle_test_finished)
+        await self.broker.subscribe(
+            ["dev.cdevents.testsuiterun.finished.0.2.0"], self.handle_test_finished
+        )
 
     async def handle_test_finished(self, event: CDEvent):
         """Handle test completion events"""
@@ -232,7 +254,9 @@ class DeploymentService:
 
         # Emit deployment finished event
         context = CDEventContext(
-            source="/event/source/deployment", type="dev.cdevents.service.deployed.0.2.0", chainId=chain_id
+            source="/event/source/deployment",
+            type="dev.cdevents.service.deployed.0.2.0",
+            chainId=chain_id,
         )
 
         subject = CDEventSubject(
@@ -275,7 +299,9 @@ class PipelineOrchestrator:
         await self.initialize()
 
         # Simulate code push - this should trigger the entire pipeline
-        await self.repository_service.simulate_code_push("https://git.example.com/my-org/my-app", "abc123def456")
+        await self.repository_service.simulate_code_push(
+            "https://git.example.com/my-org/my-app", "abc123def456"
+        )
 
         # Wait for pipeline to complete - increased time to allow all async operations
         await asyncio.sleep(10)

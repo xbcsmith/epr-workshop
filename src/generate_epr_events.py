@@ -17,11 +17,13 @@ import ulid
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 def debug_except_hook(type, value, tb):
     print(f"epr python hates {type.__name__}")
     print(str(type))
     import pdb
     import traceback
+
     traceback.print_exception(type, value, tb)
     pdb.post_mortem(tb)
 
@@ -29,8 +31,7 @@ def debug_except_hook(type, value, tb):
 debug = os.environ.get("EPR_DEBUG", False)
 if debug:
     sys.excepthook = debug_except_hook
-    logger.setLevel(logging.DEBUG)# Set up logging
-
+    logger.setLevel(logging.DEBUG)  # Set up logging
 
 
 # Function to generate a ULID
@@ -74,7 +75,13 @@ def generate_event_receivers() -> List[Dict[str, Any]]:
         name = "-".join(event_type.split(".")[:-3])
         version = ".".join(event_type.split(".")[-3:])
         description = " ".join(event_type.split(".")[:-3]).title()
-        evr = dict(name=name, version=version, description=description, type=event_type, schema={})
+        evr = dict(
+            name=name,
+            version=version,
+            description=description,
+            type=event_type,
+            schema={},
+        )
         event_receivers.append(evr)
     return event_receivers
 
@@ -115,7 +122,9 @@ def generate_events(evrs: Dict[str, Dict[str, Any]]) -> List[Dict[str, Any]]:
             ev_id = generate_ulid()
             ts = get_current_timestamp()
             subject_type = event_type.split(".")[2].strip()
-            event_receiver_id = evrs.get(event_type, {}).get("data", "<replace_with_evr_id>")
+            event_receiver_id = evrs.get(event_type, {}).get(
+                "data", "<replace_with_evr_id>"
+            )
             if subject_type == "testsuiterun":
                 subject_type = "testSuiteRun"
             elif subject_type == "testcaserun":
@@ -131,7 +140,10 @@ def generate_events(evrs: Dict[str, Dict[str, Any]]) -> List[Dict[str, Any]]:
             }
 
             # Build subject content by event/subject type
-            if "pipelinerun.started" in event_type or "pipelinerun.queued" in event_type:
+            if (
+                "pipelinerun.started" in event_type
+                or "pipelinerun.queued" in event_type
+            ):
                 subject = {
                     "id": subject_base_id,
                     "type": "pipelineRun",
@@ -181,7 +193,7 @@ def generate_events(evrs: Dict[str, Dict[str, Any]]) -> List[Dict[str, Any]]:
                 subject = {
                     "id": subject_base_id,
                     "type": "build",
-                    "source":  f"https://git.example/{name}.git",
+                    "source": f"https://git.example/{name}.git",
                     "content": {
                         "artifactId": artifact_id,
                     },
@@ -190,20 +202,20 @@ def generate_events(evrs: Dict[str, Dict[str, Any]]) -> List[Dict[str, Any]]:
                     subject["content"]["artifactId"] = artifact_id
             elif "testcaserun" in event_type:
                 subject = {
-                            "id": "myTestCaseRun123",
-                            "source":  f"https://git.example/{name}.git",
-                            "type": "testCaseRun",
-                            "content": {
-                                "outcome": "pass",
-                            "environment": {"id": env_id, "source": source},
-                            "testCase": {
-                                "id": generate_ulid(),
-                                "version": "1.0",
-                                "name": f"{name} integration test case",
-                                "type": "integration"
-                            }
-                            }
-                        }
+                    "id": "myTestCaseRun123",
+                    "source": f"https://git.example/{name}.git",
+                    "type": "testCaseRun",
+                    "content": {
+                        "outcome": "pass",
+                        "environment": {"id": env_id, "source": source},
+                        "testCase": {
+                            "id": generate_ulid(),
+                            "version": "1.0",
+                            "name": f"{name} integration test case",
+                            "type": "integration",
+                        },
+                    },
+                }
             elif "testsuiterun" in event_type:
                 subject = {
                     "id": subject_base_id,
@@ -240,12 +252,23 @@ def generate_events(evrs: Dict[str, Dict[str, Any]]) -> List[Dict[str, Any]]:
                 subject = {"id": subject_base_id, "type": subject_type, "content": {}}
 
             event_template: Dict[str, Any] = {"context": context, "subject": subject}
-            ev = dict(name=name, version="1.0.0", release=release, platform_id="x64-linux-oci-2", package="oci", description=f"{name} {event_type}", payload=event_template, success=True, event_receiver_id=event_receiver_id)
+            ev = dict(
+                name=name,
+                version="1.0.0",
+                release=release,
+                platform_id="x64-linux-oci-2",
+                package="oci",
+                description=f"{name} {event_type}",
+                payload=event_template,
+                success=True,
+                event_receiver_id=event_receiver_id,
+            )
             # debug output to stdout for visibility when running interactively
             logger.debug(json.dumps(ev, indent=2))
             events.append(ev)
 
     return events
+
 
 def post(url, data, headers=None, timeout=10.0):
     try:
@@ -260,7 +283,9 @@ def post(url, data, headers=None, timeout=10.0):
         print(f"Request failed: {e}")
         raise
 
-def post_event_receiver(evr: Dict[str, Any],
+
+def post_event_receiver(
+    evr: Dict[str, Any],
     url: str = "http://localhost:8042",
     timeout: float = 10.0,
 ) -> httpx.Response:
@@ -272,6 +297,7 @@ def post_event_receiver(evr: Dict[str, Any],
     endpoint = f"{url}/api/v1/receivers"
     resp = post(endpoint, data=evr, headers=headers, timeout=timeout)
     return resp
+
 
 def post_event(
     event: Dict[str, Any],
@@ -287,6 +313,7 @@ def post_event(
     resp = post(endpoint, data=event, headers=headers, timeout=timeout)
     return resp
 
+
 def post_event_receivers(
     evrs: List[Dict[str, Any]],
     url: str = "http://localhost:8042",
@@ -299,7 +326,7 @@ def post_event_receivers(
     for evr in evrs:
         try:
             resp = post_event_receiver(evr, url=url, timeout=timeout)
-            data=json.loads(resp.text)
+            data = json.loads(resp.text)
             _id = data.get("data", "<no_id_returned>")
             results[evr["type"]] = dict(status=resp.status_code, data=_id)
         except Exception as e:
@@ -353,7 +380,9 @@ def main() -> None:
         default="http://localhost:8042",
         help="Webhook URL",
     )
-    parser.add_argument("--timeout", "-t", type=float, default=10.0, help="Request timeout in seconds")
+    parser.add_argument(
+        "--timeout", "-t", type=float, default=10.0, help="Request timeout in seconds"
+    )
     parser.add_argument(
         "--dry-run",
         action="store_true",
@@ -372,7 +401,9 @@ def main() -> None:
     event_receivers = generate_event_receivers()
     evr_results = {}
     if not args.dry_run:
-        print(f"Posting {len(event_receivers)} event receivers to {url}/api/v1/receivers")
+        print(
+            f"Posting {len(event_receivers)} event receivers to {url}/api/v1/receivers"
+        )
         evr_results = post_event_receivers(event_receivers, url=url, timeout=timeout)
     else:
         print("Dry run: curl commands for event receivers:")
@@ -383,7 +414,7 @@ def main() -> None:
     if not args.dry_run:
         for evr_type, result in evr_results.items():
             status = result.get("status")
-            status_str = str(status) if status is not None else "ERROR" 
+            status_str = str(status) if status is not None else "ERROR"
             print(f"{evr_type}: {status_str}")
     events = generate_events(evrs=evr_results)
     if args.write_to_disk:
@@ -400,7 +431,9 @@ def main() -> None:
             with open(filename, "w") as f:
                 json.dump(event, f, indent=2)
             print(f"Wrote event {event['payload']['context']['id']} to {filename}")
-        print(f"Wrote {len(events)} events to disk in the 'epr_reports/events' directory")
+        print(
+            f"Wrote {len(events)} events to disk in the 'epr_reports/events' directory"
+        )
         # Write curl commands
         with open("epr_reports/curl_commands_event_receivers.txt", "w") as f:
             for evr in event_receivers:
@@ -410,7 +443,9 @@ def main() -> None:
             for event in events:
                 curl = make_curl_command(event, f"{url}/api/v1/events")
                 f.write(curl + "\n")
-        print("Wrote curl commands to epr_reports/curl_commands_event_receivers.txt and epr_reports/curl_commands_events.txt")
+        print(
+            "Wrote curl commands to epr_reports/curl_commands_event_receivers.txt and epr_reports/curl_commands_events.txt"
+        )
     if args.dry_run:
         print("Dry run: curl commands for events:")
         for event in events:

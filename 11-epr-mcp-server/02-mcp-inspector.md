@@ -1,6 +1,6 @@
 # MCP Inspector
 
-# Inspector
+## Inspector
 
 Quickstart guide to using the MCP Inspector for testing and debugging Model
 Context Protocol servers
@@ -101,7 +101,7 @@ Arguments: `run -i --rm --network=host epr-mcp-server:latest`
 Environment Variable:
 
 - EPR_URL
-- http://localhost:8042
+- <http://localhost:8042>
 
 ---
 

@@ -75,7 +75,10 @@ def generate_events() -> List[Dict[str, Any]]:
             }
 
             # Build subject content by event/subject type
-            if "pipelinerun.started" in event_type or "pipelinerun.queued" in event_type:
+            if (
+                "pipelinerun.started" in event_type
+                or "pipelinerun.queued" in event_type
+            ):
                 subject = {
                     "id": subject_base_id,
                     "type": "pipelineRun",
@@ -242,7 +245,9 @@ def main() -> None:
         default="http://localhost:8080/webhook/000-cdevents",
         help="Webhook URL",
     )
-    parser.add_argument("--timeout", "-t", type=float, default=10.0, help="Request timeout in seconds")
+    parser.add_argument(
+        "--timeout", "-t", type=float, default=10.0, help="Request timeout in seconds"
+    )
     parser.add_argument(
         "--dry-run",
         action="store_true",
@@ -261,7 +266,9 @@ def main() -> None:
     write_to_disk = args.write_to_disk
 
     events = generate_events()
-    print(f"Generated {len(events)} events, url={url}, dry_run={dry_run}, write_to_disk={write_to_disk}")
+    print(
+        f"Generated {len(events)} events, url={url}, dry_run={dry_run}, write_to_disk={write_to_disk}"
+    )
 
     if dry_run:
         for ev in events:

@@ -17,14 +17,14 @@ software packages.
 
 ### Development Tools Installation
 
-**Install Docker and Docker Compose**
+#### Install Docker and Docker Compose
 
 - Configure Docker Desktop for cross-platform container development
 - Set up Docker Compose for multi-service orchestration
 - Learn container cleanup and management best practices
 - Configure proper permissions for non-root Docker usage on Linux
 
-**Install Go Programming Language**
+#### Install Go Programming Language
 
 - Set up Go development environment with proper GOPATH configuration
 - Install essential Go development tools including golangci-lint for code
@@ -32,14 +32,14 @@ software packages.
 - Configure IDE integration and debugging capabilities
 - Understand Go module management for dependency handling
 
-**Install Python Development Environment**
+#### Install Python Development Environment
 
 - Configure Python 3 with virtual environment support
 - Install essential packages for event processing and data manipulation
 - Set up development tools including pytest, tox, and code formatting utilities
 - Configure virtualenv and virtualenvwrapper for project isolation
 
-**Essential Utilities Setup**
+#### Essential Utilities Setup
 
 - Install Git for version control and collaboration
 - Configure ULID generators for unique identifier creation
@@ -48,21 +48,21 @@ software packages.
 
 ### Infrastructure Components
 
-**Event Streaming with Redpanda**
+#### Event Streaming with Redpanda
 
 - Deploy Redpanda as a Kafka-compatible message bus
 - Configure topics, partitions, and retention policies
 - Set up consumer groups and producer configurations
 - Understand event ordering and delivery semantics
 
-**Database Setup with PostgreSQL**
+#### Database Setup with PostgreSQL
 
 - Configure PostgreSQL for event storage and state management
 - Design schemas for receipts, gates, and stages
 - Set up proper indexing for event querying and analytics
 - Configure connection pooling and performance optimization
 
-**Containerized Development Environment**
+#### Containerized Development Environment
 
 - Create docker-compose configurations for local development
 - Set up networking between services and proper volume mounting
@@ -71,14 +71,14 @@ software packages.
 
 ### Environment Configuration
 
-**Environment Variables and Configuration Management**
+#### Environment Variables and Configuration Management
 
 - Set up configuration files for different deployment environments
 - Configure database connection strings and Kafka broker settings
 - Manage API keys, tokens, and security credentials
 - Implement configuration validation and default value handling
 
-**Development Workflow Setup**
+#### Development Workflow Setup
 
 - Configure automated testing pipelines with proper test data
 - Set up code quality checks and continuous integration hooks

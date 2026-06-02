@@ -232,4 +232,3 @@ logger.info("MCP is running with the following configuration:")
 logger.info(f"URL: {cfg.url}")
 logger.info(f"Token: {cfg.token}")
 mcp.run(transport="stdio")
-
