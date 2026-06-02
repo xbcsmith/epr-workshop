@@ -138,6 +138,13 @@ The requirements for the workshop are as follows:
 - Configure an IDE to run the MCP server
 - Use MCP inspector to troubleshoot tools, resources, and prompts
 
+### Agents EPR: Building event-driven agents with EPR
+
+- Hands-on session around building event-driven agents with EPR
+- Build a simple event-driven agent that reacts to events in EPR
+- Enhance the agent to log its actions and the events it processes in EPR
+- Discuss best practices for building event-driven agents with EPR
+
 ### Workshop Challenge: Enhancing EPR Functionality
 
 - Participants will be given a challenge to enhance a specific aspect of EPR
