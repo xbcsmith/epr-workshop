@@ -1094,7 +1094,7 @@ docker exec -it redpanda \
 ---
 
 **Duration:** ~75 minutes **Prerequisites:** Labs 01–07 complete; PostgreSQL and
-Redpanda running via Docker Compose; Python 3.10+ with `kafka-python-ng`,
+Redpanda running via Docker Compose; Python 3.12+ with `kafka-python-ng`,
 `psycopg2-binary`, and `requests` installed.
 
 ---

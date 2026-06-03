@@ -797,7 +797,7 @@ docker exec -it redpanda \
 ---
 
 **Duration:** ~60 minutes **Prerequisites:** Labs 01–04 complete; Redpanda
-running locally via Docker Compose; `rpk` CLI available; Python 3.10+ with
+running locally via Docker Compose; `rpk` CLI available; Python 3.12+ with
 `kafka-python-ng` installed.
 
 ---

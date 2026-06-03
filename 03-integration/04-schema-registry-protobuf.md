@@ -858,7 +858,7 @@ schemas, reporting which version (if either) can successfully parse the payload.
 
 Add 10 new plausible CI/CD event types to `epr_event_v2.proto` (e.g.
 `EVENT_TYPE_CONTAINER_PUSHED`, `EVENT_TYPE_POLICY_EVALUATED`). Register the new
-schema. Write a consumer using Python 3.10+ `match`/`case` that handles each
+schema. Write a consumer using Python 3.12+ `match`/`case` that handles each
 known type explicitly and logs unknown enum values rather than crashing —
 demonstrating graceful handling of values added by a newer producer schema.
 
@@ -879,7 +879,7 @@ rm -rf generated_go/
 ---
 
 **Duration:** ~60 minutes **Prerequisites:** Lab 06 complete; `protoc`
-installed; Python 3.10+ with `kafka-python-ng`, `requests`, `grpcio-tools`, and
+installed; Python 3.12+ with `kafka-python-ng`, `requests`, `grpcio-tools`, and
 `protobuf` installed.
 
 ---

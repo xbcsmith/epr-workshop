@@ -1148,7 +1148,7 @@ curl -s -X DELETE "http://localhost:8081/subjects/epr.events-value?permanent=tru
 ---
 
 **Duration:** ~45 minutes **Prerequisites:** Labs 01–05 complete; Redpanda
-running with Schema Registry enabled; Python 3.10+ with `kafka-python-ng`,
+running with Schema Registry enabled; Python 3.12+ with `kafka-python-ng`,
 `jsonschema`, and `requests` installed.
 
 ---

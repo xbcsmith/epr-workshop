@@ -626,7 +626,7 @@ docker exec -it redpanda \
 ---
 
 **Duration:** ~55 minutes **Prerequisites:** Redpanda running via Docker
-Compose; Python 3.10+ with `kafka-python-ng` installed.
+Compose; Python 3.12+ with `kafka-python-ng` installed.
 
 ---
 
