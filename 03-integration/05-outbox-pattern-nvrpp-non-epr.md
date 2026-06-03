@@ -168,7 +168,7 @@ def main():
 
     print("\nNow check the discrepancy:")
     print("  psql: SELECT name, version FROM build_records ORDER BY created_at;")
-    print("  rpk:  rpk topic consume epr.events --brokers localhost:9092 --offset start")
+    print("  rpk:  docker exec -it redpanda rpk topic consume epr.events --brokers localhost:9092 --offset start")
     print("  service-c will appear in the DB but NOT in Kafka.")
 
 
@@ -190,11 +190,12 @@ docker exec -it <postgres_container> psql -U postgres -d epr \
   -c "SELECT name, version, status FROM build_records ORDER BY created_at;"
 
 # Three events in Kafka — service-c is missing
-rpk topic consume epr.events \
-  --brokers localhost:9092 \
-  --offset start \
-  --format '%v\n' \
-  | jq '.name + " " + .version'
+docker exec -it redpanda \
+    rpk topic consume epr.events \
+    --brokers localhost:9092 \
+    --offset start \
+    --format '%v\n' \
+    | jq '.name + " " + .version'
 ```
 
 `service-c 0.9.0` committed to the database. Never appeared in Kafka. Every
@@ -537,11 +538,12 @@ Watch it publish all four rows — including service-c that "crashed" earlier:
 Verify in Kafka — all four now present:
 
 ```bash
-rpk topic consume epr.events \
-  --brokers localhost:9092 \
-  --offset start \
-  --format '%v\n' \
-  | jq '.name + " " + .version'
+docker exec -it redpanda \
+    rpk topic consume epr.events \
+    --brokers localhost:9092 \
+    --offset start \
+    --format '%v\n' \
+    | jq '.name + " " + .version'
 ```
 
 And the outbox table confirms completion:
@@ -1085,13 +1087,14 @@ DROP TABLE IF EXISTS processed_events;
 ```
 
 ```bash
-rpk topic delete epr.events
+docker exec -it redpanda \
+    rpk topic delete epr.events
 ```
 
 ---
 
 **Duration:** ~75 minutes **Prerequisites:** Labs 01–07 complete; PostgreSQL and
-Redpanda running via Docker Compose; Python 3.10+ with `kafka-python`,
+Redpanda running via Docker Compose; Python 3.10+ with `kafka-python-ng`,
 `psycopg2-binary`, and `requests` installed.
 
 ---

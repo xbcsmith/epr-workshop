@@ -158,7 +158,7 @@ try:
     from kafka.errors import TopicAlreadyExistsError
 except ImportError as exc:
     raise SystemExit(
-        "kafka-python is required. Install it with: python3 -m pip install kafka-python"
+        "kafka-python is required. Install it with: python3 -m pip install kafka-python-ng"
     ) from exc
 
 

@@ -38,7 +38,7 @@ pip install -e .[lint,test,build]
 First we will write a consumer that will consume messages from the Event
 Provenance Registry.
 
-Install the `kafka-python` library.
+Install the `kafka-python-ng` library.
 
 ```bash
 python3 -m pip install --upgrade kafka-python-ng

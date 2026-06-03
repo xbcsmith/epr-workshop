@@ -42,16 +42,19 @@ should do is classify the exception.
 ### 1.1 Create the lab topics
 
 ```bash
-rpk topic create pipeline.events \
-  --partitions 3 --replicas 1
+docker exec -it redpanda \
+    rpk topic create pipeline.events \
+    --partitions 3 --replicas 1
 
-rpk topic create pipeline.events.retry \
-  --partitions 3 --replicas 1 \
-  --topic-config retention.ms=3600000   # 1 hour — retries should not sit forever
+docker exec -it redpanda \
+    rpk topic create pipeline.events.retry \
+    --partitions 3 --replicas 1 \
+    --topic-config retention.ms=3600000   # 1 hour — retries should not sit forever
 
-rpk topic create pipeline.events.dlq \
-  --partitions 3 --replicas 1 \
-  --topic-config retention.ms=604800000 # 7 days
+docker exec -it redpanda \
+    rpk topic create pipeline.events.dlq \
+    --partitions 3 --replicas 1 \
+    --topic-config retention.ms=604800000 # 7 days
 ```
 
 ---
@@ -836,13 +839,14 @@ value.
 ## Cleanup
 
 ```bash
-rpk topic delete pipeline.events pipeline.events.retry pipeline.events.dlq
+docker exec -it redpanda \
+    rpk topic delete pipeline.events pipeline.events.retry pipeline.events.dlq
 ```
 
 ---
 
 **Duration:** ~50 minutes **Prerequisites:** Redpanda running via Docker
-Compose; Python 3.10+ with `kafka-python` installed.
+Compose; Python 3.10+ with `kafka-python-ng` installed.
 
 ---
 

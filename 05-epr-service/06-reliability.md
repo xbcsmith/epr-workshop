@@ -1,7 +1,7 @@
 # EPR Reliability Guarantees: Write-First, Replay, and NVRPP Provenance
 
 **Duration:** ~60 minutes **Prerequisites:** EPR server, PostgreSQL, and
-Redpanda running via Docker Compose; Python 3.10+ with `kafka-python`,
+Redpanda running via Docker Compose; Python 3.10+ with `kafka-python-ng`,
 `psycopg2-binary`, and `requests` installed.
 
 ---

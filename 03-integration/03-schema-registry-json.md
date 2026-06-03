@@ -130,9 +130,10 @@ subject.
 ### 1.4 Create the lab topic
 
 ```bash
-rpk topic create epr.events \
-  --partitions 3 \
-  --replicas 1
+docker exec -it redpanda \
+    rpk topic create epr.events \
+    --partitions 3 \
+    --replicas 1
 ```
 
 ---
@@ -1045,7 +1046,7 @@ def main():
     # Create test topic
     import subprocess
     subprocess.run(
-        ["rpk", "topic", "create", TOPIC, "--partitions", "1", "--replicas", "1"],
+        ["docker", "exec", "-it", "redpanda", "rpk", "topic", "create", TOPIC, "--partitions", "1", "--replicas", "1"],
         capture_output=True,
     )
 
@@ -1134,7 +1135,8 @@ and checks it for common EPR-schema anti-patterns before registration:
 ## Cleanup
 
 ```bash
-rpk topic delete epr.events epr.events.evolution-test
+docker exec -it redpanda \
+    rpk topic delete epr.events epr.events.evolution-test
 
 # Delete the subject from the schema registry (soft delete)
 curl -s -X DELETE http://localhost:8081/subjects/epr.events-value | jq .
@@ -1146,7 +1148,7 @@ curl -s -X DELETE "http://localhost:8081/subjects/epr.events-value?permanent=tru
 ---
 
 **Duration:** ~45 minutes **Prerequisites:** Labs 01–05 complete; Redpanda
-running with Schema Registry enabled; Python 3.10+ with `kafka-python`,
+running with Schema Registry enabled; Python 3.10+ with `kafka-python-ng`,
 `jsonschema`, and `requests` installed.
 
 ---

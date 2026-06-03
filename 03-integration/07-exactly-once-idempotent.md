@@ -65,14 +65,16 @@ written.
 ## Part 1 — Setup
 
 ```bash
-rpk topic create delivery.demo \
-  --partitions 1 \
-  --replicas 1
+docker exec -it redpanda \
+    rpk topic create delivery.demo \
+    --partitions 1 \
+    --replicas 1
 
-rpk topic create delivery.transactions \
-  --partitions 1 \
-  --replicas 1 \
-  --topic-config min.insync.replicas=1
+docker exec -it redpanda \
+    rpk topic create delivery.transactions \
+    --partitions 1 \
+    --replicas 1 \
+    --topic-config min.insync.replicas=1
 ```
 
 A single partition is intentional for this lab — it makes sequence numbers
@@ -136,7 +138,7 @@ def main():
     producer.close()
 
     print("\nNow consume and count: seq=2 should appear twice.")
-    print("  rpk topic consume delivery.demo --brokers localhost:9092 "
+    print("  docker exec -it redpanda rpk topic consume delivery.demo --brokers localhost:9092 "
           "--offset start --format '%v\\n' | jq .seq")
 
 
@@ -151,11 +153,12 @@ python producer_at_least_once.py
 ```
 
 ```bash
-rpk topic consume delivery.demo \
-  --brokers localhost:9092 \
-  --offset start \
-  --format '%v\n' \
-  | jq .seq
+docker exec -it redpanda \
+    rpk topic consume delivery.demo \
+    --brokers localhost:9092 \
+    --offset start \
+    --format '%v\n' \
+    | jq .seq
 ```
 
 You will see: `0, 1, 2, 3, 4, 2` — the duplicate at the end. In a real pipeline
@@ -175,7 +178,7 @@ Create `producer_idempotent.py`:
 """
 Lab 10 — Idempotent producer.
 
-enable_idempotence=True causes kafka-python to set:
+enable_idempotence=True causes kafka-python-ng to set:
   - acks = 'all'                      (required for idempotence)
   - retries = float('inf')            (retry forever within delivery_timeout_ms)
   - max_in_flight_requests_per_connection = 1  (preserve ordering with retries)
@@ -236,7 +239,7 @@ def main():
     producer.close()
 
     print("\nConsume and count: seq=2 should appear only once.")
-    print("  rpk topic consume delivery.demo --brokers localhost:9092 "
+    print("  docker exec -it redpanda rpk topic consume delivery.demo --brokers localhost:9092 "
           "--offset start --format '%v\\n' | jq .seq")
 
 
@@ -247,16 +250,19 @@ if __name__ == "__main__":
 Reset the topic first so you are working with a clean log:
 
 ```bash
-rpk topic delete delivery.demo
-rpk topic create delivery.demo --partitions 1 --replicas 1
+docker exec -it redpanda \
+    rpk topic delete delivery.demo
+docker exec -it redpanda \
+    rpk topic create delivery.demo --partitions 1 --replicas 1
 
 python producer_idempotent.py
 
-rpk topic consume delivery.demo \
-  --brokers localhost:9092 \
-  --offset start \
-  --format '%v\n' \
-  | jq .seq
+docker exec -it redpanda \
+    rpk topic consume delivery.demo \
+    --brokers localhost:9092 \
+    --offset start \
+    --format '%v\n' \
+    | jq .seq
 ```
 
 Result: `0, 1, 2, 3, 4` — no duplicate. The broker received the retry with the
@@ -339,11 +345,12 @@ python session_boundary.py
 ```
 
 ```bash
-rpk topic consume delivery.demo \
-  --brokers localhost:9092 \
-  --offset start \
-  --format '%v\n' \
-  | jq 'select(.seq == 99) | .seq'
+docker exec -it redpanda \
+    rpk topic consume delivery.demo \
+    --brokers localhost:9092 \
+    --offset start \
+    --format '%v\n' \
+    | jq 'select(.seq == 99) | .seq'
 ```
 
 You will see `99` appear twice. Two producer sessions, two PIDs, no
@@ -460,7 +467,7 @@ def main():
     print("Expected committed sequence numbers: 0, 1, 2, 20")
     print("seq=10 was aborted and must not appear.\n")
     print("Verify with read_committed isolation:")
-    print("  rpk topic consume delivery.demo --brokers localhost:9092 "
+    print("  docker exec -it redpanda rpk topic consume delivery.demo --brokers localhost:9092 "
           "--offset start --format '%v\\n' | jq .seq")
 
 
@@ -471,8 +478,10 @@ if __name__ == "__main__":
 ---
 
 ```bash
-rpk topic delete delivery.demo
-rpk topic create delivery.demo --partitions 1 --replicas 1
+docker exec -it redpanda \
+    rpk topic delete delivery.demo
+docker exec -it redpanda \
+    rpk topic create delivery.demo --partitions 1 --replicas 1
 
 python producer_transactional.py
 ```
@@ -610,13 +619,14 @@ transactions.
 ## Cleanup
 
 ```bash
-rpk topic delete delivery.demo delivery.transactions
+docker exec -it redpanda \
+    rpk topic delete delivery.demo delivery.transactions
 ```
 
 ---
 
 **Duration:** ~55 minutes **Prerequisites:** Redpanda running via Docker
-Compose; Python 3.10+ with `kafka-python` installed.
+Compose; Python 3.10+ with `kafka-python-ng` installed.
 
 ---
 

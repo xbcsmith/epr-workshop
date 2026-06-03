@@ -89,7 +89,9 @@ structured headers:
 
 ```bash
 docker compose ps
-rpk cluster info
+
+docker exec -it redpanda \
+    rpk cluster info
 ```
 
 You should see your single-node Redpanda cluster responding.
@@ -98,19 +100,22 @@ You should see your single-node Redpanda cluster responding.
 
 ```bash
 # Main event topic (3 partitions, replication factor 1 for local dev)
-rpk topic create epr.events \
-  --partitions 3 \
-  --replicas 1
+docker exec -it redpanda \
+    rpk topic create epr.events \
+    --partitions 3 \
+    --replicas 1
 
 # Dead letter queue topic
 # Tip: match partition count to the source topic so you can correlate
-rpk topic create epr.events.dlq \
-  --partitions 3 \
-  --replicas 1 \
-  --topic-config retention.ms=604800000  # 7 days — DLQs need longer retention
+docker exec -it redpanda \
+    rpk topic create epr.events.dlq \
+        --partitions 3 \
+        --replicas 1 \
+        --topic-config retention.ms=604800000  # 7 days — DLQs need longer retention
 
 # Verify
-rpk topic list
+docker exec -it redpanda \
+    rpk topic list
 ```
 
 > **Design note:** DLQ topics should have _longer_ retention than their source
@@ -121,7 +126,12 @@ rpk topic list
 ### 1.3 Install Python dependencies
 
 ```bash
-pip install kafka-python jsonschema
+python3 -m venv .venv/instegrations
+source .venv/integrations/bin/activate
+```
+
+```bash
+pip install kafka-python-ng jsonschema
 ```
 
 ---
@@ -467,11 +477,12 @@ Consumer group: epr-validator-v1  |  Max retries: 3
 ### 4.1 View raw DLQ messages with `rpk`
 
 ```bash
-rpk topic consume epr.events.dlq \
-  --brokers localhost:9092 \
-  --offset start \
-  --format json \
-  --num 10
+docker exec -it redpanda \
+    rpk topic consume epr.events.dlq \
+    --brokers localhost:9092 \
+    --offset start \
+    --format json \
+    --num 10
 ```
 
 You will see the original message bytes alongside Kafka metadata. The error
@@ -482,21 +493,24 @@ details are in the headers.
 `rpk` displays headers as base64 by default. To view them in a readable format:
 
 ```bash
-rpk topic consume epr.events.dlq \
-  --brokers localhost:9092 \
-  --offset start \
-  --format '%v\n%h\n---\n' \
-  --num 10
+docker exec -it redpanda \
+    rpk topic consume epr.events.dlq \
+    --brokers localhost:9092 \
+    --offset start \
+    --format '%v\n%h\n---\n' \
+    --num 10
 ```
 
 ### 4.3 Check DLQ topic stats
 
 ```bash
 # Message count per partition
-rpk topic describe epr.events.dlq --brokers localhost:9092
+docker exec -it redpanda \
+    rpk topic describe epr.events.dlq --brokers localhost:9092
 
 # Consumer lag for a hypothetical DLQ processor
-rpk group describe epr-dlq-processor --brokers localhost:9092
+docker exec -it redpanda \
+    rpk group describe epr-dlq-processor --brokers localhost:9092
 ```
 
 ### 4.4 Write a DLQ inspector script
@@ -698,11 +712,12 @@ the replayed messages are now processed successfully:
 
 ```bash
 # Consume from start with a fresh group to verify replayed messages
-rpk topic consume epr.events \
-  --brokers localhost:9092 \
-  --offset start \
-  --format json \
-  --num 20
+docker exec -it redpanda \
+    rpk topic consume epr.events \
+    --brokers localhost:9092 \
+    --offset start \
+    --format json \
+    --num 20
 ```
 
 Look for messages with `"_dlq_repaired": true` — these are your fixed events
@@ -771,17 +786,19 @@ moved to quarantine rather than remaining in the DLQ indefinitely.
 
 ```bash
 # Remove lab topics
-rpk topic delete epr.events epr.events.dlq
+docker exec -it redpanda \
+    rpk topic delete epr.events epr.events.dlq
 
 # If you created the retry/quarantine topics in the challenges
-rpk topic delete epr.events.retry epr.events.quarantine
+docker exec -it redpanda \
+    rpk topic delete epr.events.retry epr.events.quarantine
 ```
 
 ---
 
 **Duration:** ~60 minutes **Prerequisites:** Labs 01–04 complete; Redpanda
 running locally via Docker Compose; `rpk` CLI available; Python 3.10+ with
-`kafka-python` installed.
+`kafka-python-ng` installed.
 
 ---
 

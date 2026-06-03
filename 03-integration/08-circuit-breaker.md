@@ -51,12 +51,14 @@ consumer.
 ```bash
 pip install pybreaker
 
-rpk topic create events.inbound \
-  --partitions 3 --replicas 1
+docker exec -it redpanda \
+    rpk topic create events.inbound \
+    --partitions 3 --replicas 1
 
-rpk topic create events.inbound.dlq \
-  --partitions 3 --replicas 1 \
-  --topic-config retention.ms=604800000
+docker exec -it redpanda \
+    rpk topic create events.inbound.dlq \
+    --partitions 3 --replicas 1 \
+    --topic-config retention.ms=604800000
 ```
 
 ---
@@ -823,13 +825,14 @@ both instances open their circuits.
 ## Cleanup
 
 ```bash
-rpk topic delete events.inbound events.inbound.dlq
+docker exec -it redpanda \
+    rpk topic delete events.inbound events.inbound.dlq
 ```
 
 ---
 
 **Duration:** ~55 minutes **Prerequisites:** Redpanda running via Docker
-Compose; Python 3.10+ with `kafka-python` and `pybreaker` installed.
+Compose; Python 3.10+ with `kafka-python-ng` and `pybreaker` installed.
 
 ---
 
