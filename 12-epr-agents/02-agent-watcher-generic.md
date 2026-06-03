@@ -6,6 +6,22 @@ agents without having to create specific watchers for each one.
 
 ---
 
+## XZatoma install
+
+First install rust:
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+Then install xzatoma:
+
+```bash
+cargo install --git https://github.com/xbcsmith/xzatoma
+```
+
+---
+
 ## XZatoma generic watcher workshop
 
 ### Setup
