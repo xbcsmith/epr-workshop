@@ -45,6 +45,16 @@ Execute the following command:
 docker compose -f ./docker-compose.services.yaml up
 ```
 
+```bash
+docker exec -it redpanda-0 \
+    rpk cluster health
+```
+
+```bash
+docker exec -it redpanda-0 \
+    rpk cluster info
+```
+
 Access the Redpanda admin console at `http://localhost:8080/overview`
 
 Create a Topic (Only necessary for initial setup)
@@ -54,7 +64,12 @@ the Docker container with the following command:
 
 ```bash
 docker exec -it redpanda-0 \
-    rpk topic create epr.dev.events --brokers=localhost:19092
+    rpk topic create epr.dev.events
+```
+
+```bash
+docker exec -it redpanda-0 \
+    rpk topic list
 ```
 
 ---

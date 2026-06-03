@@ -64,8 +64,15 @@ curl --location --request POST 'http://localhost:8042/api/v1/events' \
   },
   "success": true,
   "event_receiver_id": "<PASTE EVENT RECEIVER ID FROM FIRST CURL COMMAND>"
-}
+}'
 ```
+
+curl --location --request POST 'http://localhost:8042/api/v1/events' \
+--header 'Content-Type: application/json' \
+--data-raw '{ "name": "magnificent", "version": "7.0.1", "release":
+"2023.11.16", "platform_id": "linux", "package": "docker", "description":
+"blah", "payload": { "name": "joe" }, "success": true, "event_receiver_id":
+"01KT7W8R94D65PQ112VDPV6YJE" }'
 
 The results of the command should look like this:
 
