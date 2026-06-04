@@ -48,7 +48,7 @@ this:
       "type": "promptString",
       "id": "epr_url",
       "description": "EPR URL",
-      "default": "http://localhost:8042",
+      "default": "http://host.docker.internal:8042",
       "password": false
     }
   ],
@@ -92,29 +92,33 @@ Adding the MCP servers directly to the `settings.json` file looks like this:
                 "type": "promptString",
                 "id": "epr_url",
                 "description": "EPR URL",
-                "default": "http://localhost:8042",
+                "default": "http://host.docker.internal:8042",
                 "password": false
             }
         ],
         "servers": {
-        "epr-mcp-server": {
-            "command": "docker",
-            "args": [
-                "run",
-                "-i",
-                "--rm",
-                "-e",
-                "EPR_URL",
-                "-e",
-                "EPR_TOKEN",
-                "epr-mcp-server:latest",
-            ],
-            "env": {
-                "EPR_URL": "${input:epr_url}",
-                "EPR_TOKEN": "${input:epr_token}"
-            }
-        }
-        }
+          "epr-mcp-server": {
+          "command": "docker",
+          "args": [
+            "run",
+            "-i",
+            "--rm",
+            "--network=host",
+            "-e",
+            "HOST",
+            "-e",
+            "EPR_URL",
+            "-e",
+            "EPR_TOKEN",
+            "epr-mcp-server:latest"
+          ],
+          "env": {
+            "EPR_URL": "http://host.docker.internal:8042",
+            "EPR_TOKEN": "${input:epr_token}",
+            "HOST": "0.0.0.0"
+          },
+          "type": "stdio"
+          }
     },
 ```
 
@@ -144,6 +148,8 @@ Claude will handle running the MCP server and routing requests when the AI
 decides to use it.
 
 ---
+
+## Connecting with Zed
 
 ## Summary
 
