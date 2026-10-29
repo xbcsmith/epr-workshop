@@ -73,7 +73,7 @@ We can validate the new event receiver exists with the search command using the
 epr-cli receiver search --id 01HKX0J9KS8AASMRYX61458N41 --fields all
 ```
 
----
+## 01KTA5HMQTA54EVRBP1A0XTM4K
 
 Now we will create a second event receiver as follows.
 
@@ -89,7 +89,7 @@ epr-cli receiver create --name "bar-cli" --version "1.0.0" --description "bar cl
 }
 ```
 
----
+## 01KTA5HMQTA54EVRBP1A0XTM4K, 01KTA5NTBTX29X8EDTAN5BE308
 
 And validate we have created the `bar-cli` receiver.
 
@@ -118,7 +118,7 @@ Next we Next we will create an event receiver group.
 The commands to create an event receiver group are as follows:
 
 ```bash
-epr-cli group create --name "foo-group-cli" --version "1.0.0" --description "foo cli created foo group" --type "epr.foo.group.cli" --event-receiver-ids "01HKX0J9KS8AASMRYX61458N41 01HKX0KY3B31MR3XKJWTDZ4EQ0"  --dry-run
+epr-cli group create --name "foo-group-cli" --version "1.0.0" --description "foo cli created foo group" --type "epr.foo.group.cli" --event-receiver-ids "01KTA5HMQTA54EVRBP1A0XTM4K, 01KTA5NTBTX29X8EDTAN5BE308"  --dry-run
 
 epr-cli group create --name "foo-group-cli" --version "1.0.0" --description "foo cli created foo group" --type "epr.foo.group.cli" --event-receiver-ids "01HKX0J9KS8AASMRYX61458N41 01HKX0KY3B31MR3XKJWTDZ4EQ0"
 ```
@@ -148,7 +148,7 @@ The commands to create a `foo` event are as follows:
 ```bash
 epr-cli event create --name foo --version 1.0.0 --release 2024.01 --platform-id x86-64-gnu-linux-9 --package rpm --success true --description "the foo event for foo" --success true --event-receiver-id 01HKX0J9KS8AASMRYX61458N41 --payload '{"name":"foo"}' --dry-run
 
-epr-cli event create --name foo --version 1.0.0 --release 2024.01 --platform-id x86-64-gnu-linux-9 --package rpm --success true --description "the foo event for foo" --success true --event-receiver-id 01HKX0J9KS8AASMRYX61458N41 --payload '{"name":"foo"}'
+epr-cli event create --name foo --version 1.0.0 --release 2024.01 --platform-id x86-64-gnu-linux-9 --package rpm --success true --description "the foo event for foo" --success true --event-receiver-id 01KTA5HMQTA54EVRBP1A0XTM4K --payload '{"name":"foo"}'
 ```
 
 ---
@@ -175,7 +175,7 @@ The commands to create a `bar` event are as follows:
 ```bash
 epr-cli event create --name bar --version 1.0.0 --release 2024.01 --platform-id x86-64-gnu-linux-9 --package rpm --success true --description "the bar event for bar" --success true --event-receiver-id 01HKX0KY3B31MR3XKJWTDZ4EQ0 --payload '{"name":"bar"}' --dry-run
 
-epr-cli event create --name bar --version 1.0.0 --release 2024.01 --platform-id x86-64-gnu-linux-9 --package rpm --success true --description "the bar event for bar" --success true --event-receiver-id 01HKX0KY3B31MR3XKJWTDZ4EQ0 --payload '{"name":"bar"}'
+epr-cli event create --name bar --version 1.0.0 --release 2024.01 --platform-id x86-64-gnu-linux-9 --package rpm --success true --description "the bar event for bar" --success true --event-receiver-id 01KTA5NTBTX29X8EDTAN5BE308 --payload '{"name":"bar"}'
 ```
 
 ```json

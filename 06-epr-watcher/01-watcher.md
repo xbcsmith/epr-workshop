@@ -142,7 +142,7 @@ curl --location --request POST 'http://localhost:8042/api/v1/events' \
     "description": "blah",
     "payload": {"name":"joe"},
     "success": true,
-    "event_receiver_id": "01K61CMNCCT3B5CH95YHJDXZ15"
+    "event_receiver_id": "01M3MK30M9MW2S7WG7X6APTTM0"
 }'
 ```
 
