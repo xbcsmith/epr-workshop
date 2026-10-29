@@ -83,7 +83,7 @@ more evolution-friendly than proto2 or JSON Schema with `required` arrays.
 ### 1.1 Install dependencies
 
 ```bash
-pip install grpcio-tools protobuf requests kafka-python
+pip install grpcio-tools protobuf requests kafka-python-ng
 ```
 
 Verify `protoc` is available:
@@ -116,9 +116,10 @@ mkdir -p proto generated schemas
 ### 1.3 Create the lab topic
 
 ```bash
-rpk topic create epr.events.proto \
-  --partitions 3 \
-  --replicas 1
+docker exec -it redpanda \
+    rpk topic create epr.events.proto \
+    --partitions 3 \
+    --replicas 1
 ```
 
 ---
@@ -857,7 +858,7 @@ schemas, reporting which version (if either) can successfully parse the payload.
 
 Add 10 new plausible CI/CD event types to `epr_event_v2.proto` (e.g.
 `EVENT_TYPE_CONTAINER_PUSHED`, `EVENT_TYPE_POLICY_EVALUATED`). Register the new
-schema. Write a consumer using Python 3.10+ `match`/`case` that handles each
+schema. Write a consumer using Python 3.12+ `match`/`case` that handles each
 known type explicitly and logs unknown enum values rather than crashing —
 demonstrating graceful handling of values added by a newer producer schema.
 
@@ -866,7 +867,8 @@ demonstrating graceful handling of values added by a newer producer schema.
 ## Cleanup
 
 ```bash
-rpk topic delete epr.events.proto
+docker exec -it redpanda \
+    rpk topic delete epr.events.proto
 
 curl -s -X DELETE http://localhost:8081/subjects/epr.events.proto-value | jq .
 curl -s -X DELETE "http://localhost:8081/subjects/epr.events.proto-value?permanent=true" | jq .
@@ -877,7 +879,7 @@ rm -rf generated_go/
 ---
 
 **Duration:** ~60 minutes **Prerequisites:** Lab 06 complete; `protoc`
-installed; Python 3.10+ with `kafka-python`, `requests`, `grpcio-tools`, and
+installed; Python 3.12+ with `kafka-python-ng`, `requests`, `grpcio-tools`, and
 `protobuf` installed.
 
 ---

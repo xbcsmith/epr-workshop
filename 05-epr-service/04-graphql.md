@@ -111,7 +111,7 @@ mutation {
       package: "package"
       description: "The Foo of Brixton"
       payload: "{\"name\": \"value\"}"
-      event_receiver_id: "ID_RETURNED_FROM_PREVIOUS_MUTATION"
+      event_receiver_id: "01M3M9GEYEKQ76Y68924YE6ZNV"
       success: true
     }
   )
@@ -137,7 +137,7 @@ the previously created event
 
 ```graphql
 query {
-  events_by_id(id: "01K61C8NEDP8SDS7HVMFZ69CEF") {
+  events_by_id(id: "01M3MAS5MNXXY76SC33PR29FB8") {
     id
     name
     version
@@ -363,7 +363,7 @@ We can find and event receiver by id using the following graphql query:
   "query": "query ($er: FindEventReceiverInput!){event_receivers(event_receiver: $er) {id,name,type,version,description}}",
   "variables": {
     "er": {
-      "id": "01HPW652DSJBHR5K4KCZQ97GJP"
+      "id": "01KTA5HMQTA54EVRBP1A0XTM4K"
     }
   }
 }
@@ -375,7 +375,7 @@ We can query the event receiver information using a POST on the graphql endpoint
 as follows:
 
 ```bash
-curl -X POST -H "content-type:application/json" -d '{"query":"query ($er: FindEventReceiverInput!){event_receivers(event_receiver: $er) {id,name,type,version,description}}","variables":{"er":{"id":"01HPW652DSJBHR5K4KCZQ97GJP"}}}' http://localhost:8042/api/v1/graphql/query
+curl -X POST -H "content-type:application/json" -d '{"query":"query ($er: FindEventReceiverInput!){event_receivers(event_receiver: $er) {id,name,type,version,description}}","variables":{"er":{"id":"01M3M9GEYEKQ76Y68924YE6ZNV"}}}' http://localhost:8042/api/v1/graphql/query
 ```
 
 ---

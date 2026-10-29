@@ -81,7 +81,7 @@ curl --location --request POST 'http://localhost:8042/api/v1/receivers' \
 The results of the command should look like this:
 
 ```json
-{ "data": "01HYKMYX2Q45H0G6RJV4E8270W" }
+{ "data": "01M3MK30M9MW2S7WG7X6APTTM0" }
 ```
 
 ---
@@ -105,7 +105,7 @@ cd ./src
 ```
 
 ```bash
-echo "{\"name\": \"epr\",\"version\": \"1.0.1\",\"release\": \"2023.11.16\",\"platform_id\": \"aarch64-gnu-linux-7\",\"package\": \"oci\",\"description\": \"scan source code for OCI image EPR\",\"payload\": $(cat sbom.json),\"success\": true,\"event_receiver_id\": \"01K6BCK88R99PBH8CA5SEDZFXX\"}" | jq > sbom_event.json
+echo "{\"name\": \"epr\",\"version\": \"1.0.1\",\"release\": \"2023.11.16\",\"platform_id\": \"aarch64-gnu-linux-7\",\"package\": \"oci\",\"description\": \"scan source code for OCI image EPR\",\"payload\": $(cat sbom.json),\"success\": true,\"event_receiver_id\": \"01M3MK30M9MW2S7WG7X6APTTM0\"}" | jq > sbom_event.json
 ```
 
 ---

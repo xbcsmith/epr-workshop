@@ -96,7 +96,8 @@ Transport Type: `STDIO`
 
 Command: `docker`
 
-Arguments: `run -i --rm --network=host epr-mcp-server:latest`
+Arguments:
+`run -i --rm --network=host -e HOST=0.0.0.0 -e EPR_URL=http://host.docker.internal:8042 epr-mcp-server:latest`
 
 Environment Variable:
 

@@ -99,10 +99,11 @@ content, partition, offset, and timestamp.
 
 ```json
 {
-  "message": "How do you stream with Redpanda?\n",
+  "topic": "epr.dev.events",
+  "value": "here is my message",
+  "timestamp": 1780525169803,
   "partition": 0,
-  "offset": 1,
-  "timestamp": "2021-02-10T15:52:35.251+02:00"
+  "offset": 0
 }
 ```
 
@@ -169,7 +170,7 @@ Finally, let's consume a message from the `epr.dev.events` topic. Execute the
 following command, and each message will be displayed with its metadata.
 
 ```bash
-docker exec -it redpanda-0 \
+docker exec -it redpanda \
   rpk topic consume epr.dev.events --brokers=localhost:9092
 ```
 

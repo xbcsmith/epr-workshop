@@ -63,8 +63,8 @@ curl --location --request POST 'http://localhost:8042/api/v1/events' \
     "name": "joe"
   },
   "success": true,
-  "event_receiver_id": "<PASTE EVENT RECEIVER ID FROM FIRST CURL COMMAND>"
-}
+  "event_receiver_id": "01M3M9GEYEKQ76Y68924YE6ZNV"
+}'
 ```
 
 The results of the command should look like this:
@@ -91,7 +91,7 @@ curl --location --request POST 'http://localhost:8042/api/v1/groups' \
   "description": "The only event receiver group that matters",
   "enabled": true,
   "event_receiver_ids": [
-    "PASTE EVENT RECEIVER ID FROM FIRST CURL COMMAND"
+    "01KTA0B8084CZ4VZYGHVWAYA1Q"
   ]
 }
 ```

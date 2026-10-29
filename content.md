@@ -23,6 +23,7 @@ create, retrieve, and query events in the system.
 
 ## Session #3: CDEvents and SBOMs
 
+- Overview of CloudEvents
 - Create and store CDEvents in our new ecosystem.
 - Discuss how to leverage CDEvents and events in general.
 - Use EPR to store and retrieve SBOMs.
@@ -30,7 +31,7 @@ create, retrieve, and query events in the system.
 Exercise: Create CDEvents and SBOMs using them to create events in our system to
 trigger actions for microservices.
 
-## Session #4 EPR MCP Server
+## Session #4 Event Driven Agents and MCP Server
 
 - Overview of MCP servers and how they can be used in event driven systems.
 - Introduction to the EPR MCP Server.
@@ -89,6 +90,7 @@ The requirements for the workshop are as follows:
   - jq
   - go
   - golangci-lint
+  - rust
   - docker
 
 ## Workshop: Building an Event-Driven CI/CD Provenance System
