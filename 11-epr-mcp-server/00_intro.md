@@ -16,8 +16,8 @@ for accessing your internal tools or data.
   to interact with diverse resources (APIs, databases, files, etc.).
 - **Enhanced AI Capabilities:** They empower AI to fetch live data, trigger
   actions, and integrate with new tools easily.
-- **Security & Compliance:** MCP servers can enforce access controls and privacy
-  safeguards.
+- **Security and Compliance:** MCP servers can enforce access controls and
+  privacy safeguards.
 - **Scalability:** Easily add new data sources or tools without custom
   integrations.
 
@@ -50,13 +50,13 @@ for accessing your internal tools or data.
 
 ---
 
-**Analogy:** Think of an MCP server as a universal adapter for AI—allowing
+**Analogy:** Think of an MCP server as a universal adapter for AI, allowing
 models to connect to and use a wide variety of external resources with minimal
 effort.
 
 ---
 
-In this workshop, you'll learn how MCP servers work and how to build your own to
-extend AI capabilities in real-world applications.
+In this workshop, you will learn how MCP servers work and how to build your own
+to extend AI capabilities in real-world applications.
 
 ---

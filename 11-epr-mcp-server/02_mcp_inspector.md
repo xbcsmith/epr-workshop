@@ -3,16 +3,16 @@
 ## Inspector
 
 Quickstart guide to using the MCP Inspector for testing and debugging Model
-Context Protocol servers
+Context Protocol servers.
 
 The [MCP Inspector](https://github.com/modelcontextprotocol/inspector) is an
 interactive developer tool for testing and debugging MCP servers.
 
 ---
 
-## Getting started
+## Getting Started
 
-### Installation and basic usage
+### Installation and Basic Usage
 
 The Inspector runs directly through `npx` without requiring installation:
 
@@ -22,49 +22,49 @@ npx @modelcontextprotocol/inspector
 
 ---
 
-## Feature overview
+## Feature Overview
 
 ![mcp-inspector](../images/mcp-inspector.png)
 
 The Inspector provides several features for interacting with your MCP server:
 
-### Server connection pane
+### Server Connection Pane
 
 - Allows selecting the transport for connecting to the server
 - For local servers, supports customizing the command-line arguments and
   environment
 
-### Resources tab
+### Resources Tab
 
 - Lists all available resources
 - Shows resource metadata (MIME types, descriptions)
 - Allows resource content inspection
 - Supports subscription testing
 
-### Prompts tab
+### Prompts Tab
 
 - Displays available prompt templates
 - Shows prompt arguments and descriptions
 - Enables prompt testing with custom arguments
 - Previews generated messages
 
-### Tools tab
+### Tools Tab
 
 - Lists available tools
 - Shows tool schemas and descriptions
 - Enables tool testing with custom inputs
 - Displays tool execution results
 
-### Notifications pane
+### Notifications Pane
 
 - Presents all logs recorded from the server
 - Shows notifications received from the server
 
 ---
 
-## Best practices
+## Best Practices
 
-### Development workflow
+### Development Workflow
 
 1. Start Development
 
@@ -72,7 +72,7 @@ The Inspector provides several features for interacting with your MCP server:
    - Verify basic connectivity
    - Check capability negotiation
 
-2. Iterative testing
+2. Iterative Testing
 
    - Make server changes
    - Rebuild the server
@@ -80,7 +80,7 @@ The Inspector provides several features for interacting with your MCP server:
    - Test affected features
    - Monitor messages
 
-3. Test edge cases
+3. Test Edge Cases
    - Invalid inputs
    - Missing prompt arguments
    - Concurrent operations
@@ -90,14 +90,17 @@ The Inspector provides several features for interacting with your MCP server:
 
 ## Setup MCP Inspector
 
-Setup the MCP Inspector to run the docker container with the MCP server
+Setup the MCP Inspector to run the docker container with the MCP server.
 
 Transport Type: `STDIO`
 
 Command: `docker`
 
 Arguments:
-`run -i --rm --network=host -e HOST=0.0.0.0 -e EPR_URL=http://host.docker.internal:8042 epr-mcp-server:latest`
+
+```text
+run -i --rm --network=host -e HOST=0.0.0.0 -e EPR_URL=http://host.docker.internal:8042 epr-mcp-server:latest
+```
 
 Environment Variable:
 
@@ -108,19 +111,19 @@ Environment Variable:
 
 ## Inspect MCP Server
 
-Click on tools in the main window bar
+Click on tools in the main window bar.
 
-Find `fetch_event` and click on it
+Find `fetch_event` and click on it.
 
-Enter `epr_url` as `http://localhost:8042`
+Enter `epr_url` as `http://localhost:8042`.
 
-Then enter an event id
+Then enter an event id.
 
-Click `Run Tool`
+Click `Run Tool`.
 
-Results should look like this
+Results should look like this:
 
-![fetch_event_mcp_instpector](../images/fetch_event_mc_inspector.png)
+![fetch_event_mcp_inspector](../images/fetch_event_mc_inspector.png)
 
 ---
 

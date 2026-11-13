@@ -27,7 +27,7 @@ EPR. These operations modify EPR state and require appropriate caution in usage.
 
 ### Technical Implementation
 
-The extensions follow consistent patterns using httpx for HTTP requests and
+The extensions follow consistent patterns using httpx2 for HTTP requests and
 proper error handling. Search operations use GraphQL queries with predefined
 field sets, while creation operations use REST POST endpoints with JSON
 payloads. All functions are properly decorated as MCP tools with descriptive
@@ -36,7 +36,7 @@ titles and documentation.
 ### Deployment and Alternatives
 
 The document includes Docker rebuild instructions and server restart procedures
-to apply the extensions. An alternative implementation section covers using UV
+to apply the extensions. An alternative implementation section covers using uv
 (a Rust-based Python package manager) instead of traditional pip/venv workflows,
 along with various command options for running the MCP server locally or in
 containers.
@@ -51,18 +51,19 @@ resource types.
 
 Add two more fetch tools.
 
-```bash
+```python
 @mcp.tool(title="Fetch Event Receiver", description="Fetch an event receiver from EPR")
 async def fetch_receiver(id: str) -> str:
     """Fetch an event receiver from the EPR"""
-    async with httpx.AsyncClient() as client:
+    async with httpx2.AsyncClient() as client:
         response = await client.get(f"{epr_url}/api/v1/receivers/{id}")
         return response.text
+
 
 @mcp.tool(title="Fetch Event Receiver Group", description="Fetch an event receiver group from EPR")
 async def fetch_group(id: str) -> str:
     """Fetch an event receiver group from the EPR"""
-    async with httpx.AsyncClient() as client:
+    async with httpx2.AsyncClient() as client:
         response = await client.get(f"{epr_url}/api/v1/groups/{id}")
         return response.text
 ```
@@ -71,7 +72,7 @@ async def fetch_group(id: str) -> str:
 
 ## Leverage the GraphQL endpoint
 
-```bash
+```python
 @mcp.tool(title="Search Events", description="Search for events in EPR")
 async def search_events(data: dict) -> str:
     """Search for events in the EPR"""
@@ -87,35 +88,49 @@ async def search_events(data: dict) -> str:
         "event_receiver_id",
     ]
     query = get_search_query(operation="events", params=data, fields=fields)
-    async with httpx.AsyncClient() as client:
+    async with httpx2.AsyncClient() as client:
         headers = {"Content-Type": "application/json"}
-        response = await client.post(f"{epr_url}/api/v1/graphql/query", json=query.as_dict_query(), headers=headers)
+        response = await client.post(
+            f"{epr_url}/api/v1/graphql/query",
+            json=query.as_dict_query(),
+            headers=headers,
+        )
         if response.status_code == 200:
             return response.text
         else:
             return f"Failed to search events: {response.text}"
+
 
 @mcp.tool(title="Search Event Receivers", description="Search for event receivers in EPR")
 async def search_receivers(data: dict) -> str:
     """Search for event receivers in the EPR"""
     fields = ["id", "name", "type", "version", "description"]
     query = get_search_query(operation="event_receivers", params=data, fields=fields)
-    async with httpx.AsyncClient() as client:
+    async with httpx2.AsyncClient() as client:
         headers = {"Content-Type": "application/json"}
-        response = await client.post(f"{epr_url}/api/v1/graphql/query", json=query.as_dict_query(), headers=headers)
+        response = await client.post(
+            f"{epr_url}/api/v1/graphql/query",
+            json=query.as_dict_query(),
+            headers=headers,
+        )
         if response.status_code == 200:
             return response.text
         else:
             return f"Failed to search event receivers: {response.text}"
+
 
 @mcp.tool(title="Search Event Receiver Groups", description="Search for event receiver groups in EPR")
 async def search_groups(data: dict) -> str:
     """Search for event receiver groups in the EPR"""
     fields = ["id", "name", "type", "version", "description"]
     query = get_search_query(operation="event_receiver_groups", params=data, fields=fields)
-    async with httpx.AsyncClient() as client:
+    async with httpx2.AsyncClient() as client:
         headers = {"Content-Type": "application/json"}
-        response = await client.post(f"{epr_url}/api/v1/graphql/query", json=query.as_dict_query(), headers=headers)
+        response = await client.post(
+            f"{epr_url}/api/v1/graphql/query",
+            json=query.as_dict_query(),
+            headers=headers,
+        )
         if response.status_code == 200:
             return response.text
         else:
@@ -126,31 +141,33 @@ async def search_groups(data: dict) -> str:
 
 ## Add Danger
 
-```bash
+```python
 @mcp.tool(title="Create Event", description="Create a new event in EPR")
 async def create_event(event_data: dict) -> str:
     """Create a new event in the EPR"""
-    async with httpx.AsyncClient() as client:
+    async with httpx2.AsyncClient() as client:
         response = await client.post(f"{epr_url}/api/v1/events", json=event_data)
         if response.status_code == 201:
             return "Event created successfully"
         else:
             return f"Failed to create event: {response.text}"
 
+
 @mcp.tool(title="Create Event Receiver", description="Create a new event receiver in EPR")
 async def create_receiver(receiver_data: dict) -> str:
     """Create a new event receiver in the EPR"""
-    async with httpx.AsyncClient() as client:
+    async with httpx2.AsyncClient() as client:
         response = await client.post(f"{epr_url}/api/v1/receivers", json=receiver_data)
         if response.status_code == 201:
             return "Event receiver created successfully"
         else:
             return f"Failed to create event receiver: {response.text}"
 
+
 @mcp.tool(title="Create Event Receiver Group", description="Create a new event receiver group in EPR")
 async def create_group(group_data: dict) -> str:
     """Create a new event receiver group in the EPR"""
-    async with httpx.AsyncClient() as client:
+    async with httpx2.AsyncClient() as client:
         response = await client.post(f"{epr_url}/api/v1/groups", json=group_data)
         if response.status_code == 201:
             return "Event receiver group created successfully"
@@ -170,7 +187,7 @@ docker build -t epr-mcp-server:latest .
 
 ## Restart MCP Server
 
-Restart your MCP server in MCP Inspector or VSCode to see results.
+Restart your MCP server in MCP Inspector or VS Code to see results.
 
 ---
 
@@ -181,5 +198,6 @@ Extending Your Server
 - Add more tools for additional API endpoints.
 - Implement authentication or custom error handling as needed.
 - Use the `get_search_query` helper to build flexible search queries.
+- Use httpx2 for all async HTTP requests.
 
 ---

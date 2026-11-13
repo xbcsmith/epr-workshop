@@ -2,7 +2,7 @@
 
 ## Miscellaneous Commands and Info
 
-Random info that could be helpful
+Random info that could be helpful.
 
 ---
 
@@ -24,7 +24,7 @@ export UV_INDEX_URL=$PIP_INDEX_URL
 cd src/
 uv venv
 source .venv/bin/activate
-uv add "mcp[cli]" mcp httpx
+uv add fastmcp httpx2
 ```
 
 ---
@@ -38,11 +38,7 @@ docker run -i --rm --network=host -e EPR_URL -e EPR_TOKEN epr-mcp-server:latest
 ```
 
 ```bash
-mcp dev main.py
-```
-
-```bash
-uv run --with mcp --with mcp[cli] --with pydantic --with httpx mcp run main.py
+uv run --with fastmcp --with httpx2 python main.py
 ```
 
 ---

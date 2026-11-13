@@ -3,21 +3,14 @@ FROM python:3.12-slim-bullseye
 USER root
 WORKDIR /app
 
-# Install uv
-RUN pip install --no-cache-dir uv
 COPY pyproject.toml main.py ./
 
-RUN uv venv /app/.venv \
-    && uv run main.py
+# Install uv, then use it to install the project dependencies system-wide.
+RUN pip install --no-cache-dir uv && \
+    uv pip install --system fastmcp httpx2
 
-ENV VIRTUAL_ENV="/app/.venv"
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 ENV EPR_URL=http://host.docker.internal:8042
 ENV EPR_DEBUG=false
 
-# Expose the port your MCP server listens on
-EXPOSE 8000
-
-
-# Command to run your MCP server application
-CMD ["/app/.venv/bin/python3", "-m", "main"]
+# The MCP server speaks stdio: start the container with docker run -i ...
+CMD ["python", "main.py"]
